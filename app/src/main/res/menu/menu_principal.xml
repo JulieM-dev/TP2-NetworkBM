@@ -1,4 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+
+    <item
+        android:id="@+id/button_reinitialiser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Réinitialiser" />
+
+    <item
+        android:id="@+id/button_ajout_objet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Ajouter un objet" />
+
+    <item
+        android:id="@+id/button_ajout_connexion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Ajouter une connexion" />
+
+    <item
+        android:id="@+id/button_modification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Modifier" />
+
 </menu>

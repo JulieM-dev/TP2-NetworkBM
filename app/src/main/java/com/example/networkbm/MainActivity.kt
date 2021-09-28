@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var toggle: ActionBarDrawerToggle
 
-    private var modeSelected : Mode? = null
+    private var modeSelected : Mode = Mode.AUCUN
 
 
 
@@ -35,7 +35,14 @@ class MainActivity : AppCompatActivity() {
         val navView = findViewById<NavigationView>(R.id.navView)
 
         navView.setNavigationItemSelectedListener {
-            TODO()
+            when(it.itemId)
+            {
+                R.id.button_reinitialiser -> reinitialisation()
+                R.id.button_ajout_objet -> clickMenu(1)
+                R.id.button_ajout_connexion -> clickMenu(2)
+                R.id.button_modification -> clickMenu(3)
+            }
+            true
         }
 
         var tableButsMenu = arrayOf (
@@ -52,6 +59,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    fun reinitialisation()
+    {
+
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(toggle.onOptionsItemSelected(item))
         {
@@ -63,10 +75,10 @@ class MainActivity : AppCompatActivity() {
     fun clickMenu(i : Int)
     {
        when(i){
-           0 -> this.modeSelected = Mode.AJOUT_OBJET
-           1 -> this.modeSelected = Mode.AJOUT_CONNEXION
-           2 -> this.modeSelected = Mode.MODIFICATION
+           1 -> this.modeSelected = Mode.AJOUT_OBJET
+           2 -> this.modeSelected = Mode.AJOUT_CONNEXION
+           3 -> this.modeSelected = Mode.MODIFICATION
        }
-        Toast.makeText(this@MainActivity, this.modeSelected?.getLibelle(), Toast.LENGTH_LONG).show()
+        Toast.makeText(this@MainActivity, this.modeSelected.getLibelle(), Toast.LENGTH_LONG).show()
     }
 }

@@ -1,19 +1,16 @@
 package com.example.networkbm.models
 
-enum class Mode(private val type: Int) {
-    AJOUT_OBJET(0), AJOUT_CONNEXION(1), MODIFICATION(2);
+enum class Mode(private val type: Int, private val libelle: String) {
+    AUCUN(0, "Aucun"),
+    AJOUT_OBJET(1, "Ajoutez un objet"),
+    AJOUT_CONNEXION(2, "Ajoutez une connexion"),
+    MODIFICATION(3, "Modifiez un objet ou connexion");
 
     fun getMode(): Int {
         return type
     }
 
-    fun getLibelle() : String? {
-        var s : String? = null
-        when(type){
-            0 -> s = "AJOUT_OBJET"
-            1 -> s = "AJOUT_CONNEXION"
-            2 -> s = "MODIFICATION"
-        }
-        return s
+    fun getLibelle() : String {
+        return libelle
     }
 }

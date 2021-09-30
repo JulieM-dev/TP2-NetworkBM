@@ -5,19 +5,18 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.OvalShape
 import android.graphics.drawable.shapes.RectShape
 import android.widget.ImageButton
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.networkbm.models.ChoiceTouchListener
 import com.example.networkbm.models.Mode
@@ -69,8 +68,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        testRectangle()
-        testRectangle2()
     }
 
     fun reinitialisation()
@@ -93,12 +90,14 @@ class MainActivity : AppCompatActivity() {
            2 -> this.modeSelected = Mode.AJOUT_CONNEXION
            3 -> this.modeSelected = Mode.MODIFICATION
        }
+        this.testRectangle()
         Toast.makeText(this@MainActivity, this.modeSelected.getLibelle(), Toast.LENGTH_LONG).show()
     }
 
     fun testRectangle(){
-        var imageView = findViewById<ImageView>(R.id.contRect)
-        val bitmap: Bitmap = Bitmap.createBitmap(700, 1000, Bitmap.Config.ARGB_8888)
+        var contPrinc = findViewById<RelativeLayout>(R.id.contPrinc)
+        var imageView = View(this)
+        val bitmap: Bitmap = Bitmap.createBitmap(700, 700, Bitmap.Config.ARGB_8888)
         val canvas: Canvas = Canvas(bitmap)
 
         var shapeDrawable: ShapeDrawable
@@ -106,8 +105,8 @@ class MainActivity : AppCompatActivity() {
         // rectangle positions
         var left = 100
         var top = 100
-        var right = 600
-        var bottom = 400
+        var right = 1000
+        var bottom = 1000
 
         // draw rectangle shape to canvas
         shapeDrawable = ShapeDrawable(RectShape())
@@ -115,31 +114,17 @@ class MainActivity : AppCompatActivity() {
         shapeDrawable.getPaint().setColor(Color.parseColor("#009944"))
         shapeDrawable.draw(canvas)
 
-        // oval positions
-        left = 100
-        top = 500
-        right = 600
-        bottom = 800
-
-        // draw oval shape to canvas
-        shapeDrawable = ShapeDrawable(OvalShape())
-        shapeDrawable.setBounds( left, top, right, bottom)
-        shapeDrawable.getPaint().setColor(Color.parseColor("#009191"))
-        shapeDrawable.draw(canvas)
-
-        // now bitmap holds the updated pixels
-
         // set bitmap as background to ImageView
         imageView.background = BitmapDrawable(getResources(), bitmap)
-
-
         //test2
-
+        imageView.translationX = (contPrinc.width / 2).toFloat()
+        imageView.translationY = (contPrinc.height / 2).toFloat()
+        this.setDragable(imageView)
+        contPrinc.addView(imageView)
     }
 
-    fun testRectangle2(){
-        val rootLayout = findViewById<ViewGroup>(R.id.contDrag)
-        val img = rootLayout.findViewById<ImageView>(R.id.imgTest)
+    fun setDragable(img: View){
+        val rootLayout = findViewById<ViewGroup>(R.id.contPrinc)
         val layoutParams = RelativeLayout.LayoutParams(100,100)
         img.layoutParams = layoutParams
         val tlist = ChoiceTouchListener(rootLayout)

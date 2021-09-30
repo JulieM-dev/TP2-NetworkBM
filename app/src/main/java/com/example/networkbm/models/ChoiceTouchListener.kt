@@ -4,17 +4,14 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
-import androidx.constraintlayout.widget.ConstraintLayout
 
-class ChoiceTouchListener(rootLayout: ViewGroup) : View.OnTouchListener {
-
-    private var rootLayout = rootLayout
+class ChoiceTouchListener(private var rootLayout: ViewGroup) : View.OnTouchListener {
 
     override fun onTouch(view: View, event: MotionEvent): Boolean {
         var X = event.rawX
         var Y = event.rawY
-        var xDelta = 50
-        var yDelta = 250
+        var xDelta = 625
+        var yDelta = 1200
         when(event.action){
             MotionEvent.ACTION_DOWN -> {
                 val lParams : RelativeLayout.LayoutParams = view.layoutParams as RelativeLayout.LayoutParams

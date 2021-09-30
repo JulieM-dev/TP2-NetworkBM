@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
 
         for(i in 0..tableButsMenu.size-1){
             tableButsMenu.get(i).setOnClickListener{
-                clickMenu(i)
+                clickMenu(i+1)
             }
         }
 

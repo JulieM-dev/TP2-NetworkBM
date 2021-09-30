@@ -21,11 +21,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            android:src="@drawable/plan"></ImageView>
+            android:src="@drawable/plan">
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/contRect"
+            android:elevation="7dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </ImageView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
         <include layout="@layout/menu_raccourci"></include>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navView"

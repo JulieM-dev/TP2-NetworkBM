@@ -17,10 +17,10 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.networkbm.models.ChoiceTouchListener
 import com.example.networkbm.models.Mode
-import com.example.networkbm.models.Rectangle
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -138,11 +138,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun testRectangle2(){
-        val rootLayout = findViewById<ViewGroup>(R.id.drawerLayout)
-        val img = rootLayout.findViewById<ImageView>(R.id.planAppartement)
-        val layoutParams = RelativeLayout.LayoutParams(150,150)
+        val rootLayout = findViewById<ViewGroup>(R.id.contDrag)
+        val img = rootLayout.findViewById<ImageView>(R.id.imgTest)
+        val layoutParams = RelativeLayout.LayoutParams(300,300)
         img.layoutParams = layoutParams
-        val tlist = ChoiceTouchListener()
+        val tlist = ChoiceTouchListener(rootLayout)
         img.setOnTouchListener(tlist)
+        rootLayout.invalidate()
     }
 }

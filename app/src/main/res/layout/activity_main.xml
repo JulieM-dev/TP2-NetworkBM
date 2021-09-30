@@ -24,6 +24,18 @@
             android:src="@drawable/plan">
         </ImageView>
 
+        <RelativeLayout
+            android:id="@+id/contDrag"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FF0000">
+            <ImageView
+                android:id="@+id/imgTest"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:src="@drawable/ic_launcher_background" />
+        </RelativeLayout>
+
         <ImageView
             android:id="@+id/contRect"
             android:elevation="7dp"

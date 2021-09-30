@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity() {
     fun testRectangle2(){
         val rootLayout = findViewById<ViewGroup>(R.id.contDrag)
         val img = rootLayout.findViewById<ImageView>(R.id.imgTest)
-        val layoutParams = RelativeLayout.LayoutParams(300,300)
+        val layoutParams = RelativeLayout.LayoutParams(100,100)
         img.layoutParams = layoutParams
         val tlist = ChoiceTouchListener(rootLayout)
         img.setOnTouchListener(tlist)

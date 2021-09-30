@@ -13,8 +13,8 @@ class ChoiceTouchListener(rootLayout: ViewGroup) : View.OnTouchListener {
     override fun onTouch(view: View, event: MotionEvent): Boolean {
         var X = event.rawX
         var Y = event.rawY
-        var xDelta = 0
-        var yDelta = 0
+        var xDelta = 50
+        var yDelta = 250
         when(event.action){
             MotionEvent.ACTION_DOWN -> {
                 val lParams : RelativeLayout.LayoutParams = view.layoutParams as RelativeLayout.LayoutParams
@@ -36,8 +36,8 @@ class ChoiceTouchListener(rootLayout: ViewGroup) : View.OnTouchListener {
                 val lParams : RelativeLayout.LayoutParams = view.layoutParams as RelativeLayout.LayoutParams
                 lParams.leftMargin = (X - xDelta).toInt()
                 lParams.topMargin = (Y - yDelta).toInt()
-                lParams.rightMargin = -250
-                lParams.bottomMargin = -250
+                lParams.rightMargin = 0
+                lParams.bottomMargin = 0
 
                 view.layoutParams = lParams
             }

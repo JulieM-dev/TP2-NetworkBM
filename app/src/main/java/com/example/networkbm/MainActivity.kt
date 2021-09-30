@@ -1,16 +1,26 @@
 package com.example.networkbm
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.OvalShape
+import android.graphics.drawable.shapes.RectShape
 import android.widget.ImageButton
 
-import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
+import com.example.networkbm.models.ChoiceTouchListener
 import com.example.networkbm.models.Mode
+import com.example.networkbm.models.Rectangle
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -23,7 +33,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
+
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
 
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
@@ -57,6 +69,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        testRectangle()
+        testRectangle2()
     }
 
     fun reinitialisation()
@@ -80,5 +94,55 @@ class MainActivity : AppCompatActivity() {
            3 -> this.modeSelected = Mode.MODIFICATION
        }
         Toast.makeText(this@MainActivity, this.modeSelected.getLibelle(), Toast.LENGTH_LONG).show()
+    }
+
+    fun testRectangle(){
+        var imageView = findViewById<ImageView>(R.id.contRect)
+        val bitmap: Bitmap = Bitmap.createBitmap(700, 1000, Bitmap.Config.ARGB_8888)
+        val canvas: Canvas = Canvas(bitmap)
+
+        var shapeDrawable: ShapeDrawable
+
+        // rectangle positions
+        var left = 100
+        var top = 100
+        var right = 600
+        var bottom = 400
+
+        // draw rectangle shape to canvas
+        shapeDrawable = ShapeDrawable(RectShape())
+        shapeDrawable.setBounds( left, top, right, bottom)
+        shapeDrawable.getPaint().setColor(Color.parseColor("#009944"))
+        shapeDrawable.draw(canvas)
+
+        // oval positions
+        left = 100
+        top = 500
+        right = 600
+        bottom = 800
+
+        // draw oval shape to canvas
+        shapeDrawable = ShapeDrawable(OvalShape())
+        shapeDrawable.setBounds( left, top, right, bottom)
+        shapeDrawable.getPaint().setColor(Color.parseColor("#009191"))
+        shapeDrawable.draw(canvas)
+
+        // now bitmap holds the updated pixels
+
+        // set bitmap as background to ImageView
+        imageView.background = BitmapDrawable(getResources(), bitmap)
+
+
+        //test2
+
+    }
+
+    fun testRectangle2(){
+        val rootLayout = findViewById<ViewGroup>(R.id.drawerLayout)
+        val img = rootLayout.findViewById<ImageView>(R.id.planAppartement)
+        val layoutParams = RelativeLayout.LayoutParams(150,150)
+        img.layoutParams = layoutParams
+        val tlist = ChoiceTouchListener()
+        img.setOnTouchListener(tlist)
     }
 }

@@ -1,6 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.33" />
+
+    <View
+        android:id="@+id/objetPrevisualisation"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:background="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextNom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:autofillHints="Nom"
+        android:text="Nom"
+        android:textSize="24sp"
+        app:layout_constraintTop_toBottomOf="@+id/objetPrevisualisation" />
+
+
+    <Spinner
+        android:id="@+id/spinnerCouleur"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:textSize="24sp"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNom" />
+
+    <Button
+        android:id="@+id/buttonAnnuler"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="8dp"
+        android:text="Annuler"
+        app:layout_constraintEnd_toStartOf="@+id/buttonValider"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerCouleur" />
+
+    <Button
+        android:id="@+id/buttonValider"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Accepter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/buttonAnnuler"
+        app:layout_constraintTop_toTopOf="@+id/buttonAnnuler" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

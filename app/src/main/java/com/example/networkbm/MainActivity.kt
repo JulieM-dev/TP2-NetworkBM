@@ -23,7 +23,7 @@ import com.example.networkbm.models.ChoiceTouchListener
 import com.example.networkbm.models.Mode
 import com.google.android.material.navigation.NavigationView
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), DeptListener {
 
     lateinit var toggle: ActionBarDrawerToggle
 
@@ -140,5 +140,9 @@ class MainActivity : AppCompatActivity() {
         val tlist = ChoiceTouchListener(rootLayout)
         img.setOnTouchListener(tlist)
         rootLayout.invalidate()
+    }
+
+    override fun onDeptSelected(dept: String) {
+        super.onDeptSelected(dept)
     }
 }

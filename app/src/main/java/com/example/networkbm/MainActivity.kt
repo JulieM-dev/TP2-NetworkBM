@@ -1,16 +1,11 @@
 package com.example.networkbm
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.RectShape
 import android.widget.ImageButton
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -19,8 +14,9 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.networkbm.fragments.AjoutObjetDialogFragment
-import com.example.networkbm.models.ChoiceTouchListener
+import com.example.networkbm.models.TouchDragObject
 import com.example.networkbm.models.Mode
+import com.example.networkbm.models.Rectangle
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -57,7 +53,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        var tableButsMenu = arrayOf (
+        val tableButsMenu = arrayOf (
             findViewById<ImageButton>(R.id.butAjoutObjet),
             findViewById<ImageButton>(R.id.butAjoutConnexion),
             findViewById<ImageButton>(R.id.butModif)
@@ -69,11 +65,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        setImage()
     }
 
     fun reinitialisation()
     {
 
+    }
+
+    fun setImage(){
+        val img = findViewById<ImageView>(R.id.planAppartement)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -94,50 +95,32 @@ class MainActivity : AppCompatActivity() {
            2 -> this.modeSelected = Mode.AJOUT_CONNEXION
            3 -> this.modeSelected = Mode.MODIFICATION
        }
-        this.testRectangle()
+        this.ajoutRectangle()
         Toast.makeText(this@MainActivity, this.modeSelected.getLibelle(), Toast.LENGTH_LONG).show()
     }
 
     fun ajouterObjet()
     {
-        var dialog = AjoutObjetDialogFragment()
+        val dialog = AjoutObjetDialogFragment()
         dialog.show(supportFragmentManager, "Ajouter un objet")
     }
 
-    fun testRectangle(){
-        var contPrinc = findViewById<RelativeLayout>(R.id.contPrinc)
-        var imageView = View(this)
-        val bitmap: Bitmap = Bitmap.createBitmap(700, 700, Bitmap.Config.ARGB_8888)
-        val canvas: Canvas = Canvas(bitmap)
+    fun ajoutRectangle(){
+        val contPrinc = findViewById<RelativeLayout>(R.id.contPrinc)
+        val rect = Rectangle(this)
+        rect.createRect(contPrinc)
 
-        var shapeDrawable: ShapeDrawable
+        this.setDragable(rect)
+        contPrinc.addView(rect)
 
-        // rectangle positions
-        var left = 100
-        var top = 100
-        var right = 1000
-        var bottom = 1000
-
-        // draw rectangle shape to canvas
-        shapeDrawable = ShapeDrawable(RectShape())
-        shapeDrawable.setBounds( left, top, right, bottom)
-        shapeDrawable.getPaint().setColor(Color.parseColor("#009944"))
-        shapeDrawable.draw(canvas)
-
-        // set bitmap as background to ImageView
-        imageView.background = BitmapDrawable(getResources(), bitmap)
-        //test2
-        imageView.translationX = (contPrinc.width / 2).toFloat()
-        imageView.translationY = (contPrinc.height / 2).toFloat()
-        this.setDragable(imageView)
-        contPrinc.addView(imageView)
+        rect.changeColor("#fff000")
     }
 
     fun setDragable(img: View){
         val rootLayout = findViewById<ViewGroup>(R.id.contPrinc)
         val layoutParams = RelativeLayout.LayoutParams(100,100)
         img.layoutParams = layoutParams
-        val tlist = ChoiceTouchListener(rootLayout)
+        val tlist = TouchDragObject(rootLayout)
         img.setOnTouchListener(tlist)
         rootLayout.invalidate()
     }

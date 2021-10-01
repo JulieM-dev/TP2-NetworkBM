@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 
-class ChoiceTouchListener(private var rootLayout: ViewGroup) : View.OnTouchListener {
+class TouchDragObject(private var rootLayout: ViewGroup) : View.OnTouchListener {
 
     override fun onTouch(view: View, event: MotionEvent): Boolean {
         var X = event.rawX
@@ -14,20 +14,20 @@ class ChoiceTouchListener(private var rootLayout: ViewGroup) : View.OnTouchListe
         var yDelta = 1200
         when(event.action){
             MotionEvent.ACTION_DOWN -> {
+                System.out.println("ACTION DOWN")
                 val lParams : RelativeLayout.LayoutParams = view.layoutParams as RelativeLayout.LayoutParams
                 xDelta = (X - lParams.leftMargin).toInt()
                 yDelta = (Y - lParams.topMargin).toInt()
-
                 view.layoutParams = lParams
             }
             MotionEvent.ACTION_UP -> {
-
+                System.out.println("ACTION UP")
             }
             MotionEvent.ACTION_POINTER_DOWN -> {
-
+                System.out.println("ACTION POINTER DOWN")
             }
             MotionEvent.ACTION_POINTER_UP -> {
-
+                System.out.println("ACTION POINTER UP")
             }
             MotionEvent.ACTION_MOVE -> {
                 val lParams : RelativeLayout.LayoutParams = view.layoutParams as RelativeLayout.LayoutParams
@@ -35,7 +35,6 @@ class ChoiceTouchListener(private var rootLayout: ViewGroup) : View.OnTouchListe
                 lParams.topMargin = (Y - yDelta).toInt()
                 lParams.rightMargin = 0
                 lParams.bottomMargin = 0
-
                 view.layoutParams = lParams
             }
         }

@@ -62,6 +62,11 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/buttonAnnuler"
         app:layout_constraintTop_toTopOf="@+id/buttonAnnuler" />
-//on dirait du css jpp
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"></LinearLayout>
+    //on dirait du css jpp
 
 </androidx.constraintlayout.widget.ConstraintLayout>

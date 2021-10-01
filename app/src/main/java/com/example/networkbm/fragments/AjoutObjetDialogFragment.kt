@@ -41,7 +41,10 @@ class AjoutObjetDialogFragment : AppCompatDialogFragment() {
 
             buttonValider.setOnClickListener()
             {
-                listener.onDeptSelected(editTextNom.text.toString())
+                var nom = editTextNom.text.toString()
+                var depts = ArrayList<String>()
+                depts.add(nom)
+                listener.onDeptSelected(depts)
                 alertDialog.dismiss()
             }
             buttonAnnuler.setOnClickListener()

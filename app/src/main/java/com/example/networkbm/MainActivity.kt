@@ -1,7 +1,6 @@
 package com.example.networkbm
 
 import android.annotation.SuppressLint
-import android.widget.ImageButton
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,9 +10,7 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.networkbm.fragments.AjoutObjetDialogFragment
@@ -121,32 +118,31 @@ class MainActivity : AppCompatActivity(), DeptListener {
        when(i){
            1 -> {
                this.modeSelected = Mode.AJOUT_OBJET
-                ajouterObjet()
+                ajouterObjetDialog()
            }
            2 -> this.modeSelected = Mode.AJOUT_CONNEXION
            3 -> this.modeSelected = Mode.MODIFICATION
        }
-        Toast.makeText(this@MainActivity, this.modeSelected.getLibelle(), Toast.LENGTH_LONG).show()
     }
 
-    fun ajouterObjet()
+    fun ajouterObjetDialog()
     {
         val dialog = AjoutObjetDialogFragment()
         dialog.show(supportFragmentManager, "Ajouter un objet")
     }
 
-    fun ajoutRectangle() : Rectangle{
+    fun creerObjet(nom: String, couleur: String) : Objet{
         val contPrinc = findViewById<RelativeLayout>(R.id.contPrinc)
         val rect = Rectangle(this)
         rect.createRect(contPrinc)
-
         this.setDragable(rect)
+        rect.scaleX = 5F
+        rect.scaleY = 5F
         contPrinc.addView(rect)
 
-        rect.changeColor("#fff000")
-
-        return rect
+        return Objet(nom, couleur, rect)
     }
+
 
     fun setDragable(img: View){
         val rootLayout = findViewById<ViewGroup>(R.id.contPrinc)
@@ -157,11 +153,13 @@ class MainActivity : AppCompatActivity(), DeptListener {
         rootLayout.invalidate()
     }
 
-    override fun onDeptSelected(dept: String) {
-        if(modeSelected == Mode.AJOUT_OBJET)
-        {
-            reseau.addObjet(Objet(dept, ajoutRectangle()))
+    override fun onDeptSelected(depts: ArrayList<String>) {
+        when(modeSelected) {
+            Mode.AJOUT_OBJET -> {
+                var nom = depts.get(0)
+                if(depts.size >= 2)  reseau.addObjet(creerObjet(nom, depts.get(1)))
+                else reseau.addObjet(creerObjet(nom, "#fff000"))
+            }
         }
-
     }
 }

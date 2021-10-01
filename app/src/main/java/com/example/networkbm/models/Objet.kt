@@ -1,10 +1,10 @@
 package com.example.networkbm.models
 
 import android.view.View
-import androidx.constraintlayout.solver.widgets.Rectangle
 
-class Objet {
-    private lateinit var rect : View
+class Objet (nom: String, rect: Rectangle){
+    var rect : Rectangle = rect
+    var nom : String = nom
 
 
     fun getView() : View

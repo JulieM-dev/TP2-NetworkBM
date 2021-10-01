@@ -14,9 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.networkbm.fragments.AjoutObjetDialogFragment
-import com.example.networkbm.models.TouchDragObject
-import com.example.networkbm.models.Mode
-import com.example.networkbm.models.Rectangle
+import com.example.networkbm.models.*
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity(), DeptListener {
@@ -25,6 +23,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
     private var modeSelected : Mode = Mode.AUCUN
 
+    var reseau = Reseau()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,7 +94,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
            2 -> this.modeSelected = Mode.AJOUT_CONNEXION
            3 -> this.modeSelected = Mode.MODIFICATION
        }
-        this.ajoutRectangle()
         Toast.makeText(this@MainActivity, this.modeSelected.getLibelle(), Toast.LENGTH_LONG).show()
     }
 
@@ -105,7 +103,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
         dialog.show(supportFragmentManager, "Ajouter un objet")
     }
 
-    fun ajoutRectangle(){
+    fun ajoutRectangle() : Rectangle{
         val contPrinc = findViewById<RelativeLayout>(R.id.contPrinc)
         val rect = Rectangle(this)
         rect.createRect(contPrinc)
@@ -114,6 +112,8 @@ class MainActivity : AppCompatActivity(), DeptListener {
         contPrinc.addView(rect)
 
         rect.changeColor("#fff000")
+
+        return rect
     }
 
     fun setDragable(img: View){
@@ -126,6 +126,10 @@ class MainActivity : AppCompatActivity(), DeptListener {
     }
 
     override fun onDeptSelected(dept: String) {
-        super.onDeptSelected(dept)
+        if(modeSelected == Mode.AJOUT_OBJET)
+        {
+            reseau.addObjet(Objet(dept, ajoutRectangle()))
+        }
+
     }
 }

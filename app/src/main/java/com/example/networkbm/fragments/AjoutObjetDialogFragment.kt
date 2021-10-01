@@ -42,9 +42,8 @@ class AjoutObjetDialogFragment : AppCompatDialogFragment() {
             buttonValider.setOnClickListener()
             {
                 listener.onDeptSelected(editTextNom.text.toString())
-                listener.onDeptSelected(spinnerCouleur.selectedItem.toString())
+                alertDialog.dismiss()
             }
-
             buttonAnnuler.setOnClickListener()
             {
                 alertDialog.dismiss()

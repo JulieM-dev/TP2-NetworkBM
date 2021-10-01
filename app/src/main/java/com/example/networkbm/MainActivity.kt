@@ -18,6 +18,7 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
+import com.example.networkbm.fragments.AjoutObjetDialogFragment
 import com.example.networkbm.models.ChoiceTouchListener
 import com.example.networkbm.models.Mode
 import com.google.android.material.navigation.NavigationView
@@ -86,12 +87,21 @@ class MainActivity : AppCompatActivity() {
     fun clickMenu(i : Int)
     {
        when(i){
-           1 -> this.modeSelected = Mode.AJOUT_OBJET
+           1 -> {
+               this.modeSelected = Mode.AJOUT_OBJET
+                ajouterObjet()
+           }
            2 -> this.modeSelected = Mode.AJOUT_CONNEXION
            3 -> this.modeSelected = Mode.MODIFICATION
        }
         this.testRectangle()
         Toast.makeText(this@MainActivity, this.modeSelected.getLibelle(), Toast.LENGTH_LONG).show()
+    }
+
+    fun ajouterObjet()
+    {
+        var dialog = AjoutObjetDialogFragment()
+        dialog.show(supportFragmentManager, "Ajouter un objet")
     }
 
     fun testRectangle(){

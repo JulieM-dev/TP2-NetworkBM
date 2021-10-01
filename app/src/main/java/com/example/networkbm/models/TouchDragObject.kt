@@ -14,20 +14,16 @@ class TouchDragObject(private var rootLayout: ViewGroup) : View.OnTouchListener 
         var yDelta = 1200
         when(event.action){
             MotionEvent.ACTION_DOWN -> {
-                System.out.println("ACTION DOWN")
                 val lParams : RelativeLayout.LayoutParams = view.layoutParams as RelativeLayout.LayoutParams
                 xDelta = (X - lParams.leftMargin).toInt()
                 yDelta = (Y - lParams.topMargin).toInt()
                 view.layoutParams = lParams
             }
             MotionEvent.ACTION_UP -> {
-                System.out.println("ACTION UP")
             }
             MotionEvent.ACTION_POINTER_DOWN -> {
-                System.out.println("ACTION POINTER DOWN")
             }
             MotionEvent.ACTION_POINTER_UP -> {
-                System.out.println("ACTION POINTER UP")
             }
             MotionEvent.ACTION_MOVE -> {
                 val lParams : RelativeLayout.LayoutParams = view.layoutParams as RelativeLayout.LayoutParams

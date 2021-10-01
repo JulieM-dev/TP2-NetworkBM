@@ -1,9 +1,12 @@
 package com.example.networkbm
 
+import android.annotation.SuppressLint
 import android.widget.ImageButton
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
@@ -22,10 +25,8 @@ import com.google.android.material.navigation.NavigationView
 class MainActivity : AppCompatActivity() {
 
     lateinit var toggle: ActionBarDrawerToggle
-
     private var modeSelected : Mode = Mode.AUCUN
-
-
+    private var isPressed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,8 +74,38 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     fun setImage(){
         val img = findViewById<ImageView>(R.id.planAppartement)
+        img.setOnTouchListener { v, event ->
+            val action = event.action
+            when(action){
+                MotionEvent.ACTION_DOWN -> {
+                    isPressed = true
+                    System.out.println("HEYO1")
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        if(isPressed){
+                            val dialog = AjoutObjetDialogFragment()
+                            dialog.show(supportFragmentManager, "Ajouter un objet")
+                        }
+                    },500)
+                }
+                MotionEvent.ACTION_MOVE -> {
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    isPressed = false
+                }
+
+                MotionEvent.ACTION_CANCEL -> {
+
+                }
+                else ->{
+
+                }
+            }
+            true
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

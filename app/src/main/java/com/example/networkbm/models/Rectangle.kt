@@ -24,12 +24,12 @@ class Rectangle(context: Context) : View(context) {
         super.onDraw(canvas)
     }
 
-    fun createRect(contPrinc: RelativeLayout){
+    fun createRect(contPrinc: RelativeLayout, nom : String){
         canvas = Canvas(bitmap)
         // rectangle positions
-        val left = 300
-        val top = 300
-        val right = 400
+        val left = 100
+        val top = 100
+        val right = 900
         val bottom = 400
         // draw rectangle shape to canvas
         shapeDrawable.setBounds( left, top, right, bottom)
@@ -40,7 +40,7 @@ class Rectangle(context: Context) : View(context) {
 
         paint.color = Color.BLACK;
         paint.textAlign = Paint.Align.CENTER
-        canvas.drawText("Some Text", 350F, 450F, paint);
+        canvas.drawText(nom, 350F, 450F, paint);
 
         // set bitmap as background to ImageView
         this.background = BitmapDrawable(getResources(), bitmap)

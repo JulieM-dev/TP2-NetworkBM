@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
     fun creerObjet(nom: String, couleur: String) : Objet{
         val contPrinc = findViewById<RelativeLayout>(R.id.contPrinc)
         val rect = Rectangle(this)
-        rect.createRect(contPrinc)
+        rect.createRect(contPrinc, nom)
         this.setDragable(rect)
         rect.scaleX = 5F
         rect.scaleY = 5F

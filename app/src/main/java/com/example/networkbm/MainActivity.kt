@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
     private var isPressed = false
     private lateinit var objetAModifier : Objet
     var reseau = Reseau()
+    lateinit var tableButsMenu : Array<ImageButton>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +44,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
         val navView = findViewById<NavigationView>(R.id.navView)
 
-        val tableButsMenu = arrayOf (
+        tableButsMenu = arrayOf (
             findViewById<ImageButton>(R.id.butAjoutObjet),
             findViewById<ImageButton>(R.id.butAjoutConnexion),
             findViewById<ImageButton>(R.id.butModif)
@@ -53,16 +54,16 @@ class MainActivity : AppCompatActivity(), DeptListener {
             when(it.itemId)
             {
                 R.id.button_reinitialiser -> reinitialisation()
-                R.id.button_ajout_objet -> clickMenu(1, tableButsMenu)
-                R.id.button_ajout_connexion -> clickMenu(2, tableButsMenu)
-                R.id.button_modification -> clickMenu(3, tableButsMenu)
+                R.id.button_ajout_objet -> clickMenu(1)
+                R.id.button_ajout_connexion -> clickMenu(2)
+                R.id.button_modification -> clickMenu(3)
             }
             true
         }
 
         for(i in 0..tableButsMenu.size-1){
             tableButsMenu.get(i).setOnClickListener{
-                clickMenu(i+1, tableButsMenu)
+                clickMenu(i+1)
                 it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fadein))
             }
         }
@@ -86,7 +87,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                     Handler(Looper.getMainLooper()).postDelayed({
                         if(isPressed){
                             val dialog = AjoutObjetDialogFragment()
-                            dialog.show(supportFragmentManager, "Ajouter un objet")
+                            //dialog.show(supportFragmentManager, "Ajouter un objet")
                             this.modeSelected = Mode.AJOUT_OBJET
                         }
                     },500)
@@ -107,7 +108,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
         return super.onOptionsItemSelected(item)
     }
 
-    fun clickMenu(i: Int, tableButsMenu: Array<ImageButton>)
+    fun clickMenu(i: Int)
     {
         for(i in 0..tableButsMenu.size-1) {
             tableButsMenu.get(i).setBackgroundColor(Color.parseColor("#ffffff"))

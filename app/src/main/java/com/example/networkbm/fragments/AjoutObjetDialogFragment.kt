@@ -10,9 +10,10 @@ import android.widget.Spinner
 import androidx.appcompat.app.AppCompatDialogFragment
 import com.example.networkbm.DeptListener
 import com.example.networkbm.R
+import com.example.networkbm.models.Objet
 import java.lang.ClassCastException
 
-class AjoutObjetDialogFragment : AppCompatDialogFragment() {
+class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
     lateinit var listener: DeptListener
     lateinit var dialogBuilder : AlertDialog.Builder
     lateinit var alertDialog : AlertDialog
@@ -20,7 +21,11 @@ class AjoutObjetDialogFragment : AppCompatDialogFragment() {
     lateinit var spinnerCouleur : Spinner
     lateinit var buttonValider : Button
     lateinit var buttonAnnuler : Button
+    var objet : Objet? = null
 
+    constructor(objet: Objet) : this() {
+        this.objet = objet
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogBuilder =  AlertDialog.Builder(activity)
@@ -33,6 +38,10 @@ class AjoutObjetDialogFragment : AppCompatDialogFragment() {
 
         if (formulaire != null) {
             editTextNom = formulaire.findViewById(R.id.editTextNom)
+            if(objet != null)
+            {
+                editTextNom.setText(objet!!.nom)
+            }
             spinnerCouleur = formulaire.findViewById(R.id.spinnerCouleur)
             buttonValider = formulaire.findViewById(R.id.buttonValider)
             buttonAnnuler = formulaire.findViewById(R.id.buttonAnnuler)
@@ -53,10 +62,11 @@ class AjoutObjetDialogFragment : AppCompatDialogFragment() {
             }
         }
 
-
         return alertDialog
 
     }
+
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

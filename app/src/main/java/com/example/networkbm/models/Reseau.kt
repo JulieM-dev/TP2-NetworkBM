@@ -4,7 +4,7 @@ import android.view.View
 
 class Reseau {
 
-    private var objets : ArrayList<Objet> = ArrayList<Objet>()
+    var objets : ArrayList<Objet> = ArrayList<Objet>()
     private var connexions : ArrayList<Connexion> = ArrayList<Connexion>()
 
     fun addObjet(objet: Objet) {
@@ -22,14 +22,6 @@ class Reseau {
 
     fun removeConnexion(connexion: Connexion) {
         connexions.remove(connexion)
-    }
-
-    fun getObjet(view: View): Objet?
-    {
-        objets.forEach {
-            if (it.getView() == view) return it
-        }
-        return null
     }
 
 }

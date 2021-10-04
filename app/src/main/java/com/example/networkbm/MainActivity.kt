@@ -10,6 +10,8 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
@@ -22,6 +24,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
     lateinit var toggle: ActionBarDrawerToggle
     private var modeSelected : Mode = Mode.AUCUN
     private var isPressed = false
+    private lateinit var objetAModifier : Objet
     var reseau = Reseau()
 
 
@@ -60,6 +63,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
         for(i in 0..tableButsMenu.size-1){
             tableButsMenu.get(i).setOnClickListener{
                 clickMenu(i+1)
+                it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fadein))
             }
         }
 
@@ -121,7 +125,10 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 ajouterObjetDialog()
            }
            2 -> this.modeSelected = Mode.AJOUT_CONNEXION
-           3 -> this.modeSelected = Mode.MODIFICATION
+           3 -> {
+               this.modeSelected = Mode.MODIFICATION
+               initModificationListener()
+           }
        }
     }
 
@@ -131,17 +138,35 @@ class MainActivity : AppCompatActivity(), DeptListener {
         dialog.show(supportFragmentManager, "Ajouter un objet")
     }
 
+    fun initModificationListener()
+    {
+        reseau.objets.forEach{
+            it.setOnTouchListener(null)
+        }
+    }
+
     fun creerObjet(nom: String, couleur: String) : Objet{
         val contPrinc = findViewById<RelativeLayout>(R.id.contPrinc)
-        val rect = Rectangle(this)
-        rect.createRect(contPrinc, nom)
-        this.setDragable(rect)
-        rect.scaleX = 5F
-        rect.scaleY = 5F
-        contPrinc.addView(rect)
-
-        return Objet(nom, couleur, rect)
+        val objet = Objet(this, nom, couleur)
+        objet.createRect(contPrinc)
+        this.setDragable(objet)
+        objet.scaleX = 1.5F
+        objet.scaleY = 1.5F
+        contPrinc.addView(objet)
+        var anim : Animation = AnimationUtils.loadAnimation(this, R.anim.bounce)
+        objet.startAnimation(anim)
+        objet.setOnClickListener{
+                if(modeSelected == Mode.MODIFICATION)
+                {
+                    objetAModifier = it as Objet
+                    val dialog = AjoutObjetDialogFragment(objetAModifier)
+                    dialog.show(supportFragmentManager, "Modifier un objet")
+                    setDragable(it)
+                }
+        }
+        return objet
     }
+
 
 
     fun setDragable(img: View){
@@ -159,6 +184,16 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 var nom = depts.get(0)
                 if(depts.size >= 2)  reseau.addObjet(creerObjet(nom, depts.get(1)))
                 else reseau.addObjet(creerObjet(nom, "#fff000"))
+            }
+            Mode.MODIFICATION -> {
+                if(objetAModifier != null)
+                {
+                    objetAModifier.clear()
+                    objetAModifier.nom = depts.get(0)
+                    objetAModifier.editRect(findViewById<RelativeLayout>(R.id.contPrinc))
+                }
+
+
             }
         }
     }

@@ -25,11 +25,13 @@ class MainActivity : AppCompatActivity(), DeptListener {
     private var modeSelected : Mode = Mode.AUCUN
     private var isPressed = false
     private lateinit var objetAModifier : Objet
-    var reseau = Reseau()
+    var drawGraph = DrawableGraph()
+    var reseau = drawGraph.reseau
     var connexionAModifier : Connexion? = null
     lateinit var tableButsMenu : Array<ImageButton>
     private var savePosX = 0
     private var savePosY = 0
+    lateinit var ecran : ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,11 +66,22 @@ class MainActivity : AppCompatActivity(), DeptListener {
         }
 
         for(i in 0..tableButsMenu.size-1){
+            tableButsMenu.get(i).setBackgroundColor(Color.parseColor("#ffffff"))
             tableButsMenu.get(i).setOnClickListener{
                 clickMenu(i+1)
                 it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fadein))
             }
         }
+        ecran = findViewById<ImageView>(R.id.contRect)
+        ecran.setImageDrawable(drawGraph)
+        var obj1 = Objet(this, "test", 300F, 600F)
+        var obj2 = Objet(this, "test", 900F, 600F)
+        reseau.objets.add(obj1)
+        reseau.objets.add(obj2)
+        var connexion = Connexion(obj1, reseau, this)
+        connexion.setObjet2(obj2)
+        reseau.connexions.add(connexion)
+
 
         setImage()
     }
@@ -80,8 +93,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
     @SuppressLint("ClickableViewAccessibility")
     fun setImage(){
-        val img = findViewById<ImageView>(R.id.planAppartement)
-        img.setOnTouchListener { v, event ->
+        ecran.setOnTouchListener { v, event ->
             val action = event.action
             when(action){
                 MotionEvent.ACTION_DOWN -> {
@@ -108,6 +120,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
                 }
             }
+            ecran.invalidate()
             true
         }
     }
@@ -122,9 +135,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
     fun clickMenu(i: Int)
     {
-        for(i in 0..tableButsMenu.size-1) {
-            tableButsMenu.get(i).setBackgroundColor(Color.parseColor("#ffffff"))
-        }
+
        when(i){
            1 -> {
                if(this.modeSelected != Mode.AJOUT_OBJET)
@@ -136,28 +147,26 @@ class MainActivity : AppCompatActivity(), DeptListener {
            2 -> {
                if(this.modeSelected != Mode.AJOUT_CONNEXION) {
                    this.modeSelected = Mode.AJOUT_CONNEXION
-                   objetsSetDragable(false)
                    ajoutConnexion()
                }
                else {
                    this.modeSelected = Mode.AUCUN
-                   objetsSetDragable(true)
                }
            }
            3 -> {
                if(this.modeSelected != Mode.MODIFICATION) {
                    this.modeSelected = Mode.MODIFICATION
-                   objetsSetDragable(false)
                }
                else {
                    this.modeSelected = Mode.AUCUN
-                   objetsSetDragable(true)
                }
 
            }
        }
         if(this.modeSelected != Mode.AUCUN)
             tableButsMenu.get(i - 1).setBackgroundColor(Color.parseColor("#fff000"))
+        else
+            tableButsMenu.get(i - 1).setBackgroundColor(Color.parseColor("#ffffff"))
     }
 
     fun ajouterObjetDialog()
@@ -166,64 +175,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
         dialog.show(supportFragmentManager, "Ajouter un objet")
     }
 
-    fun objetsSetDragable(isDragable : Boolean)
-    {
-        reseau.objets.forEach{
-            it.setDragable(isDragable)
-        }
-    }
-
-    fun creerObjet(nom: String, couleur: String) : Objet{
-        val contPrinc = findViewById<RelativeLayout>(R.id.contPrinc)
-        val objet = Objet(this, nom, couleur, savePosX, savePosY)
-        objet.createRect(contPrinc)
-        this.setDragable(objet)
-        objet.scaleX = 1.5F
-        objet.scaleY = 1.5F
-        contPrinc.addView(objet)
-        var anim : Animation = AnimationUtils.loadAnimation(this, R.anim.bounce)
-        objet.startAnimation(anim)
-        objet.setOnClickListener{
-                if(modeSelected == Mode.MODIFICATION)
-                {
-                    objetAModifier = it as Objet
-                    val dialog = AjoutObjetDialogFragment(objetAModifier)
-                    dialog.show(supportFragmentManager, "Modifier un objet")
-                }
-                else if(modeSelected == Mode.AJOUT_CONNEXION)
-                {
-                    if(connexionAModifier == null)
-                    {
-                        connexionAModifier = Connexion(it as Objet, reseau, this)
-                    }
-                    else
-                    {
-                        connexionAModifier!!.setObjet2(it as Objet)
-                        val contPrinc = findViewById<RelativeLayout>(R.id.contPrinc)
-                        contPrinc.addView(connexionAModifier)
-                        reseau.addConnexion(connexionAModifier!!)
-                        connexionAModifier = null
-                        reseau.objets.forEach{
-                            it.bringToFront()
-                        }
-                    }
-
-
-                }
-        }
-        return objet
-    }
-
-
-
-    fun setDragable(objet: Objet){
-        val rootLayout = findViewById<ViewGroup>(R.id.contPrinc)
-        val layoutParams = RelativeLayout.LayoutParams(100,100)
-        objet.layoutParams = layoutParams
-        val tlist = TouchDragObject(rootLayout, this.savePosX, this.savePosY)
-        objet.addTouchDragObject(tlist)
-        rootLayout.invalidate()
-    }
 
     fun ajoutConnexion()
     {
@@ -234,16 +185,8 @@ class MainActivity : AppCompatActivity(), DeptListener {
         when(modeSelected) {
             Mode.AJOUT_OBJET -> {
                 var nom = depts.get(0)
-                if(depts.size >= 2)  reseau.addObjet(creerObjet(nom, depts.get(1)))
-                else reseau.addObjet(creerObjet(nom, "#fff000"))
-            }
-            Mode.MODIFICATION -> {
-                if(objetAModifier != null)
-                {
-                    objetAModifier.clear()
-                    objetAModifier.nom = depts.get(0)
-                    objetAModifier.editRect(findViewById<RelativeLayout>(R.id.contPrinc))
-                }
+                reseau.objets.add(Objet(this, nom, 300F, 300F))
+                ecran.invalidate()
             }
         }
     }

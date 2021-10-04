@@ -1,18 +1,31 @@
 package com.example.networkbm.models
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.PorterDuff
+import android.graphics.*
 import android.view.View
 
-class Connexion (objet1 : Objet, reseau: Reseau, context: Context) : View(context) {
+class Connexion (objet1 : Objet, reseau: Graph, context: Context) : Path() {
     private val reseau = reseau
     private var objet1 = objet1
     private var objet2 : Objet? = null
-    private var paint = Paint()
-    private lateinit var canvas: Canvas
+
+    init {
+        actualisePath()
+    }
+
+    fun actualisePath()
+    {
+        this.rewind()
+        this.setLastPoint(objet1.centerX(), objet1.centerY())
+        if(objet2 != null)
+        {
+            this.lineTo(objet2!!.centerX(), objet2!!.centerY())
+        }
+        else
+        {
+            this.lineTo(50f,50f)
+        }
+    }
 
     fun getObjet1() : Objet
     {
@@ -29,6 +42,7 @@ class Connexion (objet1 : Objet, reseau: Reseau, context: Context) : View(contex
         this.objet1.connexions.remove(this)
         newObjet1.connexions.add(this)
         this.objet1 = newObjet1
+        actualisePath()
     }
 
     fun setObjet2(newObjet2 : Objet)
@@ -36,32 +50,15 @@ class Connexion (objet1 : Objet, reseau: Reseau, context: Context) : View(contex
         this.objet2?.connexions?.remove(this)
         newObjet2.connexions.add(this)
         this.objet2 = newObjet2
+        actualisePath()
     }
 
     fun remove()
     {
+        this.remove()
         objet1.connexions.remove(this)
         objet2?.connexions?.remove(this)
-        reseau.removeConnexion(this)
+        reseau.connexions.remove(this)
     }
 
-    override fun onDraw(canvas: Canvas) {
-        this.canvas = canvas
-        paint.setColor(Color.BLACK);
-        paint.strokeWidth = 7F
-        if(objet2 != null)
-        {
-            canvas.drawLine(objet1.x,objet1.y, objet2!!.x, objet2!!.y, paint)
-        }
-
-    }
-
-    fun moveConnexion(){
-        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
-        if(objet2 != null)
-        {
-            canvas.drawLine(objet1.x,objet1.y, objet2!!.x, objet2!!.y, paint)
-        }
-        System.out.println("MOVE CONNEXION FROM " + objet1.nom + " TO " + (objet2?.nom ?:String ))
-    }
 }

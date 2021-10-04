@@ -1,25 +1,42 @@
 package com.example.networkbm.models
 
-import android.graphics.Canvas
-import android.graphics.ColorFilter
+import android.graphics.*
 import android.graphics.drawable.Drawable
 
 class DrawableGraph : Drawable() {
 
+    var reseau : Graph = Graph()
+    lateinit var canvas: Canvas
+    var paint = Paint()
+
+
     override fun draw(canvas: Canvas) {
-        TODO("Not yet implemented")
+        this.canvas = canvas
+
+        paint.setColor(Color.BLACK);
+        paint.strokeWidth = 7F
+
+        reseau.connexions.forEach {
+            canvas.drawPath(it, paint)
+        }
+
+        reseau.objets.forEach {
+            paint.setColor(Color.parseColor(it.couleur))
+            canvas.drawRect(it, paint)
+        }
+
     }
 
     override fun setAlpha(p0: Int) {
-        TODO("Not yet implemented")
+
     }
 
     override fun setColorFilter(p0: ColorFilter?) {
-        TODO("Not yet implemented")
+
     }
 
     override fun getOpacity(): Int {
-        TODO("Not yet implemented")
+        return PixelFormat.TRANSPARENT
     }
 
 }

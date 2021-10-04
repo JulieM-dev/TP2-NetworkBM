@@ -193,7 +193,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                     val dialog = AjoutObjetDialogFragment(objetAModifier)
                     dialog.show(supportFragmentManager, "Modifier un objet")
                 }
-            else if(modeSelected == Mode.AJOUT_CONNEXION)
+                else if(modeSelected == Mode.AJOUT_CONNEXION)
                 {
                     if(connexionAModifier == null)
                     {

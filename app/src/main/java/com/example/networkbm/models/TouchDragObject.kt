@@ -36,6 +36,10 @@ class TouchDragObject(private var rootLayout: ViewGroup, private var posX: Int?,
                 lParams.rightMargin = 0
                 lParams.bottomMargin = 0
                 view.layoutParams = lParams
+                var objet = view as Objet
+                objet.isDragged()
+
+
             }
         }
         rootLayout.invalidate()

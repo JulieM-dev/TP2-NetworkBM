@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.PorterDuff
 import android.view.View
 
 class Connexion (objet1 : Objet, reseau: Reseau, context: Context) : View(context) {
@@ -11,6 +12,7 @@ class Connexion (objet1 : Objet, reseau: Reseau, context: Context) : View(contex
     private var objet1 = objet1
     private var objet2 : Objet? = null
     private var paint = Paint()
+    private lateinit var canvas: Canvas
 
     fun getObjet1() : Objet
     {
@@ -44,6 +46,7 @@ class Connexion (objet1 : Objet, reseau: Reseau, context: Context) : View(contex
     }
 
     override fun onDraw(canvas: Canvas) {
+        this.canvas = canvas
         paint.setColor(Color.BLACK);
         paint.strokeWidth = 7F
         if(objet2 != null)
@@ -51,5 +54,14 @@ class Connexion (objet1 : Objet, reseau: Reseau, context: Context) : View(contex
             canvas.drawLine(objet1.x,objet1.y, objet2!!.x, objet2!!.y, paint)
         }
 
+    }
+
+    fun moveConnexion(){
+        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
+        if(objet2 != null)
+        {
+            canvas.drawLine(objet1.x,objet1.y, objet2!!.x, objet2!!.y, paint)
+        }
+        System.out.println("MOVE CONNEXION FROM " + objet1.nom + " TO " + (objet2?.nom ?:String ))
     }
 }

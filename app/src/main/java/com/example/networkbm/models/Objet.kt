@@ -95,5 +95,12 @@ class Objet(context: Context, nom: String, couleur: String, savePosX: Int?, save
         }
     }
 
+    fun isDragged()
+    {
+        connexions.forEach{
+            it.moveConnexion()
+        }
+    }
+
 
 }

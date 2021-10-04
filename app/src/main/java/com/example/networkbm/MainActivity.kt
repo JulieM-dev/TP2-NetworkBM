@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
     private var savePosX = 0
     private var savePosY = 0
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -56,16 +55,16 @@ class MainActivity : AppCompatActivity(), DeptListener {
             when(it.itemId)
             {
                 R.id.button_reinitialiser -> reinitialisation()
-                R.id.button_ajout_objet -> clickMenu(1, null)
-                R.id.button_ajout_connexion -> clickMenu(2, null)
-                R.id.button_modification -> clickMenu(3, null)
+                R.id.button_ajout_objet -> clickMenu(1)
+                R.id.button_ajout_connexion -> clickMenu(2)
+                R.id.button_modification -> clickMenu(3)
             }
             true
         }
 
         for(i in 0..tableButsMenu.size-1){
             tableButsMenu.get(i).setOnClickListener{
-                clickMenu(i+1, null)
+                clickMenu(i+1)
                 it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fadein))
             }
         }
@@ -85,13 +84,15 @@ class MainActivity : AppCompatActivity(), DeptListener {
             val action = event.action
             when(action){
                 MotionEvent.ACTION_DOWN -> {
+                    this.savePosX = event.getX().toInt()
+                    this.savePosY = event.getY().toInt()
                     if(this.modeSelected != Mode.AJOUT_OBJET) {
                         isPressed = true
                         Handler(Looper.getMainLooper()).postDelayed({
                             if (isPressed) {
                                 val dialog = AjoutObjetDialogFragment()
                                 dialog.show(supportFragmentManager, "Ajouter un objet")
-                                this.clickMenu(1, event)
+                                this.clickMenu(1)
                             }
                         }, 500)
                     } else {
@@ -118,12 +119,8 @@ class MainActivity : AppCompatActivity(), DeptListener {
         return super.onOptionsItemSelected(item)
     }
 
-    fun clickMenu(i: Int, event: MotionEvent?)
+    fun clickMenu(i: Int)
     {
-        if(event != null) {
-            this.savePosX = event.getX().toInt()
-            this.savePosY = event.getY().toInt()
-        }
         for(i in 0..tableButsMenu.size-1) {
             tableButsMenu.get(i).setBackgroundColor(Color.parseColor("#ffffff"))
         }
@@ -216,8 +213,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
                     objetAModifier.nom = depts.get(0)
                     objetAModifier.editRect(findViewById<RelativeLayout>(R.id.contPrinc))
                 }
-
-
             }
         }
     }

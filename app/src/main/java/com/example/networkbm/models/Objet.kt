@@ -1,6 +1,5 @@
 package com.example.networkbm.models
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
@@ -8,9 +7,8 @@ import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RectShape
 import android.view.View
 import android.widget.RelativeLayout
-import android.widget.TextView
 
-class Objet(context: Context, nom: String, couleur: String) : View(context) {
+class Objet(context: Context, nom: String, couleur: String, savePosX: Int?, savePosY: Int?) : View(context) {
 
     private var bitmap = Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888)
     private lateinit var canvas :Canvas
@@ -18,7 +16,8 @@ class Objet(context: Context, nom: String, couleur: String) : View(context) {
     var nom : String = nom
     var couleur : String = couleur
     lateinit var touchDragObject : TouchDragObject
-
+    private var posX = savePosX
+    private var posY = savePosY
 
 
     override fun onDraw(canvas: Canvas){
@@ -57,8 +56,14 @@ class Objet(context: Context, nom: String, couleur: String) : View(context) {
     fun createRect(contPrinc: RelativeLayout) {
         canvas = Canvas(bitmap)
         editRect(contPrinc)
-        this.translationX = (contPrinc.width / 2).toFloat()
-        this.translationY = (contPrinc.height / 2).toFloat()
+        System.out.println("-----" + posX)
+        if(posX == null && posY == null){
+            this.translationX = (contPrinc.width / 2).toFloat()
+            this.translationY = (contPrinc.height / 2).toFloat()
+        } else {
+            this.translationX = posX!!.toFloat()
+            this.translationY = posY!!.toFloat()
+        }
     }
 
 

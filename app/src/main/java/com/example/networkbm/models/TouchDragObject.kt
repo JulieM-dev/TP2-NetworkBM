@@ -5,18 +5,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 
-class TouchDragObject(private var rootLayout: ViewGroup) : View.OnTouchListener {
+class TouchDragObject(private var rootLayout: ViewGroup, private var posX: Int?,
+                      private var posY: Int?
+) : View.OnTouchListener {
 
     override fun onTouch(view: View, event: MotionEvent): Boolean {
-        var X = event.rawX
-        var Y = event.rawY
-        var xDelta = 625
-        var yDelta = 1200
+        val X = event.rawX
+        val Y = event.rawY
+        if(posX == null && posY == null){
+            posX = 625
+            posY = 1080
+        }
         when(event.action){
             MotionEvent.ACTION_DOWN -> {
                 val lParams : RelativeLayout.LayoutParams = view.layoutParams as RelativeLayout.LayoutParams
-                xDelta = (X - lParams.leftMargin).toInt()
-                yDelta = (Y - lParams.topMargin).toInt()
+                posX = (X - lParams.leftMargin).toInt()
+                posY = (Y - lParams.topMargin).toInt()
                 view.layoutParams = lParams
             }
             MotionEvent.ACTION_UP -> {
@@ -27,8 +31,8 @@ class TouchDragObject(private var rootLayout: ViewGroup) : View.OnTouchListener 
             }
             MotionEvent.ACTION_MOVE -> {
                 val lParams : RelativeLayout.LayoutParams = view.layoutParams as RelativeLayout.LayoutParams
-                lParams.leftMargin = (X - xDelta).toInt()
-                lParams.topMargin = (Y - yDelta).toInt()
+                lParams.leftMargin = (X - posX!!).toInt()
+                lParams.topMargin = (Y - posY!!).toInt()
                 lParams.rightMargin = 0
                 lParams.bottomMargin = 0
                 view.layoutParams = lParams

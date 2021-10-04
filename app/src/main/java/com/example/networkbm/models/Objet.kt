@@ -19,7 +19,7 @@ class Objet(context: Context, nom: String, couleur: String) : View(context) {
     var couleur : String = couleur
     lateinit var touchDragObject : TouchDragObject
 
-
+    var connexions = ArrayList<Connexion>()
 
     override fun onDraw(canvas: Canvas){
         super.onDraw(canvas)
@@ -88,5 +88,6 @@ class Objet(context: Context, nom: String, couleur: String) : View(context) {
             this.setOnTouchListener(null)
         }
     }
+
 
 }

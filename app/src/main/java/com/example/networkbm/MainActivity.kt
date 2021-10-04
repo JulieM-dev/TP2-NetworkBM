@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
     private var isPressed = false
     private lateinit var objetAModifier : Objet
     var reseau = Reseau()
+    var connexionAModifier : Connexion? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -121,10 +122,15 @@ class MainActivity : AppCompatActivity(), DeptListener {
                //ajouterObjetDialog()
            }
            2 -> {
-               if(this.modeSelected != Mode.AJOUT_CONNEXION)
-                    this.modeSelected = Mode.AJOUT_CONNEXION
-               else
+               if(this.modeSelected != Mode.AJOUT_CONNEXION) {
+                   this.modeSelected = Mode.AJOUT_CONNEXION
+                   objetsSetDragable(false)
+                   ajoutConnexion()
+               }
+               else {
                    this.modeSelected = Mode.AUCUN
+                   objetsSetDragable(true)
+               }
            }
            3 -> {
                if(this.modeSelected != Mode.MODIFICATION) {
@@ -172,6 +178,26 @@ class MainActivity : AppCompatActivity(), DeptListener {
                     val dialog = AjoutObjetDialogFragment(objetAModifier)
                     dialog.show(supportFragmentManager, "Modifier un objet")
                 }
+            else if(modeSelected == Mode.AJOUT_CONNEXION)
+                {
+                    if(connexionAModifier == null)
+                    {
+                        connexionAModifier = Connexion(it as Objet, reseau, this)
+                    }
+                    else
+                    {
+                        connexionAModifier!!.setObjet2(it as Objet)
+                        val contPrinc = findViewById<RelativeLayout>(R.id.contPrinc)
+                        contPrinc.addView(connexionAModifier)
+                        reseau.addConnexion(connexionAModifier!!)
+                        connexionAModifier = null
+                        reseau.objets.forEach{
+                            it.bringToFront()
+                        }
+                    }
+
+
+                }
         }
         return objet
     }
@@ -185,6 +211,11 @@ class MainActivity : AppCompatActivity(), DeptListener {
         val tlist = TouchDragObject(rootLayout)
         objet.addTouchDragObject(tlist)
         rootLayout.invalidate()
+    }
+
+    fun ajoutConnexion()
+    {
+
     }
 
     override fun onDeptSelected(depts: ArrayList<String>) {

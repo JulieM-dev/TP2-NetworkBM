@@ -128,11 +128,15 @@ class MainActivity : AppCompatActivity(), DeptListener {
                    this.modeSelected = Mode.AUCUN
            }
            3 -> {
-               if(this.modeSelected != Mode.MODIFICATION)
-                    this.modeSelected = Mode.MODIFICATION
-               else
+               if(this.modeSelected != Mode.MODIFICATION) {
+                   this.modeSelected = Mode.MODIFICATION
+                   objetsSetDragable(false)
+               }
+               else {
                    this.modeSelected = Mode.AUCUN
-               initModificationListener()
+                   objetsSetDragable(true)
+               }
+
            }
        }
         if(this.modeSelected != Mode.AUCUN)
@@ -145,10 +149,10 @@ class MainActivity : AppCompatActivity(), DeptListener {
         dialog.show(supportFragmentManager, "Ajouter un objet")
     }
 
-    fun initModificationListener()
+    fun objetsSetDragable(isDragable : Boolean)
     {
         reseau.objets.forEach{
-            it.setDragable(false)
+            it.setDragable(isDragable)
         }
     }
 
@@ -168,7 +172,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
                     objetAModifier = it as Objet
                     val dialog = AjoutObjetDialogFragment(objetAModifier)
                     dialog.show(supportFragmentManager, "Modifier un objet")
-                    it.setDragable(true)
                 }
         }
         return objet

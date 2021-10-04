@@ -16,6 +16,7 @@ class Objet(context: Context, nom: String, couleur: String, savePosX: Int?, save
     var nom : String = nom
     var couleur : String = couleur
     lateinit var touchDragObject : TouchDragObject
+    var connexions = ArrayList<Connexion>()
     private var posX = savePosX
     private var posY = savePosY
 
@@ -93,5 +94,6 @@ class Objet(context: Context, nom: String, couleur: String, savePosX: Int?, save
             this.setOnTouchListener(null)
         }
     }
+
 
 }

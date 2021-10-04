@@ -17,7 +17,7 @@ class DrawableGraph : Drawable() {
         paint.strokeWidth = 7F
 
         reseau.connexions.forEach {
-            canvas.drawPath(it, paint)
+            canvas.drawLine(it.getObjet1().centerX(), it.getObjet1().centerY(), it.getObjet2()!!.centerX(), it.getObjet2()!!.centerY(), paint)
         }
 
         reseau.objets.forEach {

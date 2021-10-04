@@ -17,6 +17,8 @@ class Objet(context: Context, nom: String, couleur: String) : View(context) {
     private var shapeDrawable = ShapeDrawable(RectShape())
     var nom : String = nom
     var couleur : String = couleur
+    lateinit var touchDragObject : TouchDragObject
+
 
 
     override fun onDraw(canvas: Canvas){
@@ -69,4 +71,22 @@ class Objet(context: Context, nom: String, couleur: String) : View(context) {
         this.shapeDrawable.paint.color = Color.parseColor(color)
         shapeDrawable.draw(canvas)
     }
+
+    fun addTouchDragObject(touchDragObject: TouchDragObject)
+    {
+        this.touchDragObject = touchDragObject
+        setDragable(true)
+    }
+
+    fun setDragable(dragable: Boolean)
+    {
+        if(dragable)
+        {
+            this.setOnTouchListener(touchDragObject)
+        }
+        else{
+            this.setOnTouchListener(null)
+        }
+    }
+
 }

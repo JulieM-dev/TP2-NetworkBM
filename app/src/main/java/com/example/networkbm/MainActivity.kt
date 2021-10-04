@@ -1,6 +1,7 @@
 package com.example.networkbm
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -43,26 +44,26 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
         val navView = findViewById<NavigationView>(R.id.navView)
 
-        navView.setNavigationItemSelectedListener {
-            when(it.itemId)
-            {
-                R.id.button_reinitialiser -> reinitialisation()
-                R.id.button_ajout_objet -> clickMenu(1)
-                R.id.button_ajout_connexion -> clickMenu(2)
-                R.id.button_modification -> clickMenu(3)
-            }
-            true
-        }
-
         val tableButsMenu = arrayOf (
             findViewById<ImageButton>(R.id.butAjoutObjet),
             findViewById<ImageButton>(R.id.butAjoutConnexion),
             findViewById<ImageButton>(R.id.butModif)
         )
 
+        navView.setNavigationItemSelectedListener {
+            when(it.itemId)
+            {
+                R.id.button_reinitialiser -> reinitialisation()
+                R.id.button_ajout_objet -> clickMenu(1, tableButsMenu)
+                R.id.button_ajout_connexion -> clickMenu(2, tableButsMenu)
+                R.id.button_modification -> clickMenu(3, tableButsMenu)
+            }
+            true
+        }
+
         for(i in 0..tableButsMenu.size-1){
             tableButsMenu.get(i).setOnClickListener{
-                clickMenu(i+1)
+                clickMenu(i+1, tableButsMenu)
                 it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fadein))
             }
         }
@@ -83,23 +84,13 @@ class MainActivity : AppCompatActivity(), DeptListener {
             when(action){
                 MotionEvent.ACTION_DOWN -> {
                     isPressed = true
-                    System.out.println("HEYO1")
                     Handler(Looper.getMainLooper()).postDelayed({
                         if(isPressed){
                             val dialog = AjoutObjetDialogFragment()
                             dialog.show(supportFragmentManager, "Ajouter un objet")
+                            this.modeSelected = Mode.AJOUT_OBJET
                         }
                     },500)
-                }
-                MotionEvent.ACTION_MOVE -> {
-                }
-
-                MotionEvent.ACTION_UP -> {
-                    isPressed = false
-                }
-
-                MotionEvent.ACTION_CANCEL -> {
-
                 }
                 else ->{
 
@@ -117,19 +108,35 @@ class MainActivity : AppCompatActivity(), DeptListener {
         return super.onOptionsItemSelected(item)
     }
 
-    fun clickMenu(i : Int)
+    fun clickMenu(i: Int, tableButsMenu: Array<ImageButton>)
     {
+        for(i in 0..tableButsMenu.size-1) {
+            tableButsMenu.get(i).setBackgroundColor(Color.parseColor("#ffffff"))
+        }
        when(i){
            1 -> {
-               this.modeSelected = Mode.AJOUT_OBJET
-                ajouterObjetDialog()
+               if(this.modeSelected != Mode.AJOUT_OBJET)
+                    this.modeSelected = Mode.AJOUT_OBJET
+               else
+                   this.modeSelected = Mode.AUCUN
+               //ajouterObjetDialog()
            }
-           2 -> this.modeSelected = Mode.AJOUT_CONNEXION
+           2 -> {
+               if(this.modeSelected != Mode.AJOUT_CONNEXION)
+                    this.modeSelected = Mode.AJOUT_CONNEXION
+               else
+                   this.modeSelected = Mode.AUCUN
+           }
            3 -> {
-               this.modeSelected = Mode.MODIFICATION
+               if(this.modeSelected != Mode.MODIFICATION)
+                    this.modeSelected = Mode.MODIFICATION
+               else
+                   this.modeSelected = Mode.AUCUN
                initModificationListener()
            }
        }
+        if(this.modeSelected != Mode.AUCUN)
+            tableButsMenu.get(i - 1).setBackgroundColor(Color.parseColor("#fff000"))
     }
 
     fun ajouterObjetDialog()

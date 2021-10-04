@@ -27,6 +27,9 @@ class MainActivity : AppCompatActivity(), DeptListener {
     private lateinit var objetAModifier : Objet
     var reseau = Reseau()
     var connexionAModifier : Connexion? = null
+    lateinit var tableButsMenu : Array<ImageButton>
+    private var savePosX = 0
+    private var savePosY = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +47,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
         val navView = findViewById<NavigationView>(R.id.navView)
 
-        val tableButsMenu = arrayOf (
+        tableButsMenu = arrayOf (
             findViewById<ImageButton>(R.id.butAjoutObjet),
             findViewById<ImageButton>(R.id.butAjoutConnexion),
             findViewById<ImageButton>(R.id.butModif)
@@ -54,16 +57,16 @@ class MainActivity : AppCompatActivity(), DeptListener {
             when(it.itemId)
             {
                 R.id.button_reinitialiser -> reinitialisation()
-                R.id.button_ajout_objet -> clickMenu(1, tableButsMenu)
-                R.id.button_ajout_connexion -> clickMenu(2, tableButsMenu)
-                R.id.button_modification -> clickMenu(3, tableButsMenu)
+                R.id.button_ajout_objet -> clickMenu(1, null)
+                R.id.button_ajout_connexion -> clickMenu(2, null)
+                R.id.button_modification -> clickMenu(3, null)
             }
             true
         }
 
         for(i in 0..tableButsMenu.size-1){
             tableButsMenu.get(i).setOnClickListener{
-                clickMenu(i+1, tableButsMenu)
+                clickMenu(i+1, null)
                 it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fadein))
             }
         }
@@ -83,14 +86,22 @@ class MainActivity : AppCompatActivity(), DeptListener {
             val action = event.action
             when(action){
                 MotionEvent.ACTION_DOWN -> {
-                    isPressed = true
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        if(isPressed){
-                            val dialog = AjoutObjetDialogFragment()
-                            dialog.show(supportFragmentManager, "Ajouter un objet")
-                            this.modeSelected = Mode.AJOUT_OBJET
-                        }
-                    },500)
+                    if(this.modeSelected != Mode.AJOUT_OBJET) {
+                        isPressed = true
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            if (isPressed) {
+                                val dialog = AjoutObjetDialogFragment()
+                                dialog.show(supportFragmentManager, "Ajouter un objet")
+                                this.clickMenu(1, event)
+                            }
+                        }, 500)
+                    } else {
+                        val dialog = AjoutObjetDialogFragment()
+                        dialog.show(supportFragmentManager, "Ajouter un objet")
+                    }
+                }
+                MotionEvent.ACTION_UP -> {
+                    isPressed = false
                 }
                 else ->{
 
@@ -108,8 +119,12 @@ class MainActivity : AppCompatActivity(), DeptListener {
         return super.onOptionsItemSelected(item)
     }
 
-    fun clickMenu(i: Int, tableButsMenu: Array<ImageButton>)
+    fun clickMenu(i: Int, event: MotionEvent?)
     {
+        if(event != null) {
+            this.savePosX = event.getX().toInt()
+            this.savePosY = event.getY().toInt()
+        }
         for(i in 0..tableButsMenu.size-1) {
             tableButsMenu.get(i).setBackgroundColor(Color.parseColor("#ffffff"))
         }
@@ -163,7 +178,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
     fun creerObjet(nom: String, couleur: String) : Objet{
         val contPrinc = findViewById<RelativeLayout>(R.id.contPrinc)
-        val objet = Objet(this, nom, couleur)
+        val objet = Objet(this, nom, couleur, savePosX, savePosY)
         objet.createRect(contPrinc)
         this.setDragable(objet)
         objet.scaleX = 1.5F
@@ -208,7 +223,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
         val rootLayout = findViewById<ViewGroup>(R.id.contPrinc)
         val layoutParams = RelativeLayout.LayoutParams(100,100)
         objet.layoutParams = layoutParams
-        val tlist = TouchDragObject(rootLayout)
+        val tlist = TouchDragObject(rootLayout, this.savePosX, this.savePosY)
         objet.addTouchDragObject(tlist)
         rootLayout.invalidate()
     }

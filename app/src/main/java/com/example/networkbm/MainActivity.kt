@@ -8,7 +8,6 @@ import android.os.Handler
 import android.os.Looper
 import android.view.MenuItem
 import android.view.MotionEvent
-import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -141,7 +140,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
     fun initModificationListener()
     {
         reseau.objets.forEach{
-            it.setOnTouchListener(null)
+            it.setDragable(false)
         }
     }
 
@@ -161,7 +160,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                     objetAModifier = it as Objet
                     val dialog = AjoutObjetDialogFragment(objetAModifier)
                     dialog.show(supportFragmentManager, "Modifier un objet")
-                    setDragable(it)
+                    it.setDragable(true)
                 }
         }
         return objet
@@ -169,12 +168,12 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
 
 
-    fun setDragable(img: View){
+    fun setDragable(objet: Objet){
         val rootLayout = findViewById<ViewGroup>(R.id.contPrinc)
         val layoutParams = RelativeLayout.LayoutParams(100,100)
-        img.layoutParams = layoutParams
+        objet.layoutParams = layoutParams
         val tlist = TouchDragObject(rootLayout)
-        img.setOnTouchListener(tlist)
+        objet.addTouchDragObject(tlist)
         rootLayout.invalidate()
     }
 

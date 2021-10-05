@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
         ecran = findViewById<ImageView>(R.id.contRect)
         ecran.setImageDrawable(drawGraph)
 
-        dragOnTouch = TouchDragObject(ecran)
+        dragOnTouch = TouchDragObject(ecran, reseau)
         var obj1 = Objet(this, "test", 300F, 600F)
         var obj2 = Objet(this, "test", 900F, 600F)
         reseau.objets.add(obj1)
@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
         reseau.connexions.add(connexion)
 
 
-        setImage()
+        initListeners()
     }
 
     fun reinitialisation()
@@ -95,42 +95,42 @@ class MainActivity : AppCompatActivity(), DeptListener {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    fun setImage(){
+    fun initListeners()
+    {
+
+
         ecran.setOnTouchListener { v, event ->
             dragOnTouch.onTouch(null, event)
             val action = event.action
-            when(action){
-                MotionEvent.ACTION_DOWN -> {
+            when(action)
+            {
+                MotionEvent.ACTION_DOWN ->
+                {
                     this.savePosX = event.getX()
                     this.savePosY = event.getY()
 
-                    if(this.modeSelected == Mode.AJOUT_CONNEXION)
-                    {
-                        var objet = reseau.getObjet(event.getX(), event.getY())
-                        if(objet != null && connexionAModifier == null)
-                        {
-                            connexionAModifier = Connexion(objet, reseau, this)
-
-                        }
-                        else if(objet != null && connexionAModifier != null)
-                        {
-                            connexionAModifier?.setObjet2(objet)
-                            reseau.connexions.add(connexionAModifier!!)
-                            connexionAModifier = null
-
-                        }
-                    }
-                    else if(this.modeSelected != Mode.AJOUT_OBJET)
+                    if(this.modeSelected != Mode.AJOUT_OBJET)
                     {
                         var objet = reseau.getObjet(event.x, event.y)
                         if(objet != null)
                         {
-                            when(modeSelected){
+                            System.out.println("MODE SELECTED = " + modeSelected.getLibelle())
+                            when(modeSelected)
+                            {
                                 Mode.AUCUN -> {
                                     dragOnTouch.onTouch(objet, event)
                                 }
                                 Mode.AJOUT_CONNEXION -> {
-
+                                    if(connexionAModifier == null)
+                                    {
+                                        connexionAModifier = Connexion(objet, reseau, this)
+                                        reseau.connexions.add(connexionAModifier!!)
+                                        dragOnTouch.dragLine(connexionAModifier!!, event)
+                                    }
+                                    else if(connexionAModifier != null)
+                                    {
+                                        dragOnTouch.dragLine(connexionAModifier!!, event)
+                                    }
                                 }
                                 Mode.MODIFICATION -> {
                                     objetAModifier = objet
@@ -139,16 +139,13 @@ class MainActivity : AppCompatActivity(), DeptListener {
                                 }
                             }
                         }
-                        isPressed = true
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            if (isPressed) {
-                                objetAModifier = Objet(this, "unnamed" , event.getX(), event.getY())
-                                val dialog = AjoutObjetDialogFragment()
-                                dialog.show(supportFragmentManager, resources.getString(R.string.addObject))
-                                this.clickMenu(1)
-                            }
-                        }, 500)
-                    }
+                        else if (modeSelected == Mode.AJOUT_CONNEXION && connexionAModifier != null)
+                        {
+                            System.out.println("Before drag LINE ------------------------------------------------------")
+                            System.out.println("Before drag LINE ------------------------------------------------------")
+                            System.out.println("Before drag LINE ------------------------------------------------------")
+                            dragOnTouch.dragLine(connexionAModifier!!, event)
+                        }
                         else
                         {
                             isPressed = true
@@ -159,9 +156,11 @@ class MainActivity : AppCompatActivity(), DeptListener {
                                     dialog.show(supportFragmentManager, "Ajouter un objet")
                                     this.clickMenu(1)
                                 }
-                            }, 500)
+                            }, 1000)
                         }
-                    } else {
+                    }
+                    else
+                    {
                         objetAModifier = Objet(this, "unnamed" , event.getX(), event.getY())
                         val dialog = AjoutObjetDialogFragment()
                         dialog.show(supportFragmentManager, resources.getString(R.string.addObject))
@@ -210,7 +209,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
            2 -> {
                if(this.modeSelected != Mode.AJOUT_CONNEXION) {
                    this.modeSelected = Mode.AJOUT_CONNEXION
-                   ajoutConnexion()
                }
                else {
                    this.modeSelected = Mode.AUCUN

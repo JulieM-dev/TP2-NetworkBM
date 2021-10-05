@@ -3,14 +3,23 @@ package com.example.networkbm.models
 import android.content.Context
 import android.graphics.*
 import android.view.View
+import java.util.stream.Collectors
 
 class Connexion (objet1 : Objet, reseau: Graph, context: Context) : Path() {
     private val reseau = reseau
     private var objet1 = objet1
     private var objet2 : Objet? = null
+    var pointerX = 50F
+    var pointerY = 0F
 
     init {
         actualisePath()
+    }
+
+    fun setPositions(x : Float, y : Float)
+    {
+        pointerX = x
+        pointerY = y
     }
 
     fun actualisePath()
@@ -25,6 +34,15 @@ class Connexion (objet1 : Objet, reseau: Graph, context: Context) : Path() {
         {
             this.lineTo(50f,50f)
         }
+    }
+
+    fun getCords() : List<Float>
+    {
+        if(objet2 == null)
+        {
+            return listOf(objet1.centerX(), objet1.centerY(), pointerX, pointerY)
+        }
+        return listOf(objet1.centerX(), objet1.centerY(), objet2!!.centerX(), objet2!!.centerY())
     }
 
     fun getObjet1() : Objet

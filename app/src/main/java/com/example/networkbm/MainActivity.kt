@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
     private var savePosX = 0
     private var savePosY = 0
     lateinit var ecran : ImageView
+    lateinit var dragOnTouch : TouchDragObject
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +74,8 @@ class MainActivity : AppCompatActivity(), DeptListener {
         }
         ecran = findViewById<ImageView>(R.id.contRect)
         ecran.setImageDrawable(drawGraph)
+
+        dragOnTouch = TouchDragObject(ecran)
         var obj1 = Objet(this, "test", 300F, 600F)
         var obj2 = Objet(this, "test", 900F, 600F)
         reseau.objets.add(obj1)
@@ -93,6 +96,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
     @SuppressLint("ClickableViewAccessibility")
     fun setImage(){
         ecran.setOnTouchListener { v, event ->
+            dragOnTouch.onTouch(null, event)
             val action = event.action
             when(action){
                 MotionEvent.ACTION_DOWN -> {
@@ -121,7 +125,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                         {
                             when(modeSelected){
                                 Mode.AUCUN -> {
-                                    objet.setPositions(event.x, event.y)
+                                    dragOnTouch.onTouch(objet, event)
                                 }
                                 Mode.AJOUT_CONNEXION -> {
 
@@ -131,15 +135,18 @@ class MainActivity : AppCompatActivity(), DeptListener {
                                 }
                             }
                         }
-                        isPressed = true
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            if (isPressed) {
-                                objetAModifier = Objet(this, "unnamed" , event.getX(), event.getY())
-                                val dialog = AjoutObjetDialogFragment()
-                                dialog.show(supportFragmentManager, "Ajouter un objet")
-                                this.clickMenu(1)
-                            }
-                        }, 500)
+                        else
+                        {
+                            isPressed = true
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                if (isPressed) {
+                                    objetAModifier = Objet(this, "unnamed" , event.getX(), event.getY())
+                                    val dialog = AjoutObjetDialogFragment()
+                                    dialog.show(supportFragmentManager, "Ajouter un objet")
+                                    this.clickMenu(1)
+                                }
+                            }, 500)
+                        }
                     } else {
                         objetAModifier = Objet(this, "unnamed" , event.getX(), event.getY())
                         val dialog = AjoutObjetDialogFragment()

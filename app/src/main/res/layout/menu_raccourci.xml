@@ -18,9 +18,10 @@
             android:layout_width="110dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@color/white"
             android:scaleType="fitCenter"
-            tools:ignore="SpeakableTextPresentCheck"
-            android:src="@drawable/add" />
+            android:src="@android:drawable/ic_menu_add"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <ImageButton
             android:id="@+id/butAjoutConnexion"
@@ -29,6 +30,7 @@
             android:layout_weight="1"
             android:scaleType="fitCenter"
             tools:ignore="SpeakableTextPresentCheck"
+            android:background="@color/white"
             android:src="@drawable/link" />
 
         <ImageButton
@@ -38,6 +40,7 @@
             android:layout_weight="1"
             android:scaleType="fitCenter"
             tools:ignore="SpeakableTextPresentCheck"
+            android:background="@color/white"
             android:src="@drawable/edit" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

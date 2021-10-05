@@ -66,7 +66,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
         }
 
         for(i in 0..tableButsMenu.size-1){
-            tableButsMenu.get(i).setBackgroundColor(Color.parseColor("#ffffff"))
             tableButsMenu.get(i).setOnClickListener{
                 clickMenu(i+1)
                 it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fadein))
@@ -153,7 +152,9 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
     fun clickMenu(i: Int)
     {
-
+        for(i in 0..tableButsMenu.size-1){
+            tableButsMenu.get(i).setBackgroundColor(Color.parseColor("#ffffff"))
+        }
        when(i){
            1 -> {
                if(this.modeSelected != Mode.AJOUT_OBJET)

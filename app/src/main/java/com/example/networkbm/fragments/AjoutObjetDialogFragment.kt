@@ -3,7 +3,9 @@ package com.example.networkbm.fragments
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
@@ -32,7 +34,7 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
 
         var formulaire = activity?.layoutInflater?.inflate(R.layout.ajout_objet_form, null)
         dialogBuilder.setView(formulaire)
-            .setTitle("Ajout objet")
+            .setTitle(this.tag)
 
         alertDialog = dialogBuilder.create()
 
@@ -75,10 +77,8 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
             listener = context as DeptListener
         }
         catch (e: ClassCastException){
-            throw ClassCastException(context.toString() +
-            "doit implementer DeptListener")
+            throw ClassCastException(context.toString() + "doit implementer DeptListener")
         }
-
 
     }
 

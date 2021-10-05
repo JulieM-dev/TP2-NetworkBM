@@ -1,0 +1,9 @@
+<resources>
+    <string name="addObject">Ajouter un objet</string>
+    <string name="editObject">Modifier un objet</string>
+    <string name="objectCreated">Objet créé</string>
+    <string name="objectModified">Objet modifié</string>
+    <string name="open">Ouvrir</string>
+    <string name="close">Fermer</string>
+    <string name="name">Nom</string>
+</resources>

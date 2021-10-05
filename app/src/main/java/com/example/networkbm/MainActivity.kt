@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.*
+import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.networkbm.fragments.AjoutObjetDialogFragment
@@ -29,8 +30,8 @@ class MainActivity : AppCompatActivity(), DeptListener {
     var reseau = drawGraph.reseau
     var connexionAModifier : Connexion? = null
     lateinit var tableButsMenu : Array<ImageButton>
-    private var savePosX = 0
-    private var savePosY = 0
+    private var savePosX = 0F
+    private var savePosY = 0F
     lateinit var ecran : ImageView
     lateinit var dragOnTouch : TouchDragObject
 
@@ -100,8 +101,8 @@ class MainActivity : AppCompatActivity(), DeptListener {
             val action = event.action
             when(action){
                 MotionEvent.ACTION_DOWN -> {
-                    this.savePosX = event.getX().toInt()
-                    this.savePosY = event.getY().toInt()
+                    this.savePosX = event.getX()
+                    this.savePosY = event.getY()
 
                     if(this.modeSelected == Mode.AJOUT_CONNEXION)
                     {
@@ -132,10 +133,22 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
                                 }
                                 Mode.MODIFICATION -> {
-
+                                    objetAModifier = objet
+                                    val dialog = AjoutObjetDialogFragment(objet)
+                                    dialog.show(supportFragmentManager, resources.getString(R.string.editObject))
                                 }
                             }
                         }
+                        isPressed = true
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            if (isPressed) {
+                                objetAModifier = Objet(this, "unnamed" , event.getX(), event.getY())
+                                val dialog = AjoutObjetDialogFragment()
+                                dialog.show(supportFragmentManager, resources.getString(R.string.addObject))
+                                this.clickMenu(1)
+                            }
+                        }, 500)
+                    }
                         else
                         {
                             isPressed = true
@@ -151,7 +164,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                     } else {
                         objetAModifier = Objet(this, "unnamed" , event.getX(), event.getY())
                         val dialog = AjoutObjetDialogFragment()
-                        dialog.show(supportFragmentManager, "Ajouter un objet")
+                        dialog.show(supportFragmentManager, resources.getString(R.string.addObject))
                     }
                 }
                 MotionEvent.ACTION_UP -> {
@@ -237,6 +250,13 @@ class MainActivity : AppCompatActivity(), DeptListener {
             Mode.AJOUT_OBJET -> {
                 objetAModifier.nom = depts.get(0)
                 reseau.objets.add(objetAModifier)
+                Toast.makeText(this, getString(R.string.objectCreated), LENGTH_SHORT).show()
+                ecran.invalidate()
+            }
+            Mode.MODIFICATION -> {
+                val obj = reseau.getObjet(this.savePosX, this.savePosY)
+                obj!!.nom = depts.get(0)
+                Toast.makeText(this, getString(R.string.objectModified), LENGTH_SHORT).show()
                 ecran.invalidate()
             }
         }

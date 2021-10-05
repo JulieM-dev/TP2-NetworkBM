@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:autofillHints="Nom"
-        android:text="Nom"
+        android:hint="@string/name"
         android:textSize="24sp"
         app:layout_constraintTop_toBottomOf="@+id/objetPrevisualisation" />
 
@@ -38,6 +38,8 @@
         android:layout_height="48dp"
         android:layout_marginTop="20dp"
         android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextNom" />
 
     <Button

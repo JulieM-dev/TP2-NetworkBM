@@ -34,6 +34,10 @@ class DrawableGraph : Drawable() {
             }
 
             canvas.drawRoundRect(it,20F,20F, paint)
+            paint.setColor(Color.parseColor("#000000"))
+            paint.textSize = 30F
+            paint.textAlign = Paint.Align.CENTER
+            canvas.drawText(it.nom, it.centerX(), it.centerY()+65, paint)
         }
 
     }

@@ -99,16 +99,34 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 MotionEvent.ACTION_DOWN -> {
                     this.savePosX = event.getX().toInt()
                     this.savePosY = event.getY().toInt()
-                    if(this.modeSelected != Mode.AJOUT_OBJET) {
+                    if(this.modeSelected == Mode.AJOUT_CONNEXION)
+                    {
+                        var objet = reseau.getObjet(event.getX(), event.getY())
+                        if(objet != null && connexionAModifier == null)
+                        {
+                            connexionAModifier = Connexion(objet, reseau, this)
+
+                        }
+                        else if(objet != null && connexionAModifier != null)
+                        {
+                            connexionAModifier?.setObjet2(objet)
+                            reseau.connexions.add(connexionAModifier!!)
+                            connexionAModifier = null
+
+                        }
+                    }
+                    else if(this.modeSelected != Mode.AJOUT_OBJET) {
                         isPressed = true
                         Handler(Looper.getMainLooper()).postDelayed({
                             if (isPressed) {
+                                objetAModifier = Objet(this, "unnamed" , event.getX(), event.getY())
                                 val dialog = AjoutObjetDialogFragment()
                                 dialog.show(supportFragmentManager, "Ajouter un objet")
                                 this.clickMenu(1)
                             }
                         }, 500)
                     } else {
+                        objetAModifier = Objet(this, "unnamed" , event.getX(), event.getY())
                         val dialog = AjoutObjetDialogFragment()
                         dialog.show(supportFragmentManager, "Ajouter un objet")
                     }
@@ -184,8 +202,8 @@ class MainActivity : AppCompatActivity(), DeptListener {
     override fun onDeptSelected(depts: ArrayList<String>) {
         when(modeSelected) {
             Mode.AJOUT_OBJET -> {
-                var nom = depts.get(0)
-                reseau.objets.add(Objet(this, nom, 300F, 300F))
+                objetAModifier.nom = depts.get(0)
+                reseau.objets.add(objetAModifier)
                 ecran.invalidate()
             }
         }

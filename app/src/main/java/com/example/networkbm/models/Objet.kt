@@ -8,11 +8,12 @@ import android.graphics.drawable.shapes.RectShape
 import android.view.View
 import android.widget.RelativeLayout
 
-class Objet(context: Context, nom: String, x: Float, y: Float) : RectF(x, y, x+100, y+100) {
+class Objet(context: Context, nom: String, x: Float, y: Float) : RectF(x-45, y-42, x+45, y+42) {
 
     var nom = nom
     var couleur : String = "#009944"
     var connexions = ArrayList<Connexion>()
+
 
 
 

@@ -24,4 +24,6 @@ class Reseau {
         connexions.remove(connexion)
     }
 
+
+
 }

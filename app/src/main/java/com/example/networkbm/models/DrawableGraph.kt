@@ -22,7 +22,7 @@ class DrawableGraph : Drawable() {
 
         reseau.objets.forEach {
             paint.setColor(Color.parseColor(it.couleur))
-            canvas.drawRect(it, paint)
+            canvas.drawRoundRect(it,20F,20F, paint)
         }
 
     }

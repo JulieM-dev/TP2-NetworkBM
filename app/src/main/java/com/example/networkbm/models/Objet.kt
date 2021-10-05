@@ -14,7 +14,14 @@ class Objet(context: Context, nom: String, x: Float, y: Float) : RectF(x-45, y-4
     var couleur : String = "#009944"
     var connexions = ArrayList<Connexion>()
 
+    fun setPositions(x : Float, y : Float)
+    {
+        this.left = x-45
+        this.top = y-42
+        this.right = x+45
+        this.bottom = y+42
 
+    }
 
 
 }

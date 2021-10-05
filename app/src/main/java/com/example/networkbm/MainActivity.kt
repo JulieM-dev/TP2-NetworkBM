@@ -98,6 +98,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 MotionEvent.ACTION_DOWN -> {
                     this.savePosX = event.getX().toInt()
                     this.savePosY = event.getY().toInt()
+
                     if(this.modeSelected == Mode.AJOUT_CONNEXION)
                     {
                         var objet = reseau.getObjet(event.getX(), event.getY())
@@ -115,6 +116,21 @@ class MainActivity : AppCompatActivity(), DeptListener {
                         }
                     }
                     else if(this.modeSelected != Mode.AJOUT_OBJET) {
+                        var objet = reseau.getObjet(event.x, event.y)
+                        if(objet != null)
+                        {
+                            when(modeSelected){
+                                Mode.AUCUN -> {
+                                    objet.setPositions(event.x, event.y)
+                                }
+                                Mode.AJOUT_CONNEXION -> {
+
+                                }
+                                Mode.MODIFICATION -> {
+
+                                }
+                            }
+                        }
                         isPressed = true
                         Handler(Looper.getMainLooper()).postDelayed({
                             if (isPressed) {

@@ -9,7 +9,7 @@ class TouchDragObject(private var rootLayout: ViewGroup, private var posX: Int?,
                       private var posY: Int?
 ) : View.OnTouchListener {
 
-    override fun onTouch(objet: Objet, event: MotionEvent): Boolean {
+    override fun onTouch(view: View, event: MotionEvent): Boolean {
         val X = event.rawX
         val Y = event.rawY
         if(posX == null && posY == null){
@@ -24,7 +24,7 @@ class TouchDragObject(private var rootLayout: ViewGroup, private var posX: Int?,
                 view.layoutParams = lParams
             }
             MotionEvent.ACTION_UP -> {
-            }git p
+            }
             MotionEvent.ACTION_POINTER_DOWN -> {
             }
             MotionEvent.ACTION_POINTER_UP -> {

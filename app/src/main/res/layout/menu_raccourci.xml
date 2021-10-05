@@ -28,19 +28,25 @@
             android:layout_width="108dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:scaleType="fitCenter"
-            tools:ignore="SpeakableTextPresentCheck"
             android:background="@color/white"
-            android:src="@drawable/link" />
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:scaleX="1"
+            android:scaleY="1"
+            android:src="@drawable/link"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <ImageButton
             android:id="@+id/butModif"
             android:layout_width="104dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:scaleType="fitCenter"
-            tools:ignore="SpeakableTextPresentCheck"
             android:background="@color/white"
-            android:src="@drawable/edit" />
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:scaleX="1"
+            android:scaleY="1"
+            android:src="@drawable/edit"
+            tools:ignore="SpeakableTextPresentCheck" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

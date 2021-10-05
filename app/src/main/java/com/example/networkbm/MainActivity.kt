@@ -77,14 +77,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
         ecran.setImageDrawable(drawGraph)
 
         dragOnTouch = TouchDragObject(ecran, reseau)
-        var obj1 = Objet(this, "test", 300F, 600F)
-        var obj2 = Objet(this, "test", 900F, 600F)
-        reseau.objets.add(obj1)
-        reseau.objets.add(obj2)
-        var connexion = Connexion(obj1, reseau, this)
-        connexion.setObjet2(obj2)
-        reseau.connexions.add(connexion)
-
 
         initListeners()
     }
@@ -101,6 +93,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
         ecran.setOnTouchListener { v, event ->
             dragOnTouch.onTouch(null, event)
+            dragOnTouch.dragLine(null, event)
             val action = event.action
             when(action)
             {
@@ -114,7 +107,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
                         var objet = reseau.getObjet(event.x, event.y)
                         if(objet != null)
                         {
-                            System.out.println("MODE SELECTED = " + modeSelected.getLibelle())
                             when(modeSelected)
                             {
                                 Mode.AUCUN -> {
@@ -141,9 +133,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
                         }
                         else if (modeSelected == Mode.AJOUT_CONNEXION && connexionAModifier != null)
                         {
-                            System.out.println("Before drag LINE ------------------------------------------------------")
-                            System.out.println("Before drag LINE ------------------------------------------------------")
-                            System.out.println("Before drag LINE ------------------------------------------------------")
                             dragOnTouch.dragLine(connexionAModifier!!, event)
                         }
                         else
@@ -168,6 +157,20 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 }
                 MotionEvent.ACTION_UP -> {
                     isPressed = false
+                    if(modeSelected == Mode.AJOUT_CONNEXION && connexionAModifier != null)
+                    {
+                        var objet = reseau.getObjet(connexionAModifier!!.pointerX, connexionAModifier!!.pointerY)
+                        if(objet != null && objet != connexionAModifier!!.getObjet1())
+                        {
+                            connexionAModifier!!.setObjet2(objet)
+                        }
+                        else
+                        {
+                            reseau.connexions.remove(connexionAModifier)
+                        }
+                        connexionAModifier = null
+
+                    }
                 }
                 else ->{
 

@@ -37,8 +37,7 @@ class TouchDragObject(private var rootLayout: View, reseau: Graph) {
         return true
     }
 
-    fun dragLine(newConnexion: Connexion, event: MotionEvent): Boolean {
-        System.out.println("Dragline")
+    fun dragLine(newConnexion: Connexion?, event: MotionEvent): Boolean {
         if (this.connexion == null) this.connexion = newConnexion
         if(connexion != null)
         {

@@ -25,15 +25,7 @@ class DrawableGraph : Drawable() {
 
 
         reseau.objets.forEach {
-            if(greyAlpha < 10)
-            {
-                paint.setColor(Color.parseColor("#686868"))
-            }
-            else
-            {
-                paint.setColor(Color.parseColor(it.couleur))
-            }
-
+            paint.setColor(Color.parseColor(it.couleur))
             canvas.drawRoundRect(it,20F,20F, paint)
             paint.setColor(Color.parseColor("#000000"))
             paint.textSize = 30F

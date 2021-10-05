@@ -5,44 +5,34 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 
-class TouchDragObject(private var rootLayout: ViewGroup, private var posX: Int?,
-                      private var posY: Int?
-) : View.OnTouchListener {
+class TouchDragObject(private var rootLayout: View) {
 
-    override fun onTouch(view: View, event: MotionEvent): Boolean {
-        val X = event.rawX
-        val Y = event.rawY
-        if(posX == null && posY == null){
-            posX = 625
-            posY = 1080
+    var objet : Objet? = null
+
+
+    fun onTouch(newObjet: Objet?, event: MotionEvent): Boolean {
+        if (this.objet == null) this.objet = newObjet
+        if(objet != null)
+        {
+            when(event.action){
+                MotionEvent.ACTION_DOWN -> {
+                    objet!!.setPositions(event.getX(), event.getY())
+                }
+                MotionEvent.ACTION_UP -> {
+                    objet = null
+                }
+                MotionEvent.ACTION_POINTER_DOWN -> {
+                }
+                MotionEvent.ACTION_POINTER_UP -> {
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    objet!!.setPositions(event.getX(), event.getY())
+                }
+            }
+            rootLayout.invalidate()
         }
-        when(event.action){
-            MotionEvent.ACTION_DOWN -> {
-                val lParams : RelativeLayout.LayoutParams = view.layoutParams as RelativeLayout.LayoutParams
-                posX = (X - lParams.leftMargin).toInt()
-                posY = (Y - lParams.topMargin).toInt()
-                view.layoutParams = lParams
-            }
-            MotionEvent.ACTION_UP -> {
-            }
-            MotionEvent.ACTION_POINTER_DOWN -> {
-            }
-            MotionEvent.ACTION_POINTER_UP -> {
-            }
-            MotionEvent.ACTION_MOVE -> {
-                val lParams : RelativeLayout.LayoutParams = view.layoutParams as RelativeLayout.LayoutParams
-                lParams.leftMargin = (X - posX!!).toInt()
-                lParams.topMargin = (Y - posY!!).toInt()
-                lParams.rightMargin = 0
-                lParams.bottomMargin = 0
-                view.layoutParams = lParams
-                var objet = view as Objet
 
-
-
-            }
-        }
-        rootLayout.invalidate()
         return true
     }
+
 }

@@ -8,10 +8,12 @@ class DrawableGraph : Drawable() {
     var reseau : Graph = Graph()
     lateinit var canvas: Canvas
     var paint = Paint()
+    var greyAlpha = 255
 
 
     override fun draw(canvas: Canvas) {
         this.canvas = canvas
+
 
         paint.setColor(Color.BLACK);
         paint.strokeWidth = 7F
@@ -20,15 +22,28 @@ class DrawableGraph : Drawable() {
             canvas.drawLine(it.getObjet1().centerX(), it.getObjet1().centerY(), it.getObjet2()!!.centerX(), it.getObjet2()!!.centerY(), paint)
         }
 
+
         reseau.objets.forEach {
-            paint.setColor(Color.parseColor(it.couleur))
+            if(greyAlpha < 10)
+            {
+                paint.setColor(Color.parseColor("#686868"))
+            }
+            else
+            {
+                paint.setColor(Color.parseColor(it.couleur))
+            }
+
             canvas.drawRoundRect(it,20F,20F, paint)
         }
 
     }
 
-    override fun setAlpha(p0: Int) {
+    override fun setAlpha(newAlpha: Int) {
+         greyAlpha = newAlpha
+    }
 
+    override fun getAlpha(): Int {
+        return greyAlpha
     }
 
     override fun setColorFilter(p0: ColorFilter?) {

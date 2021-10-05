@@ -119,7 +119,8 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
                         }
                     }
-                    else if(this.modeSelected != Mode.AJOUT_OBJET) {
+                    else if(this.modeSelected != Mode.AJOUT_OBJET)
+                    {
                         var objet = reseau.getObjet(event.x, event.y)
                         if(objet != null)
                         {
@@ -181,9 +182,16 @@ class MainActivity : AppCompatActivity(), DeptListener {
        when(i){
            1 -> {
                if(this.modeSelected != Mode.AJOUT_OBJET)
-                    this.modeSelected = Mode.AJOUT_OBJET
+               {
+                   this.modeSelected = Mode.AJOUT_OBJET
+                   drawGraph.alpha = 0
+               }
                else
+               {
                    this.modeSelected = Mode.AUCUN
+                   drawGraph.alpha = 255
+               }
+
                //ajouterObjetDialog()
            }
            2 -> {
@@ -209,6 +217,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
             tableButsMenu.get(i - 1).setBackgroundColor(Color.parseColor("#fff000"))
         else
             tableButsMenu.get(i - 1).setBackgroundColor(Color.parseColor("#ffffff"))
+        ecran.invalidate()
     }
 
     fun ajouterObjetDialog()

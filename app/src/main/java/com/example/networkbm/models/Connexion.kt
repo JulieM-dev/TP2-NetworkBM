@@ -47,8 +47,8 @@ class Connexion (objet1 : Objet, reseau: Graph, context: Context) : Path() {
 
     fun getCenter(): List<Float> {
         var cords = getCords()
-        var centerX = Math.abs(cords.get(0) - cords.get(2))
-        var centerY = Math.abs(cords.get(1) - cords.get(3))
+        var centerX = (cords.get(0) + cords.get(2)) / 2
+        var centerY = (cords.get(1) + cords.get(3)) / 2
         return listOf(centerX, centerY)
     }
 

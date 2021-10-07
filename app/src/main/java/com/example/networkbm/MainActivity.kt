@@ -1,7 +1,9 @@
 package com.example.networkbm
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Color
+import android.os.Build
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -21,6 +23,8 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.example.networkbm.fragments.AjoutObjetDialogFragment
 import com.example.networkbm.models.*
 import com.google.android.material.navigation.NavigationView
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), DeptListener {
 
@@ -72,8 +76,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
             true
         }
 
-
-
         for(i in 0..tableButsMenu.size-1){
             tableButsMenu.get(i).setOnClickListener{
                 clickMenu(i+1)
@@ -87,6 +89,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
         initListeners()
     }
+
 
     fun reinitialisation()
     {

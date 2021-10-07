@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.Gravity
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.ViewGroup
@@ -64,8 +65,11 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 R.id.button_ajout_connexion -> clickMenu(2)
                 R.id.button_modification -> clickMenu(3)
             }
+            drawerLayout.closeDrawer(Gravity.LEFT)
             true
         }
+
+
 
         for(i in 0..tableButsMenu.size-1){
             tableButsMenu.get(i).setOnClickListener{
@@ -83,7 +87,9 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
     fun reinitialisation()
     {
-
+        reseau.connexions.clear()
+        reseau.objets.clear()
+        ecran.invalidate()
     }
 
     @SuppressLint("ClickableViewAccessibility")

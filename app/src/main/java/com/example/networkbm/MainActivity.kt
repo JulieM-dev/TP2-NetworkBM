@@ -7,9 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.MenuItem
-import android.view.MotionEvent
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.*
@@ -139,10 +137,12 @@ class MainActivity : AppCompatActivity(), DeptListener {
                         {
                             isPressed = true
                             Handler(Looper.getMainLooper()).postDelayed({
-                                if (isPressed) {
-                                    objetAModifier = Objet(this, "unnamed" , event.getX(), event.getY())
+                                if (isPressed &&
+                                        event.x > this.savePosX - 20 &&
+                                        event.x < this.savePosX + 20) {
+                                    objetAModifier = Objet(this, "unnamed" , event.getX(), event.getY()-220)
                                     val dialog = AjoutObjetDialogFragment()
-                                    dialog.show(supportFragmentManager, "Ajouter un objet")
+                                    dialog.show(supportFragmentManager, resources.getString(R.string.addObject))
                                     this.clickMenu(1)
                                 }
                             }, 1000)
@@ -262,4 +262,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
             }
         }
     }
+
+
+
 }

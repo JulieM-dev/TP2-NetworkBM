@@ -6,4 +6,7 @@
     <string name="open">Ouvrir</string>
     <string name="close">Fermer</string>
     <string name="name">Nom</string>
+    <string name="reset">Réinitialiser</string>
+    <string name="addConnection">Ajouter une connexion</string>
+    <string name="modify">Modifier</string>
 </resources>

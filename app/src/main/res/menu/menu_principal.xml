@@ -6,24 +6,24 @@
         android:id="@+id/button_reinitialiser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="Réinitialiser" />
+        android:title="@string/reset" />
 
     <item
         android:id="@+id/button_ajout_objet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="Ajouter un objet" />
+        android:title="@string/addObject" />
 
     <item
         android:id="@+id/button_ajout_connexion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="Ajouter une connexion" />
+        android:title="@string/addConnection" />
 
     <item
         android:id="@+id/button_modification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="Modifier" />
+        android:title="@string/modify" />
 
 </menu>

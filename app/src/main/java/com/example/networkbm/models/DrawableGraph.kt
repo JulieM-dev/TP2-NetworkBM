@@ -21,6 +21,8 @@ class DrawableGraph : Drawable() {
         reseau.connexions.forEach {
             var cords = it.getCords()
             canvas.drawLine(cords.get(0), cords.get(1), cords.get(2), cords.get(3), paint)
+            cords = it.getCenter()
+            canvas.drawCircle(cords.get(0), cords.get(1), 20F, paint)
         }
 
 

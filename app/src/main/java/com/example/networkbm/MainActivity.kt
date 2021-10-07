@@ -154,7 +154,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                                 if (isPressed &&
                                         event.x > this.savePosX - 20 &&
                                         event.x < this.savePosX + 20) {
-                                    objetAModifier = Objet(this, "unnamed" , event.getX(), event.getY()-220)
+                                    objetAModifier = Objet(this, "unnamed" , savePosX, savePosY)
                                     val dialog = AjoutObjetDialogFragment()
                                     dialog.show(supportFragmentManager, resources.getString(R.string.addObject))
                                     this.clickMenu(1)

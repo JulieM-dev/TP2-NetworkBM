@@ -11,4 +11,9 @@ class Graph {
         }
         return null
     }
+
+    fun getConnexion(x : Float, y: Float) : Connexion?
+    {
+        return null
+    }
 }

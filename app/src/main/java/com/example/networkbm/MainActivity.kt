@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
     private var savePosY = 0F
     lateinit var ecran : ImageView
     lateinit var dragOnTouch : TouchDragObject
+    private lateinit var affPrinc : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +46,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawerLayout)
 
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
+        this.affPrinc = findViewById(R.id.affPrinc)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
@@ -172,6 +174,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                         if(objet != null && objet != connexionAModifier!!.getObjet1())
                         {
                             connexionAModifier!!.setObjet2(objet)
+                            Toast.makeText(this, getString(R.string.connectionCreated), LENGTH_SHORT).show()
                         }
                         else
                         {
@@ -209,10 +212,12 @@ class MainActivity : AppCompatActivity(), DeptListener {
                {
                    this.modeSelected = Mode.AJOUT_OBJET
                    drawGraph.alpha = 0
+                   this.affPrinc.text = resources.getString(R.string.addObject)
                }
                else
                {
                    this.modeSelected = Mode.AUCUN
+                   this.affPrinc.text = resources.getString(R.string.pressScreen)
                    drawGraph.alpha = 255
                }
 
@@ -221,17 +226,21 @@ class MainActivity : AppCompatActivity(), DeptListener {
            2 -> {
                if(this.modeSelected != Mode.AJOUT_CONNEXION) {
                    this.modeSelected = Mode.AJOUT_CONNEXION
+                   this.affPrinc.text = resources.getString(R.string.addConnection)
                }
                else {
                    this.modeSelected = Mode.AUCUN
+                   this.affPrinc.text = resources.getString(R.string.pressScreen)
                }
            }
            3 -> {
                if(this.modeSelected != Mode.MODIFICATION) {
                    this.modeSelected = Mode.MODIFICATION
+                   this.affPrinc.text = resources.getString(R.string.editObject)
                }
                else {
                    this.modeSelected = Mode.AUCUN
+                   this.affPrinc.text = resources.getString(R.string.pressScreen)
                }
 
            }
@@ -240,6 +249,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
             tableButsMenu.get(i - 1).setBackgroundColor(Color.parseColor("#fff000"))
         else
             tableButsMenu.get(i - 1).setBackgroundColor(Color.parseColor("#ffffff"))
+
         ecran.invalidate()
     }
 

@@ -28,7 +28,13 @@ class TouchDragObject(private var rootLayout: View, reseau: Graph) {
                 MotionEvent.ACTION_POINTER_UP -> {
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    objet!!.setPositions(event.getX(), event.getY())
+                    if(event.getY() < 42){
+                        objet!!.setPositions(event.getX(), 42f)
+                    } else if(event.getY() > rootLayout.height - 42) {
+                        objet!!.setPositions(event.getX(), rootLayout.height.toFloat() - 42)
+                    } else {
+                        objet!!.setPositions(event.getX(), event.getY())
+                    }
                 }
             }
             rootLayout.invalidate()

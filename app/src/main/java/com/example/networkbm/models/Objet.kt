@@ -20,7 +20,6 @@ class Objet(context: Context, nom: String, x: Float, y: Float) : RectF(x-45, y-4
         this.top = y-42
         this.right = x+45
         this.bottom = y+42
-
     }
 
 

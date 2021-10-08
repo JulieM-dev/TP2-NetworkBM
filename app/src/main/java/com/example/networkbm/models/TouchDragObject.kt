@@ -35,6 +35,8 @@ class TouchDragObject(private var rootLayout: View, reseau: Graph) {
                     } else {
                         objet!!.setPositions(event.getX(), event.getY())
                     }
+
+                    System.out.println(event.getX())
                 }
             }
             rootLayout.invalidate()

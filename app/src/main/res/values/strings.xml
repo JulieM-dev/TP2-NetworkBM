@@ -12,4 +12,5 @@
     <string name="modify">Modify</string>
     <string name="pressScreen">Keep pressed to add an object \n Or move existing objects</string>
     <string name="connectionCreated">Connection created</string>
+    <string name="editConnection">Edit connection</string>
 </resources>

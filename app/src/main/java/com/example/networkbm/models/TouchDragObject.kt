@@ -36,7 +36,6 @@ class TouchDragObject(private var rootLayout: View, reseau: Graph) {
                         objet!!.setPositions(event.getX(), event.getY())
                     }
 
-                    System.out.println(event.getX())
                 }
             }
             rootLayout.invalidate()
@@ -67,7 +66,6 @@ class TouchDragObject(private var rootLayout: View, reseau: Graph) {
                 }
                 MotionEvent.ACTION_MOVE -> {
                     connexion!!.setPositions(event.getX(), event.getY())
-                    System.out.println(connexion!!.getCords().get(2).toString() + "  Y : " + connexion!!.getCords().get(3))
                 }
             }
             rootLayout.invalidate()

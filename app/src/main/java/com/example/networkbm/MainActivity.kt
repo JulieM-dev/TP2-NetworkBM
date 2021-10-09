@@ -1,29 +1,24 @@
 package com.example.networkbm
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Color
-import android.os.Build
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.*
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.MotionEvent
-import android.view.ViewGroup
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.*
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.networkbm.fragments.AjoutObjetDialogFragment
+import com.example.networkbm.fragments.EditConnexionDialogFragment
 import com.example.networkbm.models.*
 import com.google.android.material.navigation.NavigationView
-import java.util.*
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), DeptListener {
@@ -116,15 +111,25 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
                     if(this.modeSelected != Mode.AJOUT_OBJET)
                     {
+                        //On n'est pas en mode ajout d'objet, il y a donc des actions a gerer
                         var objet = reseau.getObjet(event.x, event.y)
-                        if(objet != null)
+                        var connexion = reseau.getConnexion(event.x, event.y)
+                        if(connexion != null && modeSelected == Mode.MODIFICATION)
                         {
+                            //On a recupere une connexion
+                            val dialog = EditConnexionDialogFragment(connexion, reseau)
+                            dialog.show(supportFragmentManager, resources.getString(R.string.editConnection))
+                        } else if(objet != null)
+                        {
+                            //On a recupere un objet
                             when(modeSelected)
                             {
                                 Mode.AUCUN -> {
+                                    //On n'est dans aucun mode, on peut bouger l'objet
                                     dragOnTouch.onTouch(objet, event)
                                 }
                                 Mode.AJOUT_CONNEXION -> {
+                                    //On est en mode ajout de connexion, on met le systeme de connexion entre objets
                                     if(connexionAModifier == null)
                                     {
                                         connexionAModifier = Connexion(objet, reseau, this)
@@ -137,6 +142,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                                     }
                                 }
                                 Mode.MODIFICATION -> {
+                                    //On met en mode modification, on affiche la fenetre de modification
                                     objetAModifier = objet
                                     val dialog = AjoutObjetDialogFragment(objet, reseau)
                                     dialog.show(supportFragmentManager, resources.getString(R.string.editObject))
@@ -269,20 +275,22 @@ class MainActivity : AppCompatActivity(), DeptListener {
     }
 
     override fun onDeptSelected(depts: ArrayList<String>) {
+        //Click sur une page de dialogue
         when(modeSelected) {
             Mode.AJOUT_OBJET -> {
                 objetAModifier.nom = depts.get(0)
                 reseau.objets.add(objetAModifier)
                 Toast.makeText(this, getString(R.string.objectCreated), LENGTH_SHORT).show()
-                ecran.invalidate()
             }
             Mode.MODIFICATION -> {
                 val obj = reseau.getObjet(this.savePosX, this.savePosY)
-                obj!!.nom = depts.get(0)
-                Toast.makeText(this, getString(R.string.objectModified), LENGTH_SHORT).show()
-                ecran.invalidate()
+                if(obj != null){
+                    obj!!.nom = depts.get(0)
+                    Toast.makeText(this, getString(R.string.objectModified), LENGTH_SHORT).show()
+                }
             }
         }
+        ecran.invalidate()
     }
 
 

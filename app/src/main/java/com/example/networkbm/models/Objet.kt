@@ -22,5 +22,12 @@ class Objet(context: Context, nom: String, x: Float, y: Float) : RectF(x-45, y-4
         this.bottom = y+42
     }
 
+    override fun toString(): String {
+        if(nom.length > 0)
+            return nom
+        else
+            return "Objet " + (this.left.toInt().toString() + "." + this.top.toInt())
+    }
+
 
 }

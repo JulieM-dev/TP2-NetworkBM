@@ -16,8 +16,8 @@ class Graph {
     {
         connexions.forEach {
             var cords = it.getCenter()
-            if(x < cords.get(0) + 50  && x > cords.get(0) - 50 &&
-                y < cords.get(1) + 50  && x > cords.get(1) - 50){
+            if(x < cords.get(0) + 25  && x > cords.get(0) - 25 &&
+                y < cords.get(1) + 25  && y > cords.get(1) - 25){
                 return it
             }
         }

@@ -71,15 +71,7 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
 
             buttonValider.setOnClickListener()
             {
-                val depts = ArrayList<String>()
-
-                val o1 = this.reseau!!.getObjet(this.obj1!!.centerX(), this.obj1!!.centerY())
-                val o2 = this.reseau!!.getObjet(this.obj2!!.centerX(), this.obj2!!.centerY())
-
-                connexion!!.setObjet1(o1!!)
-                connexion!!.setObjet2(o2!!)
-                listener.onDeptSelected(depts)
-                alertDialog.dismiss()
+                this.valider()
             }
             buttonAnnuler.setOnClickListener()
             {
@@ -87,7 +79,9 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
             }
             buttonSupprimer.setOnClickListener()
             {
+                val depts = ArrayList<String>()
                 reseau!!.connexions.remove(connexion)
+                listener.onDeptSelected(depts)
                 alertDialog.dismiss()
             }
 
@@ -125,16 +119,35 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
     }
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-        if(this.idT1 == p0?.id){
-            this.obj1 = this.editObjet1.adapter.getItem(p2) as Objet
+        if (this.idT1 == p0?.id) {
+            val o1 = this.editObjet1.adapter.getItem(p2) as Objet
+            if(o1 != this.obj1){
+                this.obj1 = o1
+                this.setList()
+            }
         } else {
-            this.obj2 = this.editObjet2.adapter.getItem(p2) as Objet
+            val o2 = this.editObjet2.adapter.getItem(p2) as Objet
+            if(o2 != this.obj2){
+                this.obj2 = o2
+                this.setList()
+            }
         }
-        //this.setList()
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
 
+    }
+
+    fun valider(){
+        val depts = ArrayList<String>()
+
+        val o1 = this.reseau!!.getObjet(this.obj1!!.centerX(), this.obj1!!.centerY())
+        val o2 = this.reseau!!.getObjet(this.obj2!!.centerX(), this.obj2!!.centerY())
+
+        connexion!!.setObjet1(o1!!)
+        connexion!!.setObjet2(o2!!)
+        listener.onDeptSelected(depts)
+        alertDialog.dismiss()
     }
 
 }

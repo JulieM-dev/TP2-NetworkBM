@@ -11,28 +11,37 @@
         android:id="@+id/contPrinc"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/planAppartement"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="65dp"
-            android:layout_marginBottom="105dp"
-            android:src="@drawable/plan"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"></ImageView>
-
-        <ImageView
-            android:id="@+id/contRect"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="65dp"
-            android:layout_marginBottom="105dp"
-            android:elevation="7dp"></ImageView>
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/planAppartement"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="65dp"
+                    android:layout_marginBottom="105dp"
+                    android:src="@drawable/plan"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0"></ImageView>
+
+                <ImageView
+                    android:id="@+id/contRect"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="65dp"
+                    android:layout_marginBottom="105dp"
+                    android:elevation="7dp"></ImageView>
+
+            </RelativeLayout>
+        </ScrollView>
 
         <TextView
             android:id="@+id/affPrinc"

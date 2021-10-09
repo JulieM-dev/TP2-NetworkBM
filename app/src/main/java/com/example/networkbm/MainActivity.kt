@@ -84,8 +84,20 @@ class MainActivity : AppCompatActivity(), DeptListener {
         }
         ecran = findViewById<ImageView>(R.id.contRect)
         ecran.setImageDrawable(drawGraph)
-
+        var plan = findViewById<ImageView>(R.id.planAppartement)
+        ecran.setBackgroundColor(Color.BLUE)
+        ecran.minimumHeight = plan.height
+        ecran.maxHeight = plan.height
+        ecran.minimumWidth = plan.width
+        ecran.maxWidth = plan.width
         dragOnTouch = TouchDragObject(ecran, reseau)
+        var obj1 = Objet(this, "test", 320F, 620F)
+        var obj2 = Objet(this, "test", 731F, 1378F)
+        reseau.objets.add(obj1)
+        reseau.objets.add(obj2)
+        var connexion = Connexion(obj1, reseau, this)
+        connexion.setObjet2(obj2)
+        reseau.connexions.add(connexion)
 
         initListeners()
     }

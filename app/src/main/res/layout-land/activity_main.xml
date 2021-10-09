@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <RelativeLayout
+    <ScrollView
         android:id="@+id/contPrinc"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -44,7 +44,7 @@
             android:gravity="center"
             android:text="@string/pressScreen" />
 
-    </RelativeLayout>
+    </ScrollView>
 
     <include layout="@layout/menu_raccourci"></include>
 

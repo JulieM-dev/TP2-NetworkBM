@@ -52,7 +52,6 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment() {
             buttonAnnuler = formulaire.findViewById(R.id.buttonAnnuler)
             buttonSupprimer = formulaire.findViewById(R.id.buttonSupprimer)
 
-
             buttonValider.setOnClickListener()
             {
                 var nom = editTextNom.text.toString()

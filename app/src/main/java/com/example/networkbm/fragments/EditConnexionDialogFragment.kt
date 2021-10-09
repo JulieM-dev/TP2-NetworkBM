@@ -3,21 +3,18 @@ package com.example.networkbm.fragments
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
-import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatDialogFragment
 import com.example.networkbm.DeptListener
 import com.example.networkbm.R
+import com.example.networkbm.models.Connexion
 import com.example.networkbm.models.Graph
-import com.example.networkbm.models.Objet
 import java.lang.ClassCastException
 
-class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
+class EditConnexionDialogFragment() : AppCompatDialogFragment() {
     lateinit var listener: DeptListener
     lateinit var dialogBuilder : AlertDialog.Builder
     lateinit var alertDialog : AlertDialog
@@ -26,17 +23,19 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
     lateinit var buttonValider : Button
     lateinit var buttonAnnuler : Button
     lateinit var buttonSupprimer : Button
-    var objet : Objet? = null
+    var connexion : Connexion? = null
     var reseau : Graph? = null
 
-    constructor(objet: Objet, reseau: Graph) : this() {
-        this.objet = objet
+    constructor(connexion: Connexion, reseau: Graph) : this() {
+        this.connexion = this.connexion
+        this.reseau = reseau
     }
+
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogBuilder =  AlertDialog.Builder(activity)
 
-        var formulaire = activity?.layoutInflater?.inflate(R.layout.ajout_objet_form, null)
+        var formulaire = activity?.layoutInflater?.inflate(R.layout.edit_connexion_form, null)
         dialogBuilder.setView(formulaire)
             .setTitle(this.tag)
 
@@ -44,15 +43,14 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
 
         if (formulaire != null) {
             editTextNom = formulaire.findViewById(R.id.editTextNom)
-            if(objet != null)
+            if(connexion != null)
             {
-                editTextNom.setText(objet!!.nom)
+
             }
             spinnerCouleur = formulaire.findViewById(R.id.spinnerCouleur)
             buttonValider = formulaire.findViewById(R.id.buttonValider)
             buttonAnnuler = formulaire.findViewById(R.id.buttonAnnuler)
             buttonSupprimer = formulaire.findViewById(R.id.buttonSupprimer)
-
 
 
             buttonValider.setOnClickListener()
@@ -67,16 +65,11 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
             {
                 alertDialog.dismiss()
             }
-            if(reseau != null)
+            buttonSupprimer.setOnClickListener()
             {
-                buttonSupprimer.visibility = View.VISIBLE
-                buttonSupprimer.setOnClickListener()
-                {
-                    reseau!!.objets.remove(objet)
-                    alertDialog.dismiss()
-                }
+                reseau!!.connexions.remove(connexion)
+                alertDialog.dismiss()
             }
-
         }
 
         return alertDialog

@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                                 }
                                 Mode.MODIFICATION -> {
                                     objetAModifier = objet
-                                    val dialog = AjoutObjetDialogFragment(objet)
+                                    val dialog = AjoutObjetDialogFragment(objet, reseau)
                                     dialog.show(supportFragmentManager, resources.getString(R.string.editObject))
                                 }
                             }

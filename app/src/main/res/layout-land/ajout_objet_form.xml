@@ -55,11 +55,18 @@
         app:layout_constraintStart_toEndOf="@+id/buttonAnnuler"
         app:layout_constraintTop_toTopOf="@+id/buttonAnnuler" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"></LinearLayout>
-    //on dirait du css jpp
+    <Button
+        android:id="@+id/buttonSupprimer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="8dp"
+        android:text="Supprimer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/buttonAnnuler"
+        app:layout_constraintTop_toBottomOf="@+id/buttonValider"
+        app:layout_constraintTop_toTopOf="@+id/buttonAnnuler" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

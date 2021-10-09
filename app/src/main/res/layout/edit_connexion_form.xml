@@ -21,8 +21,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editTextNom"
+    <Spinner
+        android:id="@+id/editObjet1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -33,14 +33,14 @@
 
 
     <Spinner
-        android:id="@+id/spinnerCouleur"
+        android:id="@+id/editObjet2"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="20dp"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNom" />
+        app:layout_constraintTop_toBottomOf="@+id/editObjet1" />
 
     <Button
         android:id="@+id/buttonAnnuler"
@@ -52,7 +52,7 @@
         app:layout_constraintEnd_toStartOf="@+id/buttonValider"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerCouleur" />
+        app:layout_constraintTop_toBottomOf="@+id/editObjet2" />
 
     <Button
         android:id="@+id/buttonValider"
@@ -65,6 +65,11 @@
         app:layout_constraintStart_toEndOf="@+id/buttonAnnuler"
         app:layout_constraintTop_toTopOf="@+id/buttonAnnuler" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"></LinearLayout>
+
     <Button
         android:id="@+id/buttonSupprimer"
         android:layout_width="0dp"
@@ -72,10 +77,10 @@
         android:layout_marginTop="56dp"
         android:layout_marginEnd="8dp"
         android:text="Supprimer"
-        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/buttonAnnuler"
         app:layout_constraintTop_toBottomOf="@+id/buttonValider"
         app:layout_constraintTop_toTopOf="@+id/buttonAnnuler" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.GestureDetector
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -41,7 +42,8 @@ class MainActivity : AppCompatActivity(), DeptListener {
     lateinit var ecran : ImageView
     lateinit var dragOnTouch : TouchDragObject
     var dragging = false
-    var looper : Looper? = null
+
+    var handler : Handler? = null
 
     private lateinit var affPrinc : TextView
     lateinit var hsv : WScrollView
@@ -90,19 +92,8 @@ class MainActivity : AppCompatActivity(), DeptListener {
         var plan = findViewById<ImageView>(R.id.planAppartement)
         ecran = findViewById<ImageView>(R.id.contRect)
 
-        System.out.println("-----------------------------HEIGH " +  plan.measuredHeight)
-
         ecran.setImageDrawable(drawGraph)
 
-        var frame = findViewById<FrameLayout>(R.id.frameLayout)
-
-        var obj1 = Objet(this, "test", 320F, 620F)
-        var obj2 = Objet(this, "test", 731F, 1378F)
-        reseau.objets.add(obj1)
-        reseau.objets.add(obj2)
-        var connexion = Connexion(obj1, reseau, this)
-        connexion.setObjet2(obj2)
-        reseau.connexions.add(connexion)
 
         // Bidirectionnal scrollview
         var sv = findViewById<ScrollView>(R.id.scrollView)
@@ -111,18 +102,14 @@ class MainActivity : AppCompatActivity(), DeptListener {
         hsv.ecran = ecran
         dragOnTouch = TouchDragObject(hsv, reseau, plan)
         plan.doOnPreDraw {
-            System.out.println("-----------------------------plan HEIGHT " +  plan.height)
-            System.out.println("-----------------------------plan WIDTH " +  plan.width)
-            System.out.println("-----------------------------hsv HEIGHT " +  hsv.height)
-            System.out.println("-----------------------------hsv WIDTH " +  hsv.width)
             var param: FrameLayout.LayoutParams = FrameLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,100);
             param.height = plan.height
             param.width = plan.width
             ecran.layoutParams = param
             ecran.invalidate()
-            System.out.println("-----------------------------HEIGH " +  ecran.layoutParams.height)
         }
 
+        handler = Handler(Looper.getMainLooper())
 
         initListeners()
     }
@@ -139,23 +126,23 @@ class MainActivity : AppCompatActivity(), DeptListener {
     fun initListeners()
     {
         hsv.setOnTouchListener { view, event ->
-            System.out.println("ON TOUCH HSV")
             ecran.dispatchTouchEvent(event)
 
             true
         }
 
+        ecran.setOnLongClickListener {
+            System.out.println("-------------HEY")
+            true
+        }
 
         ecran.setOnTouchListener { v, event ->
-            System.out.println("ON TOUCH ECRAN")
             this.savePosX = event.getX() + hsv.scrollX
             this.savePosY = event.getY() + hsv.sv.scrollY
             var draggingObj = dragOnTouch.onTouch(null, event, savePosX, savePosY)
             var draggingLine = dragOnTouch.dragLine(null, event, savePosX, savePosY)
             dragging = draggingLine || draggingObj
-            System.out.println(dragging)
             val action = event.action
-            System.out.println(savePosX.toString() + " " + savePosY)
             when(action)
             {
                 MotionEvent.ACTION_DOWN ->
@@ -179,7 +166,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
                             {
                                 Mode.AUCUN -> {
                                     //On n'est dans aucun mode, on peut bouger l'objet
-                                    System.out.println("before dragg")
                                     dragging = dragOnTouch.onTouch(objet, event, savePosX, savePosY)
 
                                 }
@@ -215,26 +201,24 @@ class MainActivity : AppCompatActivity(), DeptListener {
                                 saveScrollX = hsv.scrollX
                                 saveScrollY = hsv.scrollY
                             }
+
                             isPressed = true
-                            if(looper == null)
-                            {
-                                looper = Looper.myLooper()
-                                Handler(looper!!).postDelayed({
-                                    if (isPressed &&
-                                        hsv.scrollX > saveScrollX!! - 20 &&
-                                        hsv.scrollX < saveScrollX!! + 20 &&
-                                        hsv.scrollY > saveScrollY!! - 20 &&
-                                        hsv.scrollY < saveScrollY!! + 20
-                                    ) {
-                                        objetAModifier = Objet(this, "unnamed" , savePosX, savePosY)
-                                        val dialog = AjoutObjetDialogFragment()
-                                        dialog.show(supportFragmentManager, resources.getString(R.string.addObject))
-                                        this.clickMenu(1)
-                                    } else {
-                                        this.isPressed = false
-                                    }
-                                }, 1000)
-                            }
+
+                            handler!!.postDelayed({
+                                System.out.println("----------HEY")
+                                if (isPressed &&
+                                    hsv.scrollX > saveScrollX!! - 10 &&
+                                    hsv.scrollX < saveScrollX!! + 10 &&
+                                    hsv.scrollY > saveScrollY!! - 10 &&
+                                    hsv.scrollY < saveScrollY!! + 10
+                                ) {
+                                    this.isPressed = false
+                                    objetAModifier = Objet(this, "unnamed" , savePosX, savePosY)
+                                    val dialog = AjoutObjetDialogFragment()
+                                    dialog.show(supportFragmentManager, resources.getString(R.string.addObject))
+                                    this.clickMenu(1)
+                                }
+                            }, 2000)
 
 
                         }
@@ -247,13 +231,10 @@ class MainActivity : AppCompatActivity(), DeptListener {
                     }
                 }
                 MotionEvent.ACTION_UP -> {
-                    if(looper != null)
-                    {
-
-                        looper = null
-                    }
-
                     isPressed = false
+
+                    handler = Handler(Looper.getMainLooper())
+
                     saveScrollX = null
                     saveScrollY = null
                     if(modeSelected == Mode.AJOUT_CONNEXION && connexionAModifier != null)
@@ -277,7 +258,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
                     isPressed = false
                 }
                 else ->{
-
 
                 }
             }
@@ -399,8 +379,8 @@ class MainActivity : AppCompatActivity(), DeptListener {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList("connexions", reseau.connexions)
         outState.putParcelableArrayList("objets", reseau.objets)
+
         super.onSaveInstanceState(outState)
     }
 
@@ -408,6 +388,14 @@ class MainActivity : AppCompatActivity(), DeptListener {
         super.onRestoreInstanceState(savedInstanceState)
 
         reseau.objets = savedInstanceState.getParcelableArrayList<Objet>("objets") as ArrayList<Objet>
+        reseau.objets.forEach {
+            it.connexions.forEach{
+                if(!existeConnexion(it.getObjet1(), it.getObjet2()!!))
+                {
+                    reseau.connexions.add(it)
+                }
+            }
+        }
         ecran.invalidate()
     }
 

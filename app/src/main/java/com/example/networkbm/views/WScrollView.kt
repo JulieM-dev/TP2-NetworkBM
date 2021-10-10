@@ -13,7 +13,6 @@ class WScrollView(context: Context, attributeSet: AttributeSet) : HorizontalScro
     lateinit var ecran: ImageView
 
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
-        System.out.println("ON TOUCH ON HSV")
 
         sv.onTouchEvent(ev)
         super.onTouchEvent(ev)

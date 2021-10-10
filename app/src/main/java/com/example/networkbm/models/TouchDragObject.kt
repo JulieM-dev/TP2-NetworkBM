@@ -33,8 +33,8 @@ class TouchDragObject(private var rootLayout: WScrollView, reseau: Graph, plan: 
                 MotionEvent.ACTION_MOVE -> {
                     if(event.getY() < 42){
                         objet!!.setPositions(x, 42f)
-                    } else if(y > plan.height - 42) {
-                        objet!!.setPositions(x, plan.height.toFloat() - 42)
+                    } else if(y > plan.height - 70) {
+                        objet!!.setPositions(x, plan.height.toFloat() - 70)
                     } else {
                         objet!!.setPositions(x, y)
                     }

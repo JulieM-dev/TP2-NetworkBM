@@ -246,7 +246,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                     if(modeSelected == Mode.AJOUT_CONNEXION && connexionAModifier != null)
                     {
                         var objet = reseau.getObjet(connexionAModifier!!.pointerX, connexionAModifier!!.pointerY)
-                        if(objet != null && objet != connexionAModifier!!.getObjet1())
+                        if(objet != null && objet != connexionAModifier!!.getObjet1() && !existeConnexion(connexionAModifier!!.getObjet1(), objet))
                         {
                             connexionAModifier!!.setObjet2(objet)
                             Toast.makeText(this, getString(R.string.connectionCreated), LENGTH_SHORT).show()
@@ -275,6 +275,16 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
             true
         }
+    }
+
+    private fun existeConnexion(objet1: Objet, objet2: Objet): Boolean {
+        var ci = 0
+        this.reseau.connexions.forEach{
+            if( (it.getObjet1() == objet1 && it.getObjet2() == objet2) || (it.getObjet1() == objet2 && it.getObjet2() == objet1) ){
+                ci++
+            }
+        }
+        return ci > 1
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

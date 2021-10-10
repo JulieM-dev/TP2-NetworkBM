@@ -145,6 +145,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
             true
         }
 
+
         ecran.setOnTouchListener { v, event ->
             System.out.println("ON TOUCH ECRAN")
             this.savePosX = event.getX() + hsv.scrollX
@@ -215,19 +216,24 @@ class MainActivity : AppCompatActivity(), DeptListener {
                                 saveScrollY = hsv.scrollY
                             }
                             isPressed = true
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                if (isPressed &&
+                            if(looper == null)
+                            {
+                                looper = Looper.myLooper()
+                                Handler(looper!!).postDelayed({
+                                    if (isPressed &&
                                         hsv.scrollX > saveScrollX!! - 20 &&
                                         hsv.scrollX < saveScrollX!! + 20 &&
                                         hsv.scrollY > saveScrollY!! - 20 &&
                                         hsv.scrollY < saveScrollY!! + 20
-                                        ) {
-                                    objetAModifier = Objet(this, "unnamed" , savePosX, savePosY)
-                                    val dialog = AjoutObjetDialogFragment()
-                                    dialog.show(supportFragmentManager, resources.getString(R.string.addObject))
-                                    this.clickMenu(1)
-                                }
-                            }, 2000)
+                                    ) {
+                                        objetAModifier = Objet(this, "unnamed" , savePosX, savePosY)
+                                        val dialog = AjoutObjetDialogFragment()
+                                        dialog.show(supportFragmentManager, resources.getString(R.string.addObject))
+                                        this.clickMenu(1)
+                                    }
+                                }, 5000)
+                            }
+
 
                         }
                     }
@@ -239,7 +245,14 @@ class MainActivity : AppCompatActivity(), DeptListener {
                     }
                 }
                 MotionEvent.ACTION_UP -> {
-                    Looper.getMainLooper().quitSafely()
+                    if(looper != null)
+                    {
+                        Handler(looper!!).postDelayed({
+
+                        }, 0)
+                        looper = null
+                    }
+
                     isPressed = false
                     saveScrollX = null
                     saveScrollY = null

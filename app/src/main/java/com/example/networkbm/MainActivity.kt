@@ -156,8 +156,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
             {
                 MotionEvent.ACTION_DOWN ->
                 {
-
-
                     if(this.modeSelected != Mode.AJOUT_OBJET)
                     {
                         //On n'est pas en mode ajout d'objet, il y a donc des actions a gerer
@@ -263,7 +261,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 }
                 MotionEvent.ACTION_MOVE->
                 {
-                    isPressed = false
+
                 }
                 else ->{
 
@@ -357,17 +355,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
         ecran.invalidate()
     }
 
-    fun ajouterObjetDialog()
-    {
-        val dialog = AjoutObjetDialogFragment()
-        dialog.show(supportFragmentManager, resources.getString(R.string.addObject))
-    }
-
-
-    fun ajoutConnexion()
-    {
-
-    }
 
     override fun onDeptSelected(depts: ArrayList<String>) {
         //Click sur une page de dialogue

@@ -11,37 +11,48 @@
         android:id="@+id/contPrinc"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <com.example.networkbm.views.WScrollView
+            android:id="@+id/scrollViewH"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ScrollView
+                android:id="@+id/scrollView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/planAppartement"
+                <FrameLayout
+                    android:id="@+id/frameLayout"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="65dp"
-                    android:layout_marginBottom="105dp"
-                    android:src="@drawable/plan"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0"></ImageView>
+                    android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/contRect"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="65dp"
-                    android:layout_marginBottom="105dp"
-                    android:elevation="7dp"></ImageView>
+                    <ImageView
+                        android:id="@+id/planAppartement"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="105dp"
+                        android:src="@drawable/planmin"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:gravity="center"
+                        app:layout_constraintVertical_bias="0.0"></ImageView>
 
-            </RelativeLayout>
-        </ScrollView>
+
+                    <ImageView
+                        android:id="@+id/contRect"
+                        android:layout_width="1436px"
+                        android:layout_height="1853px"
+                        android:elevation="7dp"
+                        android:gravity="center"
+                        android:visibility="visible"></ImageView>
+
+
+                </FrameLayout>
+            </ScrollView>
+        </com.example.networkbm.views.WScrollView>
+
 
         <TextView
             android:id="@+id/affPrinc"

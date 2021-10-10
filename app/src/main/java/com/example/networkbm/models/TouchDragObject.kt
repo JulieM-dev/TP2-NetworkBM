@@ -12,16 +12,19 @@ class TouchDragObject(private var rootLayout: View, reseau: Graph) {
     var connexion : Connexion? = null
 
 
-    fun onTouch(newObjet: Objet?, event: MotionEvent): Boolean {
+    fun onTouch(newObjet: Objet?, event: MotionEvent, x : Float, y : Float): Boolean {
+        var ret = false
         if (this.objet == null) this.objet = newObjet
         if(objet != null)
         {
             when(event.action){
                 MotionEvent.ACTION_DOWN -> {
-                    objet!!.setPositions(event.getX(), event.getY())
+                    objet!!.setPositions(x, y)
+                    ret = true
                 }
                 MotionEvent.ACTION_UP -> {
                     objet = null
+                    ret = false
                 }
                 MotionEvent.ACTION_POINTER_DOWN -> {
                 }
@@ -29,28 +32,30 @@ class TouchDragObject(private var rootLayout: View, reseau: Graph) {
                 }
                 MotionEvent.ACTION_MOVE -> {
                     if(event.getY() < 42){
-                        objet!!.setPositions(event.getX(), 42f)
-                    } else if(event.getY() > rootLayout.height - 42) {
-                        objet!!.setPositions(event.getX(), rootLayout.height.toFloat() - 42)
+                        objet!!.setPositions(x, 42f)
+                    } else if(y > rootLayout.height - 42) {
+                        objet!!.setPositions(x, rootLayout.height.toFloat() - 42)
                     } else {
-                        objet!!.setPositions(event.getX(), event.getY())
+                        objet!!.setPositions(x, y)
                     }
-
+                    ret = true
                 }
             }
             rootLayout.invalidate()
         }
 
-        return true
+        return ret
     }
 
-    fun dragLine(newConnexion: Connexion?, event: MotionEvent): Boolean {
+    fun dragLine(newConnexion: Connexion?, event: MotionEvent, x : Float, y : Float): Boolean {
+        var ret = false
         if (this.connexion == null) this.connexion = newConnexion
         if(connexion != null)
         {
             when(event.action){
                 MotionEvent.ACTION_DOWN -> {
-                    connexion!!.setPositions(event.getX(), event.getY())
+                    connexion!!.setPositions(x,y)
+                    ret = true
                 }
                 MotionEvent.ACTION_UP -> {
                     var obj = reseau.getObjet(connexion!!.getCords().get(2), connexion!!.getCords().get(3))
@@ -59,19 +64,21 @@ class TouchDragObject(private var rootLayout: View, reseau: Graph) {
                         connexion!!.setObjet2(obj)
                     }
                     connexion = null
+                    ret = false
                 }
                 MotionEvent.ACTION_POINTER_DOWN -> {
                 }
                 MotionEvent.ACTION_POINTER_UP -> {
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    connexion!!.setPositions(event.getX(), event.getY())
+                    connexion!!.setPositions(x,y)
+                    ret = true
                 }
             }
             rootLayout.invalidate()
         }
 
-        return true
+        return ret
     }
 
 }

@@ -14,10 +14,12 @@ import android.view.animation.AnimationUtils
 import android.widget.*
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.view.doOnPreDraw
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.networkbm.fragments.AjoutObjetDialogFragment
 import com.example.networkbm.fragments.EditConnexionDialogFragment
 import com.example.networkbm.models.*
+import com.example.networkbm.views.WScrollView
 import com.google.android.material.navigation.NavigationView
 import kotlin.collections.ArrayList
 
@@ -35,7 +37,10 @@ class MainActivity : AppCompatActivity(), DeptListener {
     private var savePosY = 0F
     lateinit var ecran : ImageView
     lateinit var dragOnTouch : TouchDragObject
+    var dragging = false
+
     private lateinit var affPrinc : TextView
+    lateinit var hsv : WScrollView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,14 +83,14 @@ class MainActivity : AppCompatActivity(), DeptListener {
             }
         }
         ecran = findViewById<ImageView>(R.id.contRect)
-        ecran.setImageDrawable(drawGraph)
         var plan = findViewById<ImageView>(R.id.planAppartement)
-        ecran.setBackgroundColor(Color.BLUE)
-        ecran.minimumHeight = plan.height
-        ecran.maxHeight = plan.height
-        ecran.minimumWidth = plan.width
-        ecran.maxWidth = plan.width
-        dragOnTouch = TouchDragObject(ecran, reseau)
+
+        System.out.println("-----------------------------HEIGH " +  plan.measuredHeight)
+
+        ecran.setImageDrawable(drawGraph)
+
+        var frame = findViewById<FrameLayout>(R.id.frameLayout)
+
         var obj1 = Objet(this, "test", 320F, 620F)
         var obj2 = Objet(this, "test", 731F, 1378F)
         reseau.objets.add(obj1)
@@ -93,6 +98,24 @@ class MainActivity : AppCompatActivity(), DeptListener {
         var connexion = Connexion(obj1, reseau, this)
         connexion.setObjet2(obj2)
         reseau.connexions.add(connexion)
+
+        // Bidirectionnal scrollview
+        var sv = findViewById<ScrollView>(R.id.scrollView)
+        hsv = findViewById<WScrollView>(R.id.scrollViewH)
+        hsv.sv = sv
+        hsv.ecran = ecran
+        dragOnTouch = TouchDragObject(hsv, reseau)
+        plan.doOnPreDraw {
+            System.out.println("-----------------------------plan HEIGHT " +  plan.height)
+            System.out.println("-----------------------------plan WIDTH " +  plan.width)
+            System.out.println("-----------------------------hsv HEIGHT " +  hsv.height)
+            System.out.println("-----------------------------hsv WIDTH " +  hsv.width)
+            ecran.layoutParams.height = plan.height
+            ecran.layoutParams.width = plan.width
+            ecran.invalidate()
+            System.out.println("-----------------------------HEIGH " +  ecran.layoutParams.height)
+        }
+
 
         initListeners()
     }
@@ -108,24 +131,34 @@ class MainActivity : AppCompatActivity(), DeptListener {
     @SuppressLint("ClickableViewAccessibility")
     fun initListeners()
     {
+        hsv.setOnTouchListener { view, event ->
+            System.out.println("ON TOUCH HSV")
+            ecran.dispatchTouchEvent(event)
 
+            true
+        }
 
         ecran.setOnTouchListener { v, event ->
-            dragOnTouch.onTouch(null, event)
-            dragOnTouch.dragLine(null, event)
+            System.out.println("ON TOUCH ECRAN")
+            this.savePosX = event.getX() + hsv.scrollX
+            this.savePosY = event.getY() + hsv.sv.scrollY
+            var draggingObj = dragOnTouch.onTouch(null, event, savePosX, savePosY)
+            var draggingLine = dragOnTouch.dragLine(null, event, savePosX, savePosY)
+            dragging = draggingLine || draggingObj
+            System.out.println(dragging)
             val action = event.action
+            System.out.println(savePosX.toString() + " " + savePosY)
             when(action)
             {
                 MotionEvent.ACTION_DOWN ->
                 {
-                    this.savePosX = event.getX()
-                    this.savePosY = event.getY()
+
 
                     if(this.modeSelected != Mode.AJOUT_OBJET)
                     {
                         //On n'est pas en mode ajout d'objet, il y a donc des actions a gerer
-                        var objet = reseau.getObjet(event.x, event.y)
-                        var connexion = reseau.getConnexion(event.x, event.y)
+                        var objet = reseau.getObjet(savePosX, savePosY)
+                        var connexion = reseau.getConnexion(savePosX, savePosY)
                         if(connexion != null && modeSelected == Mode.MODIFICATION)
                         {
                             //On a recupere une connexion
@@ -138,7 +171,9 @@ class MainActivity : AppCompatActivity(), DeptListener {
                             {
                                 Mode.AUCUN -> {
                                     //On n'est dans aucun mode, on peut bouger l'objet
-                                    dragOnTouch.onTouch(objet, event)
+                                    System.out.println("before dragg")
+                                    dragging = dragOnTouch.onTouch(objet, event, savePosX, savePosY)
+
                                 }
                                 Mode.AJOUT_CONNEXION -> {
                                     //On est en mode ajout de connexion, on met le systeme de connexion entre objets
@@ -146,11 +181,11 @@ class MainActivity : AppCompatActivity(), DeptListener {
                                     {
                                         connexionAModifier = Connexion(objet, reseau, this)
                                         reseau.connexions.add(connexionAModifier!!)
-                                        dragOnTouch.dragLine(connexionAModifier!!, event)
+                                        dragging = dragOnTouch.dragLine(connexionAModifier!!, event, savePosX, savePosY)
                                     }
                                     else if(connexionAModifier != null)
                                     {
-                                        dragOnTouch.dragLine(connexionAModifier!!, event)
+                                        dragging = dragOnTouch.dragLine(connexionAModifier!!, event, savePosX, savePosY)
                                     }
                                 }
                                 Mode.MODIFICATION -> {
@@ -163,26 +198,27 @@ class MainActivity : AppCompatActivity(), DeptListener {
                         }
                         else if (modeSelected == Mode.AJOUT_CONNEXION && connexionAModifier != null)
                         {
-                            dragOnTouch.dragLine(connexionAModifier!!, event)
+                            dragging = dragOnTouch.dragLine(connexionAModifier!!, event, savePosX, savePosY)
                         }
                         else
                         {
                             isPressed = true
                             Handler(Looper.getMainLooper()).postDelayed({
                                 if (isPressed &&
-                                        event.x > this.savePosX - 20 &&
-                                        event.x < this.savePosX + 20) {
+                                        event.x + hsv.scrollX > this.savePosX - 20 &&
+                                        event.x + hsv.scrollX < this.savePosX + 20) {
                                     objetAModifier = Objet(this, "unnamed" , savePosX, savePosY)
                                     val dialog = AjoutObjetDialogFragment()
                                     dialog.show(supportFragmentManager, resources.getString(R.string.addObject))
                                     this.clickMenu(1)
                                 }
                             }, 1000)
+
                         }
                     }
                     else
                     {
-                        objetAModifier = Objet(this, "unnamed" , event.getX(), event.getY())
+                        objetAModifier = Objet(this, "unnamed" , savePosX, savePosY)
                         val dialog = AjoutObjetDialogFragment()
                         dialog.show(supportFragmentManager, resources.getString(R.string.addObject))
                     }
@@ -207,9 +243,17 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 }
                 else ->{
 
+
                 }
             }
+            if(!dragging)
+            {
+                ecran.invalidate()
+                hsv.onTouchEvent(event)
+            }
             ecran.invalidate()
+
+
             true
         }
     }
@@ -304,7 +348,5 @@ class MainActivity : AppCompatActivity(), DeptListener {
         }
         ecran.invalidate()
     }
-
-
 
 }

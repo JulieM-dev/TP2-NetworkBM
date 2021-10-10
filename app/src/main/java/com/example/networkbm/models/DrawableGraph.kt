@@ -14,7 +14,6 @@ class DrawableGraph : Drawable() {
     override fun draw(canvas: Canvas) {
         this.canvas = canvas
 
-
         paint.setColor(Color.BLACK);
         paint.strokeWidth = 7F
 

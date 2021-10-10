@@ -11,7 +11,7 @@ import android.widget.RelativeLayout
 class Objet(context: Context, nom: String, x: Float, y: Float) : RectF(x-45, y-42, x+45, y+42) {
 
     var nom = nom
-    var couleur : String = "#009944"
+    var couleur : String = "#a300cc"
     var connexions = ArrayList<Connexion>()
 
     fun setPositions(x : Float, y : Float)

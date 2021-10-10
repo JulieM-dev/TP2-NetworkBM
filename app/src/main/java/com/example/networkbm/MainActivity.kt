@@ -263,7 +263,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 }
                 MotionEvent.ACTION_MOVE->
                 {
-                    isPressed = false
+
                 }
                 else ->{
 
@@ -357,17 +357,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
         ecran.invalidate()
     }
 
-    fun ajouterObjetDialog()
-    {
-        val dialog = AjoutObjetDialogFragment()
-        dialog.show(supportFragmentManager, resources.getString(R.string.addObject))
-    }
-
-
-    fun ajoutConnexion()
-    {
-
-    }
 
     override fun onDeptSelected(depts: ArrayList<String>) {
         //Click sur une page de dialogue

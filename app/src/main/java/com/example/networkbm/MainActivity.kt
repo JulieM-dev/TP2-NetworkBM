@@ -35,11 +35,12 @@ class MainActivity : AppCompatActivity(), DeptListener {
     lateinit var tableButsMenu : Array<ImageButton>
     private var savePosX = 0F
     private var savePosY = 0F
-    private var saveScrollX = 0F
-    private var saveScrollY = 0F
+    private var saveScrollX : Int? = null
+    private var saveScrollY : Int? = null
     lateinit var ecran : ImageView
     lateinit var dragOnTouch : TouchDragObject
     var dragging = false
+    var looper : Looper? = null
 
     private lateinit var affPrinc : TextView
     lateinit var hsv : WScrollView
@@ -208,17 +209,25 @@ class MainActivity : AppCompatActivity(), DeptListener {
                         }
                         else
                         {
+                            if(saveScrollX == null)
+                            {
+                                saveScrollX = hsv.scrollX
+                                saveScrollY = hsv.scrollY
+                            }
                             isPressed = true
                             Handler(Looper.getMainLooper()).postDelayed({
                                 if (isPressed &&
-                                        hsv.scrollX > this.savePosX - event.x - 20 &&
-                                        hsv.scrollX < this.savePosX - event.x + 20) {
+                                        hsv.scrollX > saveScrollX!! - 20 &&
+                                        hsv.scrollX < saveScrollX!! + 20 &&
+                                        hsv.scrollY > saveScrollY!! - 20 &&
+                                        hsv.scrollY < saveScrollY!! + 20
+                                        ) {
                                     objetAModifier = Objet(this, "unnamed" , savePosX, savePosY)
                                     val dialog = AjoutObjetDialogFragment()
                                     dialog.show(supportFragmentManager, resources.getString(R.string.addObject))
                                     this.clickMenu(1)
                                 }
-                            }, 1000)
+                            }, 2000)
 
                         }
                     }
@@ -230,7 +239,10 @@ class MainActivity : AppCompatActivity(), DeptListener {
                     }
                 }
                 MotionEvent.ACTION_UP -> {
+                    Looper.getMainLooper().quitSafely()
                     isPressed = false
+                    saveScrollX = null
+                    saveScrollY = null
                     if(modeSelected == Mode.AJOUT_CONNEXION && connexionAModifier != null)
                     {
                         var objet = reseau.getObjet(connexionAModifier!!.pointerX, connexionAModifier!!.pointerY)
@@ -254,6 +266,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
             }
             if(!dragging)
             {
+
                 ecran.invalidate()
                 hsv.onTouchEvent(event)
             }

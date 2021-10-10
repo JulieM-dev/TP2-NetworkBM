@@ -35,6 +35,8 @@ class MainActivity : AppCompatActivity(), DeptListener {
     lateinit var tableButsMenu : Array<ImageButton>
     private var savePosX = 0F
     private var savePosY = 0F
+    private var saveScrollX = 0F
+    private var saveScrollY = 0F
     lateinit var ecran : ImageView
     lateinit var dragOnTouch : TouchDragObject
     var dragging = false
@@ -205,8 +207,8 @@ class MainActivity : AppCompatActivity(), DeptListener {
                             isPressed = true
                             Handler(Looper.getMainLooper()).postDelayed({
                                 if (isPressed &&
-                                        event.x + hsv.scrollX > this.savePosX - 20 &&
-                                        event.x + hsv.scrollX < this.savePosX + 20) {
+                                        hsv.scrollX > this.savePosX - event.x - 20 &&
+                                        hsv.scrollX < this.savePosX - event.x + 20) {
                                     objetAModifier = Objet(this, "unnamed" , savePosX, savePosY)
                                     val dialog = AjoutObjetDialogFragment()
                                     dialog.show(supportFragmentManager, resources.getString(R.string.addObject))

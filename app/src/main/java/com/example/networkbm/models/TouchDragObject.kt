@@ -1,15 +1,15 @@
 package com.example.networkbm.models
 
 import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
-import android.widget.RelativeLayout
+import android.widget.ImageView
+import com.example.networkbm.views.WScrollView
 
-class TouchDragObject(private var rootLayout: View, reseau: Graph) {
+class TouchDragObject(private var rootLayout: WScrollView, reseau: Graph, plan: ImageView) {
     var reseau : Graph = reseau
 
     var objet : Objet? = null
     var connexion : Connexion? = null
+    var plan : ImageView = plan
 
 
     fun onTouch(newObjet: Objet?, event: MotionEvent, x : Float, y : Float): Boolean {
@@ -33,8 +33,8 @@ class TouchDragObject(private var rootLayout: View, reseau: Graph) {
                 MotionEvent.ACTION_MOVE -> {
                     if(event.getY() < 42){
                         objet!!.setPositions(x, 42f)
-                    } else if(y > rootLayout.height - 42) {
-                        objet!!.setPositions(x, rootLayout.height.toFloat() - 42)
+                    } else if(y > plan.height - 42) {
+                        objet!!.setPositions(x, plan.height.toFloat() - 42)
                     } else {
                         objet!!.setPositions(x, y)
                     }

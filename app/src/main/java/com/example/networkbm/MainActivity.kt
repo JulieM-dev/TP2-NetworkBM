@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
         hsv = findViewById<WScrollView>(R.id.scrollViewH)
         hsv.sv = sv
         hsv.ecran = ecran
-        dragOnTouch = TouchDragObject(hsv, reseau)
+        dragOnTouch = TouchDragObject(hsv, reseau, plan)
         plan.doOnPreDraw {
             System.out.println("-----------------------------plan HEIGHT " +  plan.height)
             System.out.println("-----------------------------plan WIDTH " +  plan.width)

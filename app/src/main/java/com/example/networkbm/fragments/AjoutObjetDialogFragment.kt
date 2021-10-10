@@ -86,9 +86,7 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
             }
 
         }
-
         return alertDialog
-
     }
 
 

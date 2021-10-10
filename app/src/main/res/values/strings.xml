@@ -1,5 +1,20 @@
 <resources>
-    <string name="app_name">Network Bury/Mongault</string>
+    <string name="app_name" translatable="false">Network Bury/Mongault</string>
+    <string name="addObject">Add an object</string>
+    <string name="editObject">Edit an object</string>
+    <string name="objectCreated">Object created</string>
+    <string name="objectModified">Object modified</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="name">Name</string>
+    <string name="reset">Reset</string>
+    <string name="addConnection">Add connection</string>
+    <string name="modify">Modify</string>
+    <string name="pressScreen">Keep pressed to add an object \n Or move existing objects</string>
+    <string name="connectionCreated">Connection created</string>
+    <string name="editConnection">Edit connection</string>
+    <string name="objectDeleted">Object deleted</string>
+    <string name="connectionDeleted">Connection deleted</string>
+    <string name="connectionModified">Connection modified</string>
+    <string name="lang">Lang : English</string>
 </resources>

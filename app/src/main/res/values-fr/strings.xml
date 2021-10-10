@@ -1,0 +1,19 @@
+<resources>
+    <string name="addObject">Ajouter un objet</string>
+    <string name="editObject">Modifier un objet</string>
+    <string name="objectCreated">Objet créé</string>
+    <string name="objectModified">Objet modifié</string>
+    <string name="open">Ouvrir</string>
+    <string name="close">Fermer</string>
+    <string name="name">Nom</string>
+    <string name="reset">Réinitialiser</string>
+    <string name="addConnection">Ajouter une connexion</string>
+    <string name="modify">Modifier</string>
+    <string name="pressScreen">Restez appuyé pour ajouter un objet \n Ou bougez les objets existants</string>
+    <string name="connectionCreated">Connexion créée</string>
+    <string name="editConnection">Modifier la connexion</string>
+    <string name="objectDeleted">Objet supprimé</string>
+    <string name="connectionDeleted">Connexion supprimée</string>
+    <string name="connectionModified">Connexion modifiée</string>
+    <string name="lang">Langue : Français</string>
+</resources>

@@ -156,8 +156,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
             {
                 MotionEvent.ACTION_DOWN ->
                 {
-
-
                     if(this.modeSelected != Mode.AJOUT_OBJET)
                     {
                         //On n'est pas en mode ajout d'objet, il y a donc des actions a gerer

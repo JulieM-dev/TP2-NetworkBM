@@ -15,6 +15,7 @@ import android.widget.*
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.doOnPreDraw
+import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.networkbm.fragments.AjoutObjetDialogFragment
 import com.example.networkbm.fragments.EditConnexionDialogFragment
@@ -60,6 +61,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val navView = findViewById<NavigationView>(R.id.navView)
+        navView.getHeaderView(0).setBackgroundColor(resources.getColor(R.color.purple_princ))
 
         tableButsMenu = arrayOf (
             findViewById<ImageButton>(R.id.butAjoutObjet),
@@ -117,8 +119,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
             param.height = plan.height
             param.width = plan.width
             ecran.layoutParams = param
-            //ecran.layoutParams.height = plan.height
-            //ecran.layoutParams.width = plan.width
             ecran.invalidate()
             System.out.println("-----------------------------HEIGH " +  ecran.layoutParams.height)
         }
@@ -310,9 +310,12 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
     fun clickMenu(i: Int)
     {
-        for(i in 0..tableButsMenu.size-1){
-            tableButsMenu.get(i).setBackgroundColor(Color.parseColor("#ffffff"))
+        val navView = findViewById<NavigationView>(R.id.navView)
+        for(it in 0..tableButsMenu.size-1){
+            tableButsMenu.get(it).setBackgroundColor(resources.getColor(R.color.white))
+            navView.menu.getItem(it + 1).setChecked(false)
         }
+        navView.menu.getItem(i).setChecked(true)
        when(i){
            1 -> {
                if(this.modeSelected != Mode.AJOUT_OBJET)
@@ -353,9 +356,9 @@ class MainActivity : AppCompatActivity(), DeptListener {
            }
        }
         if(this.modeSelected != Mode.AUCUN)
-            tableButsMenu.get(i - 1).setBackgroundColor(Color.parseColor("#fff000"))
+            tableButsMenu.get(i - 1).setBackgroundColor(resources.getColor(R.color.purple_sec))
         else
-            tableButsMenu.get(i - 1).setBackgroundColor(Color.parseColor("#ffffff"))
+            tableButsMenu.get(i - 1).setBackgroundColor(resources.getColor(R.color.white))
 
         ecran.invalidate()
     }
@@ -363,7 +366,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
     fun ajouterObjetDialog()
     {
         val dialog = AjoutObjetDialogFragment()
-        dialog.show(supportFragmentManager, "Ajouter un objet")
+        dialog.show(supportFragmentManager, resources.getString(R.string.addObject))
     }
 
 

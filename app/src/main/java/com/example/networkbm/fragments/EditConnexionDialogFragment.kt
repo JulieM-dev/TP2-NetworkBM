@@ -6,10 +6,7 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.Spinner
+import android.widget.*
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.view.get
 import com.example.networkbm.DeptListener
@@ -81,6 +78,7 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
             {
                 val depts = ArrayList<String>()
                 reseau!!.connexions.remove(connexion)
+                Toast.makeText(this.context, getString(R.string.connectionDeleted), Toast.LENGTH_SHORT).show()
                 listener.onDeptSelected(depts)
                 alertDialog.dismiss()
             }
@@ -140,6 +138,7 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
 
     fun valider(){
         val depts = ArrayList<String>()
+        Toast.makeText(this.context, getString(R.string.connectionModified), Toast.LENGTH_SHORT).show()
 
         val o1 = this.reseau!!.getObjet(this.obj1!!.centerX(), this.obj1!!.centerY())
         val o2 = this.reseau!!.getObjet(this.obj2!!.centerX(), this.obj2!!.centerY())

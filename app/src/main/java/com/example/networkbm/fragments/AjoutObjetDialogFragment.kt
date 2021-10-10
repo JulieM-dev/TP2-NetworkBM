@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDialogFragment
 import com.example.networkbm.DeptListener
 import com.example.networkbm.R
@@ -80,6 +81,7 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
                         i++
                     }
                     reseau!!.objets.remove(objet)
+                    Toast.makeText(this.context, getString(R.string.objectDeleted), Toast.LENGTH_SHORT).show()
                     listener.onDeptSelected(depts)
                     alertDialog.dismiss()
                 }

@@ -15,4 +15,5 @@
     <string name="objectDeleted">Objet supprimé</string>
     <string name="connectionDeleted">Connexion supprimée</string>
     <string name="connectionModified">Connexion modifiée</string>
+    <string name="lang">Langue : Français</string>
 </resources>

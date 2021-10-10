@@ -1,6 +1,9 @@
 package com.example.networkbm
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.content.res.Resources
 import android.graphics.Color
 
 import androidx.appcompat.app.AppCompatActivity
@@ -23,7 +26,9 @@ import com.example.networkbm.fragments.EditConnexionDialogFragment
 import com.example.networkbm.models.*
 import com.example.networkbm.views.WScrollView
 import com.google.android.material.navigation.NavigationView
+import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity(), DeptListener {
 
@@ -42,6 +47,10 @@ class MainActivity : AppCompatActivity(), DeptListener {
     lateinit var ecran : ImageView
     lateinit var dragOnTouch : TouchDragObject
     var dragging = false
+
+    lateinit var locale: Locale
+    private var currentLanguage = "fr"
+    private var currentLang: String? = null
 
     var handler : Handler? = null
 
@@ -78,6 +87,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 R.id.button_ajout_objet -> clickMenu(1)
                 R.id.button_ajout_connexion -> clickMenu(2)
                 R.id.button_modification -> clickMenu(3)
+                R.id.switch_lang -> changeLanguage()
             }
             drawerLayout.closeDrawer(Gravity.LEFT)
             true
@@ -132,7 +142,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
         }
 
         ecran.setOnLongClickListener {
-            System.out.println("-------------HEY")
             true
         }
 
@@ -205,7 +214,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
                             isPressed = true
 
                             handler!!.postDelayed({
-                                System.out.println("----------HEY")
                                 if (isPressed &&
                                     hsv.scrollX > saveScrollX!! - 10 &&
                                     hsv.scrollX < saveScrollX!! + 10 &&
@@ -315,7 +323,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
                    drawGraph.alpha = 255
                }
 
-               //ajouterObjetDialog()
            }
            2 -> {
                if(this.modeSelected != Mode.AJOUT_CONNEXION) {
@@ -342,7 +349,10 @@ class MainActivity : AppCompatActivity(), DeptListener {
         if(this.modeSelected != Mode.AUCUN)
             tableButsMenu.get(i - 1).setBackgroundColor(resources.getColor(R.color.purple_sec))
         else
+        {
             tableButsMenu.get(i - 1).setBackgroundColor(resources.getColor(R.color.white))
+            navView.menu.getItem(i).setChecked(false)
+        }
 
         ecran.invalidate()
     }
@@ -398,5 +408,43 @@ class MainActivity : AppCompatActivity(), DeptListener {
         }
         ecran.invalidate()
     }
+
+    fun setLocale(localeName: String) {
+        if (localeName != currentLanguage) {
+            locale = Locale(localeName)
+            val res = resources
+            val dm = res.displayMetrics
+            val conf = res.configuration
+            conf.locale = locale
+            res.updateConfiguration(conf, dm)
+            val refresh = Intent(
+                this,
+                MainActivity::class.java
+            )
+            refresh.putExtra(currentLang, localeName)
+            startActivity(refresh)
+        } else {
+            Toast.makeText(
+                this@MainActivity, "Language, , already, , selected)!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent(Intent.ACTION_MAIN)
+        intent.addCategory(Intent.CATEGORY_HOME)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivity(intent)
+        finish()
+        exitProcess(0)
+    }
+
+    fun changeLanguage(){
+        if(this.currentLanguage == "fr"){
+            this.setLocale("en")
+        } else {
+            this.setLocale("fr")
+        }
+    }
+
 
 }

@@ -84,8 +84,8 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fadein))
             }
         }
-        ecran = findViewById<ImageView>(R.id.contRect)
         var plan = findViewById<ImageView>(R.id.planAppartement)
+        ecran = findViewById<ImageView>(R.id.contRect)
 
         System.out.println("-----------------------------HEIGH " +  plan.measuredHeight)
 
@@ -112,8 +112,12 @@ class MainActivity : AppCompatActivity(), DeptListener {
             System.out.println("-----------------------------plan WIDTH " +  plan.width)
             System.out.println("-----------------------------hsv HEIGHT " +  hsv.height)
             System.out.println("-----------------------------hsv WIDTH " +  hsv.width)
-            ecran.layoutParams.height = plan.height
-            ecran.layoutParams.width = plan.width
+            var param: FrameLayout.LayoutParams = FrameLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,100);
+            param.height = plan.height
+            param.width = plan.width
+            ecran.layoutParams = param
+            //ecran.layoutParams.height = plan.height
+            //ecran.layoutParams.width = plan.width
             ecran.invalidate()
             System.out.println("-----------------------------HEIGH " +  ecran.layoutParams.height)
         }

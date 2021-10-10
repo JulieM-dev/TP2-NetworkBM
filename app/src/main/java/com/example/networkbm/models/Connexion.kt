@@ -2,6 +2,8 @@ package com.example.networkbm.models
 
 import android.content.Context
 import android.graphics.*
+import android.os.Parcel
+import android.os.Parcelable
 import android.view.View
 import java.util.stream.Collectors
 
@@ -85,5 +87,7 @@ class Connexion (objet1 : Objet, reseau: Graph, context: Context) : Path() {
         objet2?.connexions?.remove(this)
         reseau.connexions.remove(this)
     }
+
+
 
 }

@@ -230,8 +230,10 @@ class MainActivity : AppCompatActivity(), DeptListener {
                                         val dialog = AjoutObjetDialogFragment()
                                         dialog.show(supportFragmentManager, resources.getString(R.string.addObject))
                                         this.clickMenu(1)
+                                    } else {
+                                        this.isPressed = false
                                     }
-                                }, 5000)
+                                }, 1000)
                             }
 
 
@@ -247,9 +249,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 MotionEvent.ACTION_UP -> {
                     if(looper != null)
                     {
-                        Handler(looper!!).postDelayed({
 
-                        }, 0)
                         looper = null
                     }
 
@@ -271,6 +271,10 @@ class MainActivity : AppCompatActivity(), DeptListener {
                         connexionAModifier = null
 
                     }
+                }
+                MotionEvent.ACTION_MOVE->
+                {
+                    isPressed = false
                 }
                 else ->{
 
@@ -391,6 +395,19 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 }
             }
         }
+        ecran.invalidate()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putParcelableArrayList("connexions", reseau.connexions)
+        outState.putParcelableArrayList("objets", reseau.objets)
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        reseau.objets = savedInstanceState.getParcelableArrayList<Objet>("objets") as ArrayList<Objet>
         ecran.invalidate()
     }
 

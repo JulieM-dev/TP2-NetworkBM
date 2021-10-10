@@ -13,4 +13,7 @@
     <string name="pressScreen">Keep pressed to add an object \n Or move existing objects</string>
     <string name="connectionCreated">Connection created</string>
     <string name="editConnection">Edit connection</string>
+    <string name="objectDeleted">Object deleted</string>
+    <string name="connectionDeleted">Connection deleted</string>
+    <string name="connectionModified">Connection modified</string>
 </resources>

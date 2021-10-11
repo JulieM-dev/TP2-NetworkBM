@@ -8,18 +8,34 @@ class DrawableGraph : Drawable() {
     var reseau : Graph = Graph()
     lateinit var canvas: Canvas
     var paint = Paint()
+    var paintStroke = Paint()
     var greyAlpha = 255
 
+    init {
+        paint.style = Paint.Style.FILL
+        paint.setColor(Color.BLACK);
+        paint.strokeWidth = 7F
+
+        paintStroke.style = Paint.Style.STROKE
+        paintStroke.setColor(Color.BLACK);
+
+        paintStroke.strokeWidth = 7F
+    }
 
     override fun draw(canvas: Canvas) {
         this.canvas = canvas
 
+        paint.style = Paint.Style.FILL
         paint.setColor(Color.BLACK);
         paint.strokeWidth = 7F
 
+
         reseau.connexions.forEach {
             var cords = it.getCords()
-            canvas.drawLine(cords.get(0), cords.get(1), cords.get(2), cords.get(3), paint)
+            it.rewind()
+            it.moveTo(cords.get(0), cords.get(1))
+            it.lineTo(cords.get(2), cords.get(3))
+            canvas.drawPath(it, paintStroke)
             cords = it.getCenter()
             canvas.drawCircle(cords.get(0), cords.get(1), 20F, paint)
         }

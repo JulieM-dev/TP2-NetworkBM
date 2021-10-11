@@ -12,39 +12,74 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.10" />
 
-    <Spinner
-        android:id="@+id/editObjet1"
+
+    <EditText
+        android:id="@+id/editTextNomConnexion"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="50dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:autofillHints="Nom"
         android:hint="@string/name"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/linearLayout" />
 
-
-    <Spinner
-        android:id="@+id/editObjet2"
+    <LinearLayout
+        android:id="@+id/listCouleurs"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="20dp"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editObjet1" />
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNomConnexion">
+
+        <Button
+            android:id="@+id/butCol1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/black"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listCouleurs">
+
+        <Spinner
+            android:id="@+id/editObjet1"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:autofillHints="Nom"
+            android:hint="@string/name"
+            android:textSize="24sp" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            app:srcCompat="@android:drawable/ic_menu_share" />
+
+        <Spinner
+            android:id="@+id/editObjet2"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:textSize="24sp" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/buttonAnnuler"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
         android:layout_marginRight="8dp"
         android:text="Annuler"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonValider"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/editObjet2" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
     <Button
         android:id="@+id/buttonValider"

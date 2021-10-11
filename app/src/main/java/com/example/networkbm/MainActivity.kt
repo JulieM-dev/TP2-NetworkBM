@@ -248,7 +248,12 @@ class MainActivity : AppCompatActivity(), DeptListener {
                         var objet = reseau.getObjet(connexionAModifier!!.pointerX, connexionAModifier!!.pointerY)
                         if(objet != null && objet != connexionAModifier!!.getObjet1() && !existeConnexion(connexionAModifier!!.getObjet1(), objet))
                         {
+                            //Création de la connexion
                             connexionAModifier!!.setObjet2(objet)
+
+                            val dialog = EditConnexionDialogFragment(connexionAModifier!!, reseau, true)
+                            dialog.show(supportFragmentManager, resources.getString(R.string.editConnection))
+
                             Toast.makeText(this, getString(R.string.connectionCreated), LENGTH_SHORT).show()
                         }
                         else
@@ -361,15 +366,20 @@ class MainActivity : AppCompatActivity(), DeptListener {
         when(modeSelected) {
             Mode.AJOUT_OBJET -> {
                 objetAModifier.nom = depts.get(0)
+                objetAModifier.couleur = depts.get(1)
                 reseau.objets.add(objetAModifier)
                 Toast.makeText(this, getString(R.string.objectCreated), LENGTH_SHORT).show()
             }
             Mode.MODIFICATION -> {
                 val obj = reseau.getObjet(this.savePosX, this.savePosY)
                 if(obj != null){
-                    obj!!.nom = depts.get(0)
+                    obj.nom = depts.get(0)
+                    obj.couleur = depts.get(1)
                     Toast.makeText(this, getString(R.string.objectModified), LENGTH_SHORT).show()
                 }
+            }
+            else -> {
+
             }
         }
         ecran.invalidate()

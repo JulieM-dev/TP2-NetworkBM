@@ -11,7 +11,7 @@ import android.widget.RelativeLayout
 class Objet(context: Context, nom: String, x: Float, y: Float) : RectF(x-45, y-42, x+45, y+42) {
 
     var nom = nom
-    var couleur : String = "#a300cc"
+    var couleur : String? = null
     var connexions = ArrayList<Connexion>()
 
     fun setPositions(x : Float, y : Float)
@@ -28,6 +28,5 @@ class Objet(context: Context, nom: String, x: Float, y: Float) : RectF(x-45, y-4
         else
             return "Objet " + (this.left.toInt().toString() + "." + this.top.toInt())
     }
-
 
 }

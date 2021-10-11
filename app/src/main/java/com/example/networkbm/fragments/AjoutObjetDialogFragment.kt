@@ -3,13 +3,13 @@ package com.example.networkbm.fragments
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.core.view.children
 import com.example.networkbm.DeptListener
 import com.example.networkbm.R
 import com.example.networkbm.models.Connexion
@@ -27,6 +27,8 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
     lateinit var buttonSupprimer : Button
     var objet : Objet? = null
     var reseau : Graph? = null
+    var listCouleurs = arrayOf("#2d3436","#e74c3c","#2ecc71","#3498db","#e67e22","#00cec9","#9b59b6")
+    var selectedColor : String? = null
 
     constructor(objet: Objet, reseau: Graph) : this() {
         this.objet = objet
@@ -35,8 +37,9 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogBuilder =  AlertDialog.Builder(activity)
+        this.selectedColor = this.listCouleurs.get(0)
 
-        var formulaire = activity?.layoutInflater?.inflate(R.layout.ajout_objet_form, null)
+        val formulaire = activity?.layoutInflater?.inflate(R.layout.ajout_objet_form, null)
         dialogBuilder.setView(formulaire)
             .setTitle(this.tag)
 
@@ -47,6 +50,8 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
             if(objet != null)
             {
                 editTextNom.setText(objet!!.nom)
+                this.selectedColor = objet!!.couleur
+                this.clickCouleur(objet!!.couleur!!, formulaire)
             }
             buttonValider = formulaire.findViewById(R.id.buttonValider)
             buttonAnnuler = formulaire.findViewById(R.id.buttonAnnuler)
@@ -54,9 +59,10 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
 
             buttonValider.setOnClickListener()
             {
-                var nom = editTextNom.text.toString()
-                var depts = ArrayList<String>()
+                val nom = editTextNom.text.toString()
+                val depts = ArrayList<String>()
                 depts.add(nom)
+                depts.add(this.selectedColor!!)
                 listener.onDeptSelected(depts)
                 alertDialog.dismiss()
             }
@@ -87,10 +93,38 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
                 }
             }
 
+            val layout = formulaire.findViewById<LinearLayout>(R.id.listCouleurs)
+            var butNoir = formulaire.findViewById<Button>(R.id.butCol1)
+            listCouleurs.forEach {
+                val newBut = Button(buttonValider.context)
+                newBut.layoutParams = butNoir.layoutParams
+                newBut.setBackgroundColor(Color.parseColor(it))
+                newBut.setTextColor(resources.getColor(R.color.white))
+                val str = it.toString()
+                newBut.setOnClickListener()
+                {
+                    this.clickCouleur(str, formulaire)
+                }
+                layout.addView(newBut)
+            }
+            layout.removeView(butNoir)
         }
         return alertDialog
     }
 
+    fun clickCouleur(color: String, formulaire: View){
+        this.selectedColor = color
+        val layout = formulaire.findViewById<LinearLayout>(R.id.listCouleurs)
+        layout.children.forEach {
+            val but = it as Button
+            val butCol = but.background as ColorDrawable
+            but.text = ""
+            if(butCol.color == Color.parseColor(color))
+                but.text = "V"
+            else
+                but.text = ""
+        }
+    }
 
 
     override fun onAttach(context: Context) {

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -25,23 +26,29 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
     lateinit var buttonSupprimer : Button
     lateinit var editObjet1 : Spinner
     lateinit var editObjet2 : Spinner
+    lateinit var nomConnexion: EditText
+    var listCouleurs = arrayOf("#2d3436","#e74c3c","#2ecc71","#3498db","#e67e22","#00cec9","#9b59b6")
     var connexion : Connexion? = null
     var reseau : Graph? = null
     var obj1 : Objet? = null
     var obj2: Objet? = null
     var idT1 = 0
     var idT2 = 0
+    var isEdition = false
+    var selectedColor : String? = null
 
-    constructor(connexion: Connexion, reseau: Graph) : this() {
+    constructor(connexion: Connexion, reseau: Graph, isEdition: Boolean = false) : this() {
         this.connexion = connexion
         this.reseau = reseau
         this.obj1 = connexion.getObjet1()
         this.obj2 = connexion.getObjet2()
+        this.isEdition = isEdition
     }
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogBuilder =  AlertDialog.Builder(activity)
+        this.selectedColor = this.listCouleurs.get(0)
 
         var formulaire = activity?.layoutInflater?.inflate(R.layout.edit_connexion_form, null)
         dialogBuilder.setView(formulaire)
@@ -54,11 +61,16 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
             {
 
             }
+            nomConnexion = formulaire.findViewById(R.id.editTextNomConnexion)
             buttonValider = formulaire.findViewById(R.id.buttonValider)
             buttonAnnuler = formulaire.findViewById(R.id.buttonAnnuler)
             buttonSupprimer = formulaire.findViewById(R.id.buttonSupprimer)
             editObjet1 = formulaire.findViewById(R.id.editObjet1)
             editObjet2 = formulaire.findViewById(R.id.editObjet2)
+
+            if(this.isEdition){
+                buttonSupprimer.visibility = View.INVISIBLE
+            }
 
             this.setList()
             this.idT1 = editObjet1.id
@@ -72,20 +84,41 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
             }
             buttonAnnuler.setOnClickListener()
             {
+                if(this.isEdition){
+                    this.sendSupprimer()
+                }
                 alertDialog.dismiss()
             }
             buttonSupprimer.setOnClickListener()
             {
-                val depts = ArrayList<String>()
-                reseau!!.connexions.remove(connexion)
-                Toast.makeText(this.context, getString(R.string.connectionDeleted), Toast.LENGTH_SHORT).show()
-                listener.onDeptSelected(depts)
-                alertDialog.dismiss()
+                this.sendSupprimer()
             }
 
+            val layout = formulaire.findViewById<LinearLayout>(R.id.listCouleurs)
+            var butNoir = formulaire.findViewById<Button>(R.id.butCol1)
+            listCouleurs.forEach {
+                val newBut = Button(buttonValider.context)
+                newBut.layoutParams = butNoir.layoutParams
+                newBut.setBackgroundColor(Color.parseColor(it))
+                val str = it.toString()
+                newBut.setOnClickListener()
+                {
+                    this.selectedColor = str
+                }
+                layout.addView(newBut)
+            }
+            layout.removeView(butNoir)
         }
 
         return alertDialog
+    }
+
+    fun sendSupprimer(){
+        val depts = ArrayList<String>()
+        reseau!!.connexions.remove(connexion)
+        Toast.makeText(this.context, getString(R.string.connectionDeleted), Toast.LENGTH_SHORT).show()
+        listener.onDeptSelected(depts)
+        alertDialog.dismiss()
     }
 
     fun setList(){
@@ -145,6 +178,8 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
 
         connexion!!.setObjet1(o1!!)
         connexion!!.setObjet2(o2!!)
+        connexion!!.setNom(this.nomConnexion.text.toString())
+        connexion!!.setColor(this.selectedColor!!)
         listener.onDeptSelected(depts)
         alertDialog.dismiss()
     }

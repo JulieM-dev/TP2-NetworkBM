@@ -19,16 +19,24 @@ class DrawableGraph : Drawable() {
 
         reseau.connexions.forEach {
             var cords = it.getCords()
+            if(it.couleur != null)
+                paint.setColor(Color.parseColor(it.couleur))
             canvas.drawLine(cords.get(0), cords.get(1), cords.get(2), cords.get(3), paint)
             cords = it.getCenter()
             canvas.drawCircle(cords.get(0), cords.get(1), 20F, paint)
+            if(it.getNom() != null){
+                paint.textSize = 30F
+                paint.textAlign = Paint.Align.CENTER
+                canvas.drawText(it.getNom()!!, it.getCenter().get(0), it.getCenter().get(1) + 50, paint)
+            }
         }
 
 
         reseau.objets.forEach {
             paint.setColor(Color.parseColor(it.couleur))
             canvas.drawRoundRect(it,20F,20F, paint)
-            paint.setColor(Color.parseColor("#000000"))
+            if(it.couleur != null)
+                paint.setColor(Color.parseColor(it.couleur))
             paint.textSize = 30F
             paint.textAlign = Paint.Align.CENTER
             canvas.drawText(it.nom, it.centerX(), it.centerY()+65, paint)

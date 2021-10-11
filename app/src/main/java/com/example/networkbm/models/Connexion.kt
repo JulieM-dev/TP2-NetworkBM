@@ -11,8 +11,10 @@ class Connexion (objet1 : Objet, reseau: Graph, context: Context) : Path() {
     private val reseau = reseau
     private var objet1 = objet1
     private var objet2 : Objet? = null
+    private var nom : String? = null
     var pointerX = 50F
     var pointerY = 0F
+    var couleur : String? = null
 
     init {
         actualisePath()
@@ -88,6 +90,17 @@ class Connexion (objet1 : Objet, reseau: Graph, context: Context) : Path() {
         reseau.connexions.remove(this)
     }
 
+    fun setNom(nom: String){
+        this.nom = nom
+    }
+
+    fun getNom() : String? {
+        return this.nom
+    }
+
+    fun setColor(color: String){
+        this.couleur = color
+    }
 
 
 }

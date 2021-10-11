@@ -1,16 +1,12 @@
 package com.example.networkbm
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
-import android.graphics.Color
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.GestureDetector
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -19,7 +15,6 @@ import android.widget.*
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.doOnPreDraw
-import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.networkbm.fragments.AjoutObjetDialogFragment
 import com.example.networkbm.fragments.EditConnexionDialogFragment
@@ -47,6 +42,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
     lateinit var ecran : ImageView
     lateinit var dragOnTouch : TouchDragObject
     var dragging = false
+    var saveData = SaveData(this)
 
     lateinit var locale: Locale
     private var currentLanguage = "fr"

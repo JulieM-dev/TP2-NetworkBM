@@ -46,16 +46,37 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
         alertDialog = dialogBuilder.create()
 
         if (formulaire != null) {
+
+            buttonValider = formulaire.findViewById(R.id.buttonValider)
+            buttonAnnuler = formulaire.findViewById(R.id.buttonAnnuler)
+            buttonSupprimer = formulaire.findViewById(R.id.buttonSupprimer)
+
+            //Liste des boutons de couleur
+            val layout = formulaire.findViewById<LinearLayout>(R.id.listCouleurs)
+            var butNoir = formulaire.findViewById<Button>(R.id.butCol1)
+            listCouleurs.forEach {
+                val newBut = Button(buttonValider.context)
+                newBut.layoutParams = butNoir.layoutParams
+                newBut.setBackgroundColor(Color.parseColor(it))
+                newBut.setTextColor(resources.getColor(R.color.white))
+                val str = it.toString()
+                newBut.setOnClickListener()
+                {
+                    this.clickCouleur(str, formulaire)
+                }
+                layout.addView(newBut)
+            }
+            layout.removeView(butNoir)
+
             editTextNom = formulaire.findViewById(R.id.editTextNom)
             if(objet != null)
             {
                 editTextNom.setText(objet!!.nom)
                 this.selectedColor = objet!!.couleur
                 this.clickCouleur(objet!!.couleur!!, formulaire)
+            } else {
+                this.clickCouleur(this.listCouleurs.get(0), formulaire)
             }
-            buttonValider = formulaire.findViewById(R.id.buttonValider)
-            buttonAnnuler = formulaire.findViewById(R.id.buttonAnnuler)
-            buttonSupprimer = formulaire.findViewById(R.id.buttonSupprimer)
 
             buttonValider.setOnClickListener()
             {
@@ -92,22 +113,6 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
                     alertDialog.dismiss()
                 }
             }
-
-            val layout = formulaire.findViewById<LinearLayout>(R.id.listCouleurs)
-            var butNoir = formulaire.findViewById<Button>(R.id.butCol1)
-            listCouleurs.forEach {
-                val newBut = Button(buttonValider.context)
-                newBut.layoutParams = butNoir.layoutParams
-                newBut.setBackgroundColor(Color.parseColor(it))
-                newBut.setTextColor(resources.getColor(R.color.white))
-                val str = it.toString()
-                newBut.setOnClickListener()
-                {
-                    this.clickCouleur(str, formulaire)
-                }
-                layout.addView(newBut)
-            }
-            layout.removeView(butNoir)
         }
         return alertDialog
     }
@@ -120,7 +125,7 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
             val butCol = but.background as ColorDrawable
             but.text = ""
             if(butCol.color == Color.parseColor(color))
-                but.text = "V"
+                but.text = "✓"
             else
                 but.text = ""
         }

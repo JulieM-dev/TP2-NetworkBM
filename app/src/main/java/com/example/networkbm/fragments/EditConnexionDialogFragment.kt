@@ -5,10 +5,12 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.core.view.children
 import androidx.core.view.get
 import com.example.networkbm.DeptListener
 import com.example.networkbm.R
@@ -57,10 +59,6 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
         alertDialog = dialogBuilder.create()
 
         if (formulaire != null) {
-            if(connexion != null)
-            {
-
-            }
             nomConnexion = formulaire.findViewById(R.id.editTextNomConnexion)
             buttonValider = formulaire.findViewById(R.id.buttonValider)
             buttonAnnuler = formulaire.findViewById(R.id.buttonAnnuler)
@@ -68,8 +66,29 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
             editObjet1 = formulaire.findViewById(R.id.editObjet1)
             editObjet2 = formulaire.findViewById(R.id.editObjet2)
 
+            //Affichage de la liste de couleurs
+            val layout = formulaire.findViewById<LinearLayout>(R.id.listCouleurs)
+            var butNoir = formulaire.findViewById<Button>(R.id.butCol1)
+            listCouleurs.forEach {
+                val newBut = Button(buttonValider.context)
+                newBut.layoutParams = butNoir.layoutParams
+                newBut.setBackgroundColor(Color.parseColor(it))
+                newBut.setTextColor(resources.getColor(R.color.white))
+                val str = it.toString()
+                newBut.setOnClickListener()
+                {
+                    this.clickCouleur(str, formulaire)
+                }
+                layout.addView(newBut)
+            }
+            layout.removeView(butNoir)
+
             if(this.isEdition){
                 buttonSupprimer.visibility = View.INVISIBLE
+                this.clickCouleur(this.listCouleurs.get(0), formulaire)
+            } else {
+                this.selectedColor = connexion!!.couleur
+                this.clickCouleur(connexion!!.couleur!!, formulaire)
             }
 
             this.setList()
@@ -93,21 +112,6 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
             {
                 this.sendSupprimer()
             }
-
-            val layout = formulaire.findViewById<LinearLayout>(R.id.listCouleurs)
-            var butNoir = formulaire.findViewById<Button>(R.id.butCol1)
-            listCouleurs.forEach {
-                val newBut = Button(buttonValider.context)
-                newBut.layoutParams = butNoir.layoutParams
-                newBut.setBackgroundColor(Color.parseColor(it))
-                val str = it.toString()
-                newBut.setOnClickListener()
-                {
-                    this.selectedColor = str
-                }
-                layout.addView(newBut)
-            }
-            layout.removeView(butNoir)
         }
 
         return alertDialog
@@ -182,6 +186,20 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
         connexion!!.setColor(this.selectedColor!!)
         listener.onDeptSelected(depts)
         alertDialog.dismiss()
+    }
+
+    fun clickCouleur(color: String, formulaire: View){
+        this.selectedColor = color
+        val layout = formulaire.findViewById<LinearLayout>(R.id.listCouleurs)
+        layout.children.forEach {
+            val but = it as Button
+            val butCol = but.background as ColorDrawable
+            but.text = ""
+            if(butCol.color == Color.parseColor(color))
+                but.text = "✓"
+            else
+                but.text = ""
+        }
     }
 
 }

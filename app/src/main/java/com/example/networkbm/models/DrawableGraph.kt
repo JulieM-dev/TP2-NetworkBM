@@ -33,8 +33,10 @@ class DrawableGraph : Drawable() {
         reseau.connexions.forEach {
             var cords = it.getCords()
 
-            if(it.couleur != null)
+            if(it.couleur != null){
                 paintStroke.setColor(Color.parseColor(it.couleur))
+                paint.setColor(Color.parseColor(it.couleur))
+            }
 
             it.rewind()
             it.moveTo(cords.get(0), cords.get(1))

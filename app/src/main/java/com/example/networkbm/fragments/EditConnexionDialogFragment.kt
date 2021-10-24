@@ -119,7 +119,8 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
 
     fun sendSupprimer(){
         val depts = ArrayList<String>()
-        reseau!!.connexions.remove(connexion)
+        connexion!!.remove()
+        //reseau!!.connexions.remove(connexion)
         Toast.makeText(this.context, getString(R.string.connectionDeleted), Toast.LENGTH_SHORT).show()
         listener.onDeptSelected(depts)
         alertDialog.dismiss()

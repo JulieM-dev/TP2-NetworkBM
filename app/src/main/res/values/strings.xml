@@ -17,4 +17,6 @@
     <string name="connectionDeleted">Connection deleted</string>
     <string name="connectionModified">Connection modified</string>
     <string name="lang">Lang : English</string>
+    <string name="save">Save</string>
+    <string name="networkSaved">Network saved</string>
 </resources>

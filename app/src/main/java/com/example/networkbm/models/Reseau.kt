@@ -1,6 +1,8 @@
 package com.example.networkbm.models
 
+import android.content.Context
 import android.view.View
+import java.io.ObjectOutputStream
 
 class Reseau {
 
@@ -23,7 +25,5 @@ class Reseau {
     fun removeConnexion(connexion: Connexion) {
         connexions.remove(connexion)
     }
-
-
 
 }

@@ -2,13 +2,9 @@ package com.example.networkbm.models
 
 import android.content.Context
 import android.graphics.*
-import android.os.Parcel
-import android.os.Parcelable
-import android.view.View
-import java.util.stream.Collectors
 
-class Connexion (objet1 : Objet, reseau: Graph, context: Context) : Path() {
-    private val reseau = reseau
+class Connexion (objet1 : Objet, reseau: Graph?) : Path() {
+    var reseau = reseau
     private var objet1 = objet1
     private var objet2 : Objet? = null
     private var nom : String? = null
@@ -18,6 +14,11 @@ class Connexion (objet1 : Objet, reseau: Graph, context: Context) : Path() {
 
     init {
         actualisePath()
+    }
+
+    constructor(objet1 : Objet, objet2 : Objet?, col: String?) : this(objet1, null) {
+        this.couleur = col
+        this.objet2 = objet2
     }
 
     fun setPositions(x : Float, y : Float)
@@ -84,10 +85,9 @@ class Connexion (objet1 : Objet, reseau: Graph, context: Context) : Path() {
 
     fun remove()
     {
-        this.remove()
         objet1.connexions.remove(this)
         objet2?.connexions?.remove(this)
-        reseau.connexions.remove(this)
+        reseau!!.connexions.remove(this)
     }
 
     fun setNom(nom: String){

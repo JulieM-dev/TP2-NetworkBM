@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
     lateinit var ecran : ImageView
     lateinit var dragOnTouch : TouchDragObject
     var dragging = false
-    var saveData = SaveData(this)
+    var saveReseau = SaveReseau()
 
     lateinit var locale: Locale
     private var currentLanguage = "fr"
@@ -84,6 +84,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 R.id.button_ajout_connexion -> clickMenu(2)
                 R.id.button_modification -> clickMenu(3)
                 R.id.switch_lang -> changeLanguage()
+                R.id.saveReseau -> saveReseau()
             }
             drawerLayout.closeDrawer(Gravity.LEFT)
             true
@@ -95,20 +96,20 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fadein))
             }
         }
-        var plan = findViewById<ImageView>(R.id.planAppartement)
+        val plan = findViewById<ImageView>(R.id.planAppartement)
         ecran = findViewById<ImageView>(R.id.contRect)
 
         ecran.setImageDrawable(drawGraph)
 
 
         // Bidirectionnal scrollview
-        var sv = findViewById<ScrollView>(R.id.scrollView)
+        val sv = findViewById<ScrollView>(R.id.scrollView)
         hsv = findViewById<WScrollView>(R.id.scrollViewH)
         hsv.sv = sv
         hsv.ecran = ecran
         dragOnTouch = TouchDragObject(hsv, reseau, plan)
         plan.doOnPreDraw {
-            var param: FrameLayout.LayoutParams = FrameLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,100);
+            val param: FrameLayout.LayoutParams = FrameLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,100);
             param.height = plan.height
             param.width = plan.width
             ecran.layoutParams = param
@@ -144,8 +145,8 @@ class MainActivity : AppCompatActivity(), DeptListener {
         ecran.setOnTouchListener { v, event ->
             this.savePosX = event.getX() + hsv.scrollX
             this.savePosY = event.getY() + hsv.sv.scrollY
-            var draggingObj = dragOnTouch.onTouch(null, event, savePosX, savePosY)
-            var draggingLine = dragOnTouch.dragLine(null, event, savePosX, savePosY)
+            val draggingObj = dragOnTouch.onTouch(null, event, savePosX, savePosY)
+            val draggingLine = dragOnTouch.dragLine(null, event, savePosX, savePosY)
             dragging = draggingLine || draggingObj
             val action = event.action
             when(action)
@@ -155,8 +156,8 @@ class MainActivity : AppCompatActivity(), DeptListener {
                     if(this.modeSelected != Mode.AJOUT_OBJET)
                     {
                         //On n'est pas en mode ajout d'objet, il y a donc des actions a gerer
-                        var objet = reseau.getObjet(savePosX, savePosY)
-                        var connexion = reseau.getConnexion(savePosX, savePosY)
+                        val objet = reseau.getObjet(savePosX, savePosY)
+                        val connexion = reseau.getConnexion(savePosX, savePosY)
                         if(connexion != null && modeSelected == Mode.MODIFICATION)
                         {
                             //On a recupere une connexion
@@ -176,7 +177,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                                     //On est en mode ajout de connexion, on met le systeme de connexion entre objets
                                     if(connexionAModifier == null)
                                     {
-                                        connexionAModifier = Connexion(objet, reseau, this)
+                                        connexionAModifier = Connexion(objet, reseau)
                                         reseau.connexions.add(connexionAModifier!!)
                                         dragging = dragOnTouch.dragLine(connexionAModifier!!, event, savePosX, savePosY)
                                     }
@@ -191,6 +192,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                                     val dialog = AjoutObjetDialogFragment(objet, reseau)
                                     dialog.show(supportFragmentManager, resources.getString(R.string.editObject))
                                 }
+                                else -> null
                             }
                         }
                         else if (modeSelected == Mode.AJOUT_CONNEXION && connexionAModifier != null)
@@ -215,7 +217,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                                     hsv.scrollY < saveScrollY!! + 10
                                 ) {
                                     this.isPressed = false
-                                    objetAModifier = Objet(this, "unnamed" , savePosX, savePosY)
+                                    objetAModifier = Objet("unnamed" , savePosX, savePosY)
                                     val dialog = AjoutObjetDialogFragment()
                                     dialog.show(supportFragmentManager, resources.getString(R.string.addObject))
                                     this.clickMenu(1)
@@ -227,7 +229,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                     }
                     else
                     {
-                        objetAModifier = Objet(this, "unnamed" , savePosX, savePosY)
+                        objetAModifier = Objet("unnamed" , savePosX, savePosY)
                         val dialog = AjoutObjetDialogFragment()
                         dialog.show(supportFragmentManager, resources.getString(R.string.addObject))
                     }
@@ -241,7 +243,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                     saveScrollY = null
                     if(modeSelected == Mode.AJOUT_CONNEXION && connexionAModifier != null)
                     {
-                        var objet = reseau.getObjet(connexionAModifier!!.pointerX, connexionAModifier!!.pointerY)
+                        val objet = reseau.getObjet(connexionAModifier!!.pointerX, connexionAModifier!!.pointerY)
                         if(objet != null && objet != connexionAModifier!!.getObjet1() && !existeConnexion(connexionAModifier!!.getObjet1(), objet))
                         {
                             //Création de la connexion
@@ -260,10 +262,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
                     }
                 }
-                MotionEvent.ACTION_MOVE->
-                {
-
-                }
                 else ->{
 
                 }
@@ -274,11 +272,12 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 ecran.invalidate()
                 hsv.onTouchEvent(event)
             }
-            ecran.invalidate()
 
+            ecran.invalidate()
 
             true
         }
+        this.saveReseau.read(this, this.reseau)
     }
 
     private fun existeConnexion(objet1: Objet, objet2: Objet): Boolean {
@@ -342,7 +341,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
                    this.modeSelected = Mode.AUCUN
                    this.affPrinc.text = resources.getString(R.string.pressScreen)
                }
-
            }
        }
         if(this.modeSelected != Mode.AUCUN)
@@ -439,5 +437,9 @@ class MainActivity : AppCompatActivity(), DeptListener {
         }
     }
 
+    fun saveReseau(){
+        this.saveReseau.create(this, this.reseau)
+        Toast.makeText(this, getString(R.string.networkSaved), LENGTH_SHORT).show()
+    }
 
 }

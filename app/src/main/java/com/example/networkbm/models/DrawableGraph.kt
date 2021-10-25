@@ -35,6 +35,7 @@ class DrawableGraph : Drawable() {
 
             if(it.couleur != null){
                 paintStroke.setColor(Color.parseColor(it.couleur))
+                paintStroke.strokeWidth = it.epaisseur
                 paint.setColor(Color.parseColor(it.couleur))
             }
 

@@ -19,4 +19,5 @@
     <string name="lang">Lang : English</string>
     <string name="save">Save</string>
     <string name="networkSaved">Network saved</string>
+    <string name="thickness">Thickness</string>
 </resources>

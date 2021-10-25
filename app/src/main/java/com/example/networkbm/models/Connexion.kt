@@ -11,13 +11,15 @@ class Connexion (objet1 : Objet, reseau: Graph?) : Path() {
     var pointerX = 50F
     var pointerY = 0F
     var couleur : String? = null
+    var epaisseur = 10F
 
     init {
         actualisePath()
     }
 
-    constructor(objet1 : Objet, objet2 : Objet?, col: String?) : this(objet1, null) {
+    constructor(objet1 : Objet, objet2 : Objet?, col: String?, epaisseur: Float) : this(objet1, null) {
         this.couleur = col
+        this.epaisseur = epaisseur
         this.objet2 = objet2
     }
 

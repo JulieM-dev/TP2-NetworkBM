@@ -1,6 +1,5 @@
 package com.example.networkbm.fragments
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
@@ -11,7 +10,6 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.view.children
-import androidx.core.view.get
 import com.example.networkbm.DeptListener
 import com.example.networkbm.R
 import com.example.networkbm.models.Connexion
@@ -29,6 +27,8 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
     lateinit var editObjet1 : Spinner
     lateinit var editObjet2 : Spinner
     lateinit var nomConnexion: EditText
+    lateinit var barEpaisseur: SeekBar
+    lateinit var nbrEpaisseur: TextView
     var listCouleurs = arrayOf("#2d3436","#e74c3c","#2ecc71","#3498db","#e67e22","#00cec9","#9b59b6")
     var connexion : Connexion? = null
     var reseau : Graph? = null
@@ -52,7 +52,7 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
         dialogBuilder =  AlertDialog.Builder(activity)
         this.selectedColor = this.listCouleurs.get(0)
 
-        var formulaire = activity?.layoutInflater?.inflate(R.layout.edit_connexion_form, null)
+        val formulaire = activity?.layoutInflater?.inflate(R.layout.edit_connexion_form, null)
         dialogBuilder.setView(formulaire)
             .setTitle(this.tag)
 
@@ -65,10 +65,12 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
             buttonSupprimer = formulaire.findViewById(R.id.buttonSupprimer)
             editObjet1 = formulaire.findViewById(R.id.editObjet1)
             editObjet2 = formulaire.findViewById(R.id.editObjet2)
+            barEpaisseur = formulaire.findViewById(R.id.barEpaisseur)
+            nbrEpaisseur = formulaire.findViewById(R.id.nbrEpaisseur)
 
             //Affichage de la liste de couleurs
             val layout = formulaire.findViewById<LinearLayout>(R.id.listCouleurs)
-            var butNoir = formulaire.findViewById<Button>(R.id.butCol1)
+            val butNoir = formulaire.findViewById<Button>(R.id.butCol1)
             listCouleurs.forEach {
                 val newBut = Button(buttonValider.context)
                 newBut.layoutParams = butNoir.layoutParams
@@ -112,6 +114,20 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
             {
                 this.sendSupprimer()
             }
+
+            barEpaisseur.progress = (connexion!!.epaisseur * 2.5).toInt()
+            nbrEpaisseur.text = barEpaisseur.progress.toString()
+            barEpaisseur.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
+                    nbrEpaisseur.text = barEpaisseur.progress.toString()
+                }
+
+                override fun onStartTrackingTouch(p0: SeekBar?) {
+                }
+
+                override fun onStopTrackingTouch(p0: SeekBar?) {
+                }
+            })
         }
 
         return alertDialog
@@ -183,6 +199,7 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
 
         connexion!!.setObjet1(o1!!)
         connexion!!.setObjet2(o2!!)
+        connexion!!.epaisseur = (barEpaisseur.progress / 2.5).toFloat()
         connexion!!.setNom(this.nomConnexion.text.toString())
         connexion!!.setColor(this.selectedColor!!)
         listener.onDeptSelected(depts)

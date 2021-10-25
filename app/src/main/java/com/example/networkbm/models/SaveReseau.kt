@@ -57,6 +57,7 @@ class SaveReseau {
                 if(conIt.couleur != null){
                     connect.setColor(conIt.couleur!!)
                 }
+                connect.epaisseur = conIt.epaisseur
                 reseau.connexions.add(connect)
             }
 
@@ -88,7 +89,7 @@ class SaveReseau {
             reseau.connexions.forEach{
                 val o1 = Objet(it.getObjet1().nom, it.getObjet1().centerX(), it.getObjet1().centerY())
                 val o2 = Objet(it.getObjet2()!!.nom, it.getObjet2()!!.centerX(), it.getObjet2()!!.centerY())
-                this.listConnexion.add(Connexion(o1, o2, it.couleur))
+                this.listConnexion.add(Connexion(o1, o2, it.couleur, it.epaisseur))
             }
             gson = Gson()
             str = gson.toJson(this.listConnexion)

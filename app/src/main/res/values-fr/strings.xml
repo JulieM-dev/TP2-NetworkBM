@@ -18,4 +18,5 @@
     <string name="lang">Langue : Français</string>
     <string name="save">Sauvegarder</string>
     <string name="networkSaved">Réseau sauvegardé</string>
+    <string name="thickness">Épaisseur</string>
 </resources>

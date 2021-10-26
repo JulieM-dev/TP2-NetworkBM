@@ -10,6 +10,7 @@ import android.os.Looper
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.MotionEvent
+import android.view.View.LAYER_TYPE_SOFTWARE
 import android.view.animation.AnimationUtils
 import android.widget.*
 import android.widget.Toast.LENGTH_SHORT
@@ -22,6 +23,7 @@ import com.example.networkbm.models.*
 import com.example.networkbm.views.WScrollView
 import com.google.android.material.navigation.NavigationView
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 import kotlin.system.exitProcess
 
@@ -31,7 +33,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
     private var modeSelected : Mode = Mode.AUCUN
     private var isPressed = false
     private lateinit var objetAModifier : Objet
-    var drawGraph = DrawableGraph()
+    var drawGraph = DrawableGraph(this)
     var reseau = drawGraph.reseau
     var connexionAModifier : Connexion? = null
     lateinit var tableButsMenu : Array<ImageButton>
@@ -100,7 +102,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
         ecran = findViewById<ImageView>(R.id.contRect)
 
         ecran.setImageDrawable(drawGraph)
-
 
         // Bidirectionnal scrollview
         val sv = findViewById<ScrollView>(R.id.scrollView)
@@ -171,7 +172,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
                                 Mode.AUCUN -> {
                                     //On n'est dans aucun mode, on peut bouger l'objet
                                     dragging = dragOnTouch.onTouch(objet, event, savePosX, savePosY)
-
                                 }
                                 Mode.AJOUT_CONNEXION -> {
                                     //On est en mode ajout de connexion, on met le systeme de connexion entre objets
@@ -268,8 +268,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
             }
             if(!dragging)
             {
-
-                ecran.invalidate()
                 hsv.onTouchEvent(event)
             }
 

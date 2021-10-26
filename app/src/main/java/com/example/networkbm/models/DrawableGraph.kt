@@ -1,9 +1,11 @@
 package com.example.networkbm.models
 
+import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import com.example.networkbm.R
 
-class DrawableGraph : Drawable() {
+class DrawableGraph(var context: Context) : Drawable() {
 
     var reseau : Graph = Graph()
     lateinit var canvas: Canvas
@@ -53,8 +55,9 @@ class DrawableGraph : Drawable() {
             }
         }
 
-
         reseau.objets.forEach {
+            var icon2 = BitmapFactory.decodeResource(this.context.resources, R.drawable.printer);
+            icon2 = Bitmap.createScaledBitmap(icon2, 100, 100, false);
             paint.setColor(Color.parseColor(it.couleur))
             canvas.drawRoundRect(it,20F,20F, paint)
             if(it.couleur != null)
@@ -62,6 +65,7 @@ class DrawableGraph : Drawable() {
             paint.textSize = 30F
             paint.textAlign = Paint.Align.CENTER
             canvas.drawText(it.nom, it.centerX(), it.centerY()+65, paint)
+            canvas.drawBitmap(icon2, it.centerX(), it.centerY(), null)
         }
 
     }

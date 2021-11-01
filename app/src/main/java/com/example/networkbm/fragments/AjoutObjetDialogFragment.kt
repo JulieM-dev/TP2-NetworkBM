@@ -117,15 +117,7 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
 
             buttonValider.setOnClickListener()
             {
-                val nom = editTextNom.text.toString()
-                val depts = ArrayList<String>()
-                depts.add(nom)
-                depts.add(this.selectedColor!!)
-                if(this.selectedIcon !== null) {
-                    depts.add(this.selectedIcon!!)
-                }
-                listener.onDeptSelected(depts)
-                alertDialog.dismiss()
+                this.valider()
             }
             buttonAnnuler.setOnClickListener()
             {
@@ -182,6 +174,18 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
             else
                 but.setBackgroundColor(Color.parseColor("black"))
         }
+    }
+
+    fun valider(){
+        val nom = editTextNom.text.toString()
+        val depts = ArrayList<String>()
+        depts.add(nom)
+        depts.add(this.selectedColor!!)
+        if(this.selectedIcon !== null) {
+            depts.add(this.selectedIcon!!)
+        }
+        listener.onDeptSelected(depts)
+        alertDialog.dismiss()
     }
 
 

@@ -25,7 +25,8 @@ class SaveReseau {
             val gson = Gson()
             val listObjets: List<Objet> = gson.fromJson(sb.toString(), Array<Objet>::class.java).toList()
             listObjets.forEach{
-                reseau.objets.add(it)
+                val obj = Objet(it.nom, it.centerX(), it.centerY(), it.couleur, it.icone)
+                reseau.objets.add(obj)
             }
 
             //LISTE DES CONNEXIONS
@@ -74,7 +75,7 @@ class SaveReseau {
             //LISTE DES OBJETS
             this.listObjets = ArrayList<Objet>()
             reseau.objets.forEach{
-                this.listObjets.add(Objet(it.nom, it.centerX(), it.centerY(), it.couleur))
+                this.listObjets.add(Objet(it.nom, it.centerX(), it.centerY(), it.couleur, it.icone))
             }
             var gson = Gson()
             var str = gson.toJson(this.listObjets)

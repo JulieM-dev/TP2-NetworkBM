@@ -372,6 +372,8 @@ class MainActivity : AppCompatActivity(), DeptListener {
                     obj.couleur = depts.get(1)
                     if(depts.size > 2){
                         obj.icone = depts.get(2)
+                    } else {
+                        obj.icone = null
                     }
                     Toast.makeText(this, getString(R.string.objectModified), LENGTH_SHORT).show()
                 }

@@ -11,8 +11,9 @@ class Objet(nom: String, x: Float, y: Float) : RectF(x-45, y-42, x+45, y+42) {
     var icone : String? = null
     var connexions = ArrayList<Connexion>()
 
-    constructor(nom: String, x: Float, y:Float, col: String?) : this(nom, x, y) {
+    constructor(nom: String, x: Float, y:Float, col: String?, ico: String?) : this(nom, x, y) {
         this.couleur = col
+        this.icone = ico
     }
 
     fun setPositions(x : Float, y : Float)

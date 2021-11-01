@@ -65,9 +65,11 @@ class DrawableGraph(var context: Context) : Drawable() {
             canvas.drawText(it.nom, it.centerX(), it.centerY()+65, paint)
             if(it.icone != null){
                 val path = this.context.resources.getIdentifier(it.icone, "drawable", this.context.packageName)
-                var icon2 = BitmapFactory.decodeResource(this.context.resources, path);
-                icon2 = Bitmap.createScaledBitmap(icon2, 80, 80, false);
-                canvas.drawBitmap(icon2, it.centerX()-40, it.centerY()-40, null)
+                var icon2 = BitmapFactory.decodeResource(this.context.resources, path)
+                if(icon2 != null) {
+                    icon2 = Bitmap.createScaledBitmap(icon2, 80, 80, false)
+                    canvas.drawBitmap(icon2, it.centerX() - 40, it.centerY() - 40, null)
+                }
             }
         }
 

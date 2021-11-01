@@ -8,6 +8,7 @@ class Objet(nom: String, x: Float, y: Float) : RectF(x-45, y-42, x+45, y+42) {
 
     var nom = nom
     var couleur : String? = null
+    var icone : String? = null
     var connexions = ArrayList<Connexion>()
 
     constructor(nom: String, x: Float, y:Float, col: String?) : this(nom, x, y) {

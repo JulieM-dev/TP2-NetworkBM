@@ -3,18 +3,22 @@ package com.example.networkbm.fragments
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.children
 import com.example.networkbm.DeptListener
 import com.example.networkbm.R
 import com.example.networkbm.models.Connexion
 import com.example.networkbm.models.Graph
 import com.example.networkbm.models.Objet
+import java.io.File
 import java.lang.ClassCastException
 
 class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
@@ -28,7 +32,9 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
     var objet : Objet? = null
     var reseau : Graph? = null
     var listCouleurs = arrayOf("#2d3436","#e74c3c","#2ecc71","#3498db","#e67e22","#00cec9","#9b59b6")
+    var listIcones = arrayOf(null, "printer", "blender", "camera", "computer", "lamp", "television")
     var selectedColor : String? = null
+    var selectedIcon: String? = null
 
     constructor(objet: Objet, reseau: Graph) : this() {
         this.objet = objet
@@ -53,7 +59,7 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
 
             //Liste des boutons de couleur
             val layout = formulaire.findViewById<LinearLayout>(R.id.listCouleurs)
-            var butNoir = formulaire.findViewById<Button>(R.id.butCol1)
+            val butNoir = formulaire.findViewById<Button>(R.id.butCol1)
             listCouleurs.forEach {
                 val newBut = Button(buttonValider.context)
                 newBut.layoutParams = butNoir.layoutParams
@@ -68,12 +74,43 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
             }
             layout.removeView(butNoir)
 
+            //Liste des boutons d'icones
+            val layoutIcon = formulaire.findViewById<LinearLayout>(R.id.listIcones)
+            val butNoirIcon = formulaire.findViewById<ImageButton>(R.id.butIcon1)
+            listIcones.forEach {
+                val newBut = ImageButton(buttonValider.context)
+                newBut.layoutParams = butNoir.layoutParams
+
+                var path = this.resources.getIdentifier("cross", "drawable", this.context!!.packageName)
+                if(it != null){
+                    path = this.resources.getIdentifier(it.toString(), "drawable", this.context!!.packageName)
+                    newBut.setBackgroundColor(resources.getColor(R.color.black))
+                } else {
+                    newBut.setBackgroundColor(Color.parseColor("#2ecc71"))
+                }
+
+                var icon2 = BitmapFactory.decodeResource(this.resources, path)
+                icon2 = Bitmap.createScaledBitmap(icon2, 100, 100, false);
+                newBut.setImageBitmap(icon2)
+                newBut.tag = it.toString()
+                newBut.setOnClickListener()
+                {
+                    this.clickIcon(newBut.tag.toString(), formulaire)
+                }
+                layoutIcon.addView(newBut)
+            }
+            layoutIcon.removeView(butNoirIcon)
+
             editTextNom = formulaire.findViewById(R.id.editTextNom)
             if(objet != null)
             {
                 editTextNom.setText(objet!!.nom)
                 this.selectedColor = objet!!.couleur
                 this.clickCouleur(objet!!.couleur!!, formulaire)
+                if(objet!!.icone != null){
+                    this.selectedIcon = objet!!.icone
+                    this.clickIcon(objet!!.icone!!, formulaire)
+                }
             } else {
                 this.clickCouleur(this.listCouleurs.get(0), formulaire)
             }
@@ -84,6 +121,9 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
                 val depts = ArrayList<String>()
                 depts.add(nom)
                 depts.add(this.selectedColor!!)
+                if(this.selectedIcon !== null) {
+                    depts.add(this.selectedIcon!!)
+                }
                 listener.onDeptSelected(depts)
                 alertDialog.dismiss()
             }
@@ -96,14 +136,14 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
                 buttonSupprimer.visibility = View.VISIBLE
                 buttonSupprimer.setOnClickListener()
                 {
-                    var depts = ArrayList<String>()
+                    val depts = ArrayList<String>()
                     var i = 0
                     val si = reseau!!.connexions.size
                     val con = this.reseau!!.connexions.clone() as ArrayList<Connexion>
                     while(i < si){
-                        val it = con.get(i)
-                        if(it.getObjet1() == objet || it.getObjet2() == objet){
-                            reseau!!.connexions.remove(it)
+                        val itCon = con.get(i)
+                        if(itCon.getObjet1() == objet || itCon.getObjet2() == objet){
+                            reseau!!.connexions.remove(itCon)
                         }
                         i++
                     }
@@ -128,6 +168,19 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
                 but.text = "✓"
             else
                 but.text = ""
+        }
+    }
+
+    fun clickIcon(tag: String, formulaire: View){
+        this.selectedIcon = tag
+        val layout = formulaire.findViewById<LinearLayout>(R.id.listIcones)
+        layout.children.forEach {
+            val but = it as ImageButton
+            val butCol = but.tag.toString()
+            if(butCol == tag)
+                but.setBackgroundColor(Color.parseColor("#2ecc71"))
+            else
+                but.setBackgroundColor(Color.parseColor("black"))
         }
     }
 

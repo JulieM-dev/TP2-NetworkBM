@@ -56,8 +56,6 @@ class DrawableGraph(var context: Context) : Drawable() {
         }
 
         reseau.objets.forEach {
-            var icon2 = BitmapFactory.decodeResource(this.context.resources, R.drawable.printer);
-            icon2 = Bitmap.createScaledBitmap(icon2, 100, 100, false);
             paint.setColor(Color.parseColor(it.couleur))
             canvas.drawRoundRect(it,20F,20F, paint)
             if(it.couleur != null)
@@ -65,7 +63,12 @@ class DrawableGraph(var context: Context) : Drawable() {
             paint.textSize = 30F
             paint.textAlign = Paint.Align.CENTER
             canvas.drawText(it.nom, it.centerX(), it.centerY()+65, paint)
-            canvas.drawBitmap(icon2, it.centerX(), it.centerY(), null)
+            if(it.icone != null){
+                val path = this.context.resources.getIdentifier(it.icone, "drawable", this.context.packageName)
+                var icon2 = BitmapFactory.decodeResource(this.context.resources, path);
+                icon2 = Bitmap.createScaledBitmap(icon2, 80, 80, false);
+                canvas.drawBitmap(icon2, it.centerX()-40, it.centerY()-40, null)
+            }
         }
 
     }

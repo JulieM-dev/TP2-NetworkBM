@@ -359,6 +359,9 @@ class MainActivity : AppCompatActivity(), DeptListener {
             Mode.AJOUT_OBJET -> {
                 objetAModifier.nom = depts.get(0)
                 objetAModifier.couleur = depts.get(1)
+                if(depts.size > 2) {
+                    objetAModifier.icone = depts.get(2)
+                }
                 reseau.objets.add(objetAModifier)
                 Toast.makeText(this, getString(R.string.objectCreated), LENGTH_SHORT).show()
             }
@@ -367,6 +370,9 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 if(obj != null){
                     obj.nom = depts.get(0)
                     obj.couleur = depts.get(1)
+                    if(depts.size > 2){
+                        obj.icone = depts.get(2)
+                    }
                     Toast.makeText(this, getString(R.string.objectModified), LENGTH_SHORT).show()
                 }
             }

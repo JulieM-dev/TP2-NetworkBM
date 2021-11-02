@@ -2,6 +2,8 @@ package com.example.networkbm
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -275,7 +277,10 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
             true
         }
-        this.saveReseau.read(this, this.reseau)
+        val isLoad = this.saveReseau.read(this, this.reseau)
+        if(!isLoad){
+            //TODO Afficher la liste des plans d'appart
+        }
     }
 
     private fun existeConnexion(objet1: Objet, objet2: Objet): Boolean {

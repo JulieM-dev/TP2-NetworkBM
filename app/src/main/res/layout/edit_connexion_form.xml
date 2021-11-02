@@ -20,8 +20,7 @@
         android:layout_weight="1"
         android:autofillHints="Nom"
         android:hint="@string/name"
-        android:textSize="24sp"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout" />
+        android:textSize="24sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -102,7 +101,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginRight="8dp"
-        android:text="Annuler"
+        android:text="@string/cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonValider"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -114,17 +113,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:text="Accepter"
+        android:text="@string/accept"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/buttonAnnuler"
         app:layout_constraintTop_toTopOf="@+id/buttonAnnuler" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"></LinearLayout>
 
     <Button
         android:id="@+id/buttonSupprimer"
@@ -132,7 +125,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
         android:layout_marginEnd="8dp"
-        android:text="Supprimer"
+        android:text="@string/delete"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/buttonAnnuler"

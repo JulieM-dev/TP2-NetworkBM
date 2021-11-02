@@ -10,7 +10,7 @@ class SaveReseau {
     private lateinit var listObjets : ArrayList<Objet>
     private lateinit var listConnexion: ArrayList<Connexion>
 
-    fun read(context : Context, reseau: Graph): String? {
+    fun read(context : Context, reseau: Graph): Boolean {
         try {
             //LISTE DES OBJETS
             var fis = context.openFileInput("objets")
@@ -24,6 +24,8 @@ class SaveReseau {
             }
             val gson = Gson()
             val listObjets: List<Objet> = gson.fromJson(sb.toString(), Array<Objet>::class.java).toList()
+            if(listObjets.isEmpty())
+                return false
             listObjets.forEach{
                 val obj = Objet(it.nom, it.centerX(), it.centerY(), it.couleur, it.icone)
                 reseau.objets.add(obj)
@@ -62,11 +64,11 @@ class SaveReseau {
                 reseau.connexions.add(connect)
             }
 
-            return sb.toString();
+            return true;
         } catch (fileNotFound : FileNotFoundException) {
-            return null;
+            return false;
         } catch (ioException : IOException) {
-            return null;
+            return false;
         }
     }
 

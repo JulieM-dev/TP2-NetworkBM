@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <EditText
         android:id="@+id/editTextNomConnexion"
         android:layout_width="match_parent"
@@ -12,13 +13,41 @@
         android:layout_weight="1"
         android:autofillHints="Nom"
         android:hint="@string/name"
-        android:textSize="24sp"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="24sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/listCouleurs">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_weight="1"
+            android:text="@string/thickness" />
+
+        <SeekBar
+            android:id="@+id/barEpaisseur"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/nbrEpaisseur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="0" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/listCouleurs"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/editTextNomConnexion">
 
@@ -26,8 +55,8 @@
             android:id="@+id/butCol1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:backgroundTint="@color/black" />
+            android:backgroundTint="@color/black"
+            android:layout_weight="1" />
     </LinearLayout>
 
     <LinearLayout
@@ -35,6 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/listCouleurs">
 
         <Spinner
@@ -59,46 +89,31 @@
             android:textSize="24sp" />
     </LinearLayout>
 
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.33" />
-
     <Button
         android:id="@+id/buttonAnnuler"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Annuler"
+        android:layout_marginRight="8dp"
+        android:text="@string/cancel"
         app:layout_constraintEnd_toStartOf="@+id/buttonValider"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
     <Button
         android:id="@+id/buttonValider"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="Accepter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/buttonAnnuler"
-        app:layout_constraintTop_toTopOf="@+id/buttonAnnuler" />
+        android:layout_marginEnd="10dp"
+        android:text="@string/accept"
+        app:layout_constraintEnd_toStartOf="@+id/buttonSupprimer"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
     <Button
         android:id="@+id/buttonSupprimer"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        android:layout_marginEnd="8dp"
-        android:text="Supprimer"
+        android:text="@string/delete"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/buttonAnnuler"
-        app:layout_constraintTop_toBottomOf="@+id/buttonValider"
-        app:layout_constraintTop_toTopOf="@+id/buttonAnnuler" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

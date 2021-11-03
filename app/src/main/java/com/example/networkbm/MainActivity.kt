@@ -20,6 +20,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.doOnPreDraw
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.networkbm.fragments.AjoutObjetDialogFragment
+import com.example.networkbm.fragments.ChangePlanFragment
 import com.example.networkbm.fragments.EditConnexionDialogFragment
 import com.example.networkbm.models.*
 import com.example.networkbm.views.WScrollView
@@ -89,6 +90,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 R.id.button_modification -> clickMenu(3)
                 R.id.switch_lang -> changeLanguage()
                 R.id.saveReseau -> saveReseau()
+                R.id.button_changePlan -> affChangePlan()
             }
             drawerLayout.closeDrawer(Gravity.LEFT)
             true
@@ -360,31 +362,59 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
     override fun onDeptSelected(depts: ArrayList<String>) {
         //Click sur une page de dialogue
-        when(modeSelected) {
-            Mode.AJOUT_OBJET -> {
-                objetAModifier.nom = depts.get(0)
-                objetAModifier.couleur = depts.get(1)
-                if(depts.size > 2) {
-                    objetAModifier.icone = depts.get(2)
-                }
-                reseau.objets.add(objetAModifier)
-                Toast.makeText(this, getString(R.string.objectCreated), LENGTH_SHORT).show()
-            }
-            Mode.MODIFICATION -> {
-                val obj = reseau.getObjet(this.savePosX, this.savePosY)
-                if(obj != null){
-                    obj.nom = depts.get(0)
-                    obj.couleur = depts.get(1)
-                    if(depts.size > 2){
-                        obj.icone = depts.get(2)
-                    } else {
-                        obj.icone = null
-                    }
-                    Toast.makeText(this, getString(R.string.objectModified), LENGTH_SHORT).show()
-                }
-            }
-            else -> {
+        if(depts.get(0) == "changePlan"){
+            val img = depts.get(1)
+            val plan = findViewById<ImageView>(R.id.planAppartement)
 
+            var path = this.resources.getIdentifier("cross", "drawable", this.packageName)
+            path = this.resources.getIdentifier(img, "drawable", this.packageName)
+            val nouvImg = BitmapFactory.decodeResource(this.resources, path)
+            plan.setImageBitmap(nouvImg)
+
+            this.reseau.objets.forEach{
+                if(nouvImg.width < it.centerX() - 50){
+                    it.setPositions(nouvImg.width.toFloat() - 50, it.centerY())
+                }
+                if(nouvImg.height - 50 < it.centerY()){
+                    it.setPositions(it.centerX(), nouvImg.height.toFloat() - 50)
+                }
+            }
+
+            plan.doOnPreDraw {
+                val param: FrameLayout.LayoutParams = FrameLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,100);
+                param.height = plan.height
+                param.width = plan.width
+                ecran.layoutParams = param
+                ecran.invalidate()
+            }
+        } else {
+            when (modeSelected) {
+                Mode.AJOUT_OBJET -> {
+                    objetAModifier.nom = depts.get(0)
+                    objetAModifier.couleur = depts.get(1)
+                    if (depts.size > 2) {
+                        objetAModifier.icone = depts.get(2)
+                    }
+                    reseau.objets.add(objetAModifier)
+                    Toast.makeText(this, getString(R.string.objectCreated), LENGTH_SHORT).show()
+                }
+                Mode.MODIFICATION -> {
+                    val obj = reseau.getObjet(this.savePosX, this.savePosY)
+                    if (obj != null) {
+                        obj.nom = depts.get(0)
+                        obj.couleur = depts.get(1)
+                        if (depts.size > 2) {
+                            obj.icone = depts.get(2)
+                        } else {
+                            obj.icone = null
+                        }
+                        Toast.makeText(this, getString(R.string.objectModified), LENGTH_SHORT)
+                            .show()
+                    }
+                }
+                else -> {
+
+                }
             }
         }
         ecran.invalidate()
@@ -451,6 +481,11 @@ class MainActivity : AppCompatActivity(), DeptListener {
     fun saveReseau(){
         this.saveReseau.create(this, this.reseau)
         Toast.makeText(this, getString(R.string.networkSaved), LENGTH_SHORT).show()
+    }
+
+    fun affChangePlan() {
+        val dialog = ChangePlanFragment()
+        dialog.show(supportFragmentManager, resources.getString(R.string.changePlan))
     }
 
 }

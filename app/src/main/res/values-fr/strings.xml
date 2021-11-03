@@ -22,4 +22,6 @@
     <string name="cancel">Annuler</string>
     <string name="delete">Supprimer</string>
     <string name="accept">Accepter</string>
+    <string name="changePlan">Changer le plan</string>
+    <string name="planChanged">Plan changé</string>
 </resources>

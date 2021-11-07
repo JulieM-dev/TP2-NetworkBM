@@ -20,4 +20,9 @@
     <string name="save">Save</string>
     <string name="networkSaved">Network saved</string>
     <string name="thickness">Thickness</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="accept">Accept</string>
+    <string name="changePlan">Change plan</string>
+    <string name="planChanged">Plan changed</string>
 </resources>

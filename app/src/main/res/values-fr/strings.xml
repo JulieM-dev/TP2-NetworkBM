@@ -19,4 +19,9 @@
     <string name="save">Sauvegarder</string>
     <string name="networkSaved">Réseau sauvegardé</string>
     <string name="thickness">Épaisseur</string>
+    <string name="cancel">Annuler</string>
+    <string name="delete">Supprimer</string>
+    <string name="accept">Accepter</string>
+    <string name="changePlan">Changer le plan</string>
+    <string name="planChanged">Plan changé</string>
 </resources>

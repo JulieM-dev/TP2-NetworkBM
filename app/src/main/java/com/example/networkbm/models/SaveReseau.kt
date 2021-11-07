@@ -1,6 +1,7 @@
 package com.example.networkbm.models
 
 import android.content.Context
+import com.example.networkbm.data.ObjetData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.*
@@ -72,6 +73,9 @@ class SaveReseau {
 
     fun create(context: Context, reseau: Graph) : Boolean{
         try {
+            var listObjetData = ArrayList<ObjetData>()
+
+
             //LISTE DES OBJETS
             this.listObjets = ArrayList<Objet>()
             reseau.objets.forEach{

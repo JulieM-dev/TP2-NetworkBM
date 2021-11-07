@@ -4,13 +4,9 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.Gson
 
-class Graph() : Parcelable {
+class Graph() {
     var objets = ArrayList<Objet>()
     var connexions = ArrayList<Connexion>()
-
-    constructor(parcel: Parcel) : this() {
-
-    }
 
     fun getObjet(x : Float, y : Float) : Objet?
     {
@@ -32,21 +28,13 @@ class Graph() : Parcelable {
         return null
     }
 
-    companion object CREATOR : Parcelable.Creator<Graph> {
-        override fun createFromParcel(parcel: Parcel): Graph {
-            return Graph(parcel)
-        }
 
-        override fun newArray(size: Int): Array<Graph?> {
-            return arrayOfNulls(size)
-        }
+    fun getJsonReadyInstance() : Graph
+    {
+        var graph = Graph();
+
+
+        return Graph()
     }
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
 }

@@ -1,6 +1,8 @@
 package com.example.networkbm.models
 
 import android.content.Context
+import com.example.networkbm.data.GraphData
+import com.example.networkbm.data.GraphFactory
 import com.example.networkbm.data.ObjetData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -13,8 +15,7 @@ class SaveReseau {
 
     fun read(context : Context, reseau: Graph): Boolean {
         try {
-            //LISTE DES OBJETS
-            var fis = context.openFileInput("objets")
+            var fis = context.openFileInput("graph")
             var isr = InputStreamReader(fis)
             var bufferedReader = BufferedReader(isr)
             val sb = StringBuilder()
@@ -24,47 +25,14 @@ class SaveReseau {
                 line = bufferedReader.readLine()
             }
             val gson = Gson()
-            val listObjets: List<Objet> = gson.fromJson(sb.toString(), Array<Objet>::class.java).toList()
-            if(listObjets.isEmpty())
-                return false
-            listObjets.forEach{
-                val obj = Objet(it.nom, it.centerX(), it.centerY(), it.couleur, it.icone)
-                reseau.objets.add(obj)
-            }
-
-            //LISTE DES CONNEXIONS
-            fis = context.openFileInput("connexions")
-            isr = InputStreamReader(fis)
-            bufferedReader = BufferedReader(isr)
-            line = bufferedReader.readLine()
-            sb.clear()
-            while (line != null) {
-                sb.append(line);
-                line = bufferedReader.readLine()
-            }
+            val graphData : GraphData = gson.fromJson(sb.toString(), GraphData::class.java)
             System.out.println(sb.toString())
-            val listConnexions: List<Connexion> = gson.fromJson(sb.toString(), Array<Connexion>::class.java).toList()
-            listConnexions.forEach{
-                val connect = Connexion(reseau.objets.get(0), reseau)
-                val conIt = it
-                reseau.objets.forEach{
-                    if(conIt.getObjet1().centerX() == it.centerX() &&
-                        conIt.getObjet1().centerY() == it.centerY()){
-                        it.connexions.add(connect)
-                        connect.setObjet1(it)
-                    } else if(conIt.getObjet2()!!.centerX() == it.centerX() &&
-                        conIt.getObjet2()!!.centerY() == it.centerY()){
-                        it.connexions.add(connect)
-                        connect.setObjet2(it)
-                    }
-                }
-                if(conIt.couleur != null){
-                    connect.setColor(conIt.couleur!!)
-                }
-                connect.epaisseur = conIt.epaisseur
-                reseau.connexions.add(connect)
-            }
 
+            // Conversion de data vers objet concret
+            val graph = GraphFactory.getGraph(graphData)
+
+            reseau.objets = graph.objets
+            reseau.connexions = graph.connexions
             return true;
         } catch (fileNotFound : FileNotFoundException) {
             return false;
@@ -75,35 +43,17 @@ class SaveReseau {
 
     fun create(context: Context, reseau: Graph) : Boolean{
         try {
-            var listObjetData = ArrayList<ObjetData>()
-
-
-            //LISTE DES OBJETS
-            this.listObjets = ArrayList<Objet>()
-            reseau.objets.forEach{
-                this.listObjets.add(Objet(it.nom, it.centerX(), it.centerY(), it.couleur, it.icone))
-            }
+            // Conversion d'objet concret vers data pour éviter la récursivité
+            var graphData = GraphFactory.getGraphData(reseau)
             var gson = Gson()
-            var str = gson.toJson(this.listObjets)
-            var fos = context.openFileOutput("objets",Context.MODE_PRIVATE);
-            if (str != null) {
-                fos.write(str.toByteArray());
-            }
-            fos.close();
+            var str = gson.toJson(graphData)
 
-            //LISTE DES CONNEXIONS
-            this.listConnexion = ArrayList<Connexion>()
-            reseau.connexions.forEach{
-                val o1 = Objet(it.getObjet1().nom, it.getObjet1().centerX(), it.getObjet1().centerY())
-                val o2 = Objet(it.getObjet2()!!.nom, it.getObjet2()!!.centerX(), it.getObjet2()!!.centerY())
-                this.listConnexion.add(Connexion(o1, o2, it.couleur, it.epaisseur))
-            }
-            gson = Gson()
-            str = gson.toJson(this.listConnexion)
-            fos = context.openFileOutput("connexions",Context.MODE_PRIVATE);
+
+            var fos = context.openFileOutput("graph",Context.MODE_PRIVATE);
             if (str != null) {
                 fos.write(str.toByteArray());
             }
+            System.out.println(str)
             fos.close();
 
             return true;

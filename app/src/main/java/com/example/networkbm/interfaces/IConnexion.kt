@@ -1,4 +1,4 @@
 package com.example.networkbm.interfaces
 
-class IConnexion {
+interface IConnexion {
 }

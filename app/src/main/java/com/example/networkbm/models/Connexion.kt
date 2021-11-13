@@ -2,8 +2,10 @@ package com.example.networkbm.models
 
 import android.content.Context
 import android.graphics.*
+import com.google.gson.annotations.Expose
 
 class Connexion (objet1 : Objet, reseau: Graph?) : Path() {
+    var id = this.hashCode()
     var reseau = reseau
     private var objet1 = objet1
     private var objet2 : Objet? = null
@@ -71,7 +73,10 @@ class Connexion (objet1 : Objet, reseau: Graph?) : Path() {
 
     fun setObjet1(newObjet1: Objet)
     {
-        this.objet1.connexions.remove(this)
+        if(this.objet1.connexions.contains(this))
+        {
+            this.objet1.connexions.remove(this)
+        }
         newObjet1.connexions.add(this)
         this.objet1 = newObjet1
         actualisePath()
@@ -79,7 +84,10 @@ class Connexion (objet1 : Objet, reseau: Graph?) : Path() {
 
     fun setObjet2(newObjet2 : Objet)
     {
-        this.objet2?.connexions?.remove(this)
+        if(this.objet2 != null && this.objet2!!.connexions.contains(this))
+        {
+            this.objet2!!.connexions.remove(this)
+        }
         newObjet2.connexions.add(this)
         this.objet2 = newObjet2
         actualisePath()

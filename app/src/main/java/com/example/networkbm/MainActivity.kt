@@ -248,7 +248,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                     if(modeSelected == Mode.AJOUT_CONNEXION && connexionAModifier != null)
                     {
                         val objet = reseau.getObjet(connexionAModifier!!.pointerX, connexionAModifier!!.pointerY)
-                        if(objet != null && objet != connexionAModifier!!.getObjet1() && !existeConnexion(connexionAModifier!!.getObjet1(), objet))
+                        if(objet != null && objet != connexionAModifier!!.getObjet1() && !reseau.existeConnexion(connexionAModifier!!.getObjet1(), objet))
                         {
                             //Création de la connexion
                             connexionAModifier!!.setObjet2(objet)
@@ -283,16 +283,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
         if(!isLoad){
             //TODO Afficher la liste des plans d'appart
         }
-    }
-
-    private fun existeConnexion(objet1: Objet, objet2: Objet): Boolean {
-        var ci = 0
-        this.reseau.connexions.forEach{
-            if( (it.getObjet1() == objet1 && it.getObjet2() == objet2) || (it.getObjet1() == objet2 && it.getObjet2() == objet1) ){
-                ci++
-            }
-        }
-        return ci > 1
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -362,7 +352,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
     override fun onDeptSelected(depts: ArrayList<String>) {
         //Click sur une page de dialogue
-        if(depts.get(0) == "changePlan"){
+        if(depts.size >= 1 && depts.get(0) == "changePlan"){
             val img = depts.get(1)
             val plan = findViewById<ImageView>(R.id.planAppartement)
 
@@ -432,7 +422,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
         reseau.objets = savedInstanceState.getParcelableArrayList<Objet>("objets") as ArrayList<Objet>
         reseau.objets.forEach {
             it.connexions.forEach{
-                if(!existeConnexion(it.getObjet1(), it.getObjet2()!!))
+                if(!reseau.existeConnexion(it.getObjet1(), it.getObjet2()!!))
                 {
                     reseau.connexions.add(it)
                 }

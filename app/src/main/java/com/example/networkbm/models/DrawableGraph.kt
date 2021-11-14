@@ -36,7 +36,7 @@ class DrawableGraph(var context: Context) : Drawable() {
         reseau.connexions.forEach {
             it.rewind()
             var cords = it.getCords()
-            var radius = 50
+            var radius = 1000
             if(it.couleur != null){
                 paintStroke.setColor(Color.parseColor(it.couleur))
                 paintStroke.strokeWidth = it.epaisseur
@@ -44,26 +44,44 @@ class DrawableGraph(var context: Context) : Drawable() {
             }
 
             it.moveTo(cords.get(0), cords.get(1))
-            var centerCords = listOf((cords.get(0)+cords.get(2)+radius)/2, (cords.get(1)+cords.get(3)+radius)/2)
+            var centerCords = listOf((cords.get(0)+cords.get(2))/2, (cords.get(1)+cords.get(3))/2)
 
             var m1 = (cords.get(3) - cords.get(1)) / (cords.get(2) - cords.get(0))
             var m2 = -(1/m1)
             var h = -(m2 * centerCords.get(0) - centerCords.get(1))
             var mediatriceY = m2 * 3 + h
-            var quadX = cords.get(0) + (radius / Math.sqrt(Math.pow(m2.toDouble(), 2.0)+1))
-            var quadY = cords.get(1) + (m2 * radius / Math.sqrt(Math.pow(m2.toDouble(), 2.0)+1))
+            var quadX = centerCords.get(0)
+            var quadY = centerCords.get(1)
+            if(cords.get(1) > cords.get(3) )
+            {
+                quadX = (centerCords.get(0) + (radius / Math.sqrt(Math.pow( m2.toDouble(), 2.0)+1))).toFloat()
+                quadY = (centerCords.get(1) + (m2 * radius / Math.sqrt(Math.pow( m2.toDouble(), 2.0)+1))).toFloat()
+            }
+            else if (cords.get(1) < cords.get(3) )
+            {
+                quadX = (centerCords.get(0) - (radius / Math.sqrt(Math.pow(m2.toDouble(), 2.0)+1))).toFloat()
+                quadY = (centerCords.get(1) - (m2 * radius / Math.sqrt(Math.pow( m2.toDouble(), 2.0)+1))).toFloat()
+            }
+            else if(cords.get(1) == cords.get(3) )
+            {
+                quadX = (centerCords.get(0))
+                quadY = (centerCords.get(1) + radius)
+            }
 
-            System.out.println(cords.get(0))
-            System.out.println(cords.get(1))
-            System.out.println(quadX)
-            System.out.println(quadY)
-            System.out.println(cords.get(2))
-            System.out.println(cords.get(3))
+
+            System.out.println("x1 " + cords.get(0))
+            System.out.println("y1 " + cords.get(1))
+            System.out.println("CenterX " + centerCords.get(0))
+            System.out.println("CenterY " + centerCords.get(1))
+            System.out.println("quadX " + quadX)
+            System.out.println("quadY " + quadY)
+            System.out.println("x2 " + cords.get(2))
+            System.out.println("y2 " + cords.get(3))
             it.quadTo(quadX.toFloat(), quadY.toFloat() ,cords.get(2), cords.get(3))
             canvas.drawPath(it, paintStroke)
 
             cords = it.getCenter()
-            canvas.drawCircle(cords.get(0), cords.get(1), 20F, paint)
+            canvas.drawCircle(quadX, quadY, 20F, paint)
             if(it.getNom() != null){
                 paint.textSize = 30F
                 paint.textAlign = Paint.Align.CENTER

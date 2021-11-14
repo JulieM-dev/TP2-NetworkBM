@@ -3,25 +3,23 @@ package com.example.networkbm.models
 import android.content.Context
 import com.example.networkbm.data.GraphData
 import com.example.networkbm.data.GraphFactory
-import com.example.networkbm.data.ObjetData
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import java.io.*
 
 class SaveReseau {
 
-    private lateinit var listObjets : ArrayList<Objet>
-    private lateinit var listConnexion: ArrayList<Connexion>
+    // private lateinit var listObjets : ArrayList<Objet>
+    // private lateinit var listConnexion: ArrayList<Connexion>
 
     fun read(context : Context, reseau: Graph): Boolean {
         try {
-            var fis = context.openFileInput("graph")
-            var isr = InputStreamReader(fis)
-            var bufferedReader = BufferedReader(isr)
+            val fis = context.openFileInput("graph")
+            val isr = InputStreamReader(fis)
+            val bufferedReader = BufferedReader(isr)
             val sb = StringBuilder()
             var line = bufferedReader.readLine()
             while (line != null) {
-                sb.append(line);
+                sb.append(line)
                 line = bufferedReader.readLine()
             }
             val gson = Gson()
@@ -33,33 +31,33 @@ class SaveReseau {
             reseau.objets = graph.objets
             reseau.connexions = graph.connexions
             reseau.imgAppart = graphData.imgAppart
-            return true;
+            return true
         } catch (fileNotFound : FileNotFoundException) {
-            return false;
+            return false
         } catch (ioException : IOException) {
-            return false;
+            return false
         }
     }
 
     fun create(context: Context, reseau: Graph) : Boolean{
         try {
             // Conversion d'objet concret vers data pour éviter la récursivité
-            var graphData = GraphFactory.getGraphData(reseau)
-            var gson = Gson()
-            var str = gson.toJson(graphData)
+            val graphData = GraphFactory.getGraphData(reseau)
+            val gson = Gson()
+            val str = gson.toJson(graphData)
 
 
-            var fos = context.openFileOutput("graph",Context.MODE_PRIVATE);
+            val fos = context.openFileOutput("graph",Context.MODE_PRIVATE)
             if (str != null) {
-                fos.write(str.toByteArray());
+                fos.write(str.toByteArray())
             }
-            fos.close();
+            fos.close()
 
-            return true;
+            return true
         } catch (fileNotFound : FileNotFoundException) {
-            return false;
+            return false
         } catch (ioException : IOException) {
-            return false;
+            return false
         }
     }
 }

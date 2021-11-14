@@ -4,12 +4,12 @@ import android.view.MotionEvent
 import android.widget.ImageView
 import com.example.networkbm.views.WScrollView
 
-class TouchDragObject(private var rootLayout: WScrollView, reseau: Graph, plan: ImageView) {
-    var reseau : Graph = reseau
+class TouchDragObject(private var rootLayout: WScrollView, var reseau: Graph,
+                      private var plan: ImageView
+) {
 
     var objet : Objet? = null
     var connexion : Connexion? = null
-    var plan : ImageView = plan
 
 
     fun onTouch(newObjet: Objet?, event: MotionEvent, x : Float, y : Float): Boolean {
@@ -31,12 +31,16 @@ class TouchDragObject(private var rootLayout: WScrollView, reseau: Graph, plan: 
                 MotionEvent.ACTION_POINTER_UP -> {
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    if(event.getY() < 42){
-                        objet!!.setPositions(x, 42f)
-                    } else if(y > plan.height - 70) {
-                        objet!!.setPositions(x, plan.height.toFloat() - 70)
-                    } else {
-                        objet!!.setPositions(x, y)
+                    when {
+                        event.y < 42 -> {
+                            objet!!.setPositions(x, 42f)
+                        }
+                        y > plan.height - 70 -> {
+                            objet!!.setPositions(x, plan.height.toFloat() - 70)
+                        }
+                        else -> {
+                            objet!!.setPositions(x, y)
+                        }
                     }
                     ret = true
                 }
@@ -61,7 +65,10 @@ class TouchDragObject(private var rootLayout: WScrollView, reseau: Graph, plan: 
                     ret = true
                 }
                 MotionEvent.ACTION_UP -> {
-                    var obj = reseau.getObjet(connexion!!.getCords().get(2), connexion!!.getCords().get(3))
+                    val obj = reseau.getObjet(
+                        connexion!!.getCords()[2],
+                        connexion!!.getCords()[3]
+                    )
                     if (obj != null && obj != connexion!!.getObjet1() )
                     {
                         connexion!!.setObjet2(obj)

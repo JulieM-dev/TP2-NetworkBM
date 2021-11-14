@@ -53,7 +53,7 @@ class Connexion (private var objet1: Objet, var reseau: Graph?) : Path() {
         rewind()
 
 
-        val cords = getCords()
+        var cords = getCords()
         // cords[0] = objet1.x
         // cords[1] = objet1.y
         // si objet2 != null:
@@ -77,11 +77,15 @@ class Connexion (private var objet1: Objet, var reseau: Graph?) : Path() {
         }
 
         canvas.drawPath(this, paint)
+        cords = getRealCenter()
+        paint.alpha = 125
+        canvas.drawCircle(cords.get(0), cords.get(1), epaisseur, paint)
+        paint.alpha = 255
 
         // cords = getCenter()
         if (nom != null)
         {
-            canvas.drawText(nom!!, getCenter()[0], getCenter()[1] + 50, paintText)
+            canvas.drawText(nom!!, getRealCenter()[0], getRealCenter()[1] + 50, paintText)
         }
 
     }
@@ -128,9 +132,42 @@ class Connexion (private var objet1: Objet, var reseau: Graph?) : Path() {
     /**
      * Récupère les coordonnées pour la courbure
      */
-    fun getQuadCords() : List<Float>
+    fun getRealCenter() : List<Float>
     {
         val radius = this.courbure
+        val cords = getCords()
+        val centerCords = listOf((cords[0] + cords[2])/2, (cords[1] + cords[3])/2)
+
+        val m1 = (cords[3] - cords[1]) / (cords[2] - cords[0])
+        val m2 = -(1/m1)
+        // var h = -(m2 * centerCords[0] - centerCords[1])
+        // var mediatriceY = m2 * 3 + h
+        var quadX = centerCords[0]
+        var quadY = centerCords[1]
+        when {
+            cords[1] > cords[3] -> {
+                quadX = (centerCords[0] + (radius / sqrt(m2.toDouble().pow(2.0) + 1))).toFloat()
+                quadY =
+                    (centerCords[1] + (m2 * radius / sqrt(m2.toDouble().pow(2.0) + 1))).toFloat()
+            }
+            cords[1] < cords[3] -> {
+                quadX = (centerCords[0] - (radius / sqrt(m2.toDouble().pow(2.0) + 1))).toFloat()
+                quadY =
+                    (centerCords[1] - (m2 * radius / sqrt(m2.toDouble().pow(2.0) + 1))).toFloat()
+            }
+            cords[1] == cords[3] -> {
+                quadX = (centerCords[0])
+                quadY = (centerCords[1] + radius)
+            }
+        }
+
+        return listOf(quadX, quadY)
+    }
+
+
+    fun getQuadCords() : List<Float>
+    {
+        val radius = this.courbure*2
         val cords = getCords()
         val centerCords = listOf((cords[0] + cords[2])/2, (cords[1] + cords[3])/2)
 
@@ -209,8 +246,14 @@ class Connexion (private var objet1: Objet, var reseau: Graph?) : Path() {
      */
     fun remove()
     {
-        objet1.connexions.remove(this)
-        objet2?.connexions?.remove(this)
+        if(objet1 != null)
+        {
+            objet1.connexions.remove(this)
+        }
+        if(objet2 != null)
+        {
+            objet2?.connexions?.remove(this)
+        }
         reseau!!.connexions.remove(this)
     }
 

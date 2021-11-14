@@ -9,10 +9,19 @@ class Objet(var nom: String, x: Float, y: Float) : RectF(x-45, y-42, x+45, y+42)
     var couleur : String? = null
     var icone : String? = null
     var connexions = ArrayList<Connexion>()
+    val paint = Paint()
 
     constructor(nom: String, x: Float, y:Float, col: String?, ico: String?) : this(nom, x, y) {
         this.couleur = col
         this.icone = ico
+    }
+
+    init {
+        paint.style = Paint.Style.FILL
+        paint.setColor(Color.BLACK);
+        paint.strokeWidth = 7F
+        paint.textSize = 30F
+        paint.textAlign = Paint.Align.CENTER
     }
 
     /**
@@ -42,17 +51,11 @@ class Objet(var nom: String, x: Float, y: Float) : RectF(x-45, y-42, x+45, y+42)
      * Ecris l'objet sur le graphe
      */
     fun draw(canvas : Canvas, context: Context){
-        val paint = Paint()
-        paint.style = Paint.Style.FILL
-        paint.setColor(Color.BLACK);
-        paint.strokeWidth = 7F
 
-        paint.setColor(Color.parseColor(this.couleur))
-        canvas.drawRoundRect(this,20F,20F, paint)
+
         if(this.couleur != null)
             paint.setColor(Color.parseColor(this.couleur))
-        paint.textSize = 30F
-        paint.textAlign = Paint.Align.CENTER
+        canvas.drawRoundRect(this,20F,20F, paint)
         canvas.drawText(this.nom, this.centerX(), this.centerY()+65, paint)
         if(this.icone != null){
             val path = context.resources.getIdentifier(this.icone, "drawable", context.packageName)

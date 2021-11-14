@@ -34,6 +34,7 @@ class GraphFactory {
                     conx.setObjet2(obj2!!)
                     conx.setNom(it.nom!!)
                     conx.reseau = graph
+                    conx.courbure = it.courbure
                     graph.connexions.add(conx)
                 }
             }
@@ -57,7 +58,7 @@ class GraphFactory {
         }
 
         /**
-         * Récupère un objet
+         * Récupère un objet selon un id
          */
         private fun getObjet(id :Int, graph: Graph) : Objet?
         {

@@ -166,9 +166,17 @@ class MainActivity : AppCompatActivity(), DeptListener {
             true
         }
 
+        /**
+         * Le listener principal de l'application, il va vérifier où on touche en fonction du mode
+         * mode sélectionné
+         */
         ecran.setOnTouchListener { _, event ->
             this.savePosX = event.x + hsv.scrollX
             this.savePosY = event.y + hsv.sv.scrollY
+
+            /**
+             * On lance les fonctions drag on touch au cas où on maintient un objet ou connexion
+             */
             val draggingObj = dragOnTouch.onTouch(null, event, savePosX, savePosY)
             val draggingLine = dragOnTouch.dragLine(
                 null,
@@ -402,10 +410,10 @@ class MainActivity : AppCompatActivity(), DeptListener {
     }
 
     /**
-     * On a validé une fenêtre de dialogue
+     * On a validé une fenêtre de dialogue (exemple EditConnexionDialogFragment)
      */
     override fun onDeptSelected(depts: ArrayList<String>) {
-        if(depts.size >= 1 && depts[0] == "changePlan"){
+        if(depts.size == 2 && depts[0] == "changePlan"){
             //Changement de plan
             val img = depts[1]
 
@@ -462,6 +470,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
         reseau.imgAppart = savedInstanceState.getString("imgAppart") as String
         reseau.objets = savedInstanceState.getParcelableArrayList<Objet>("objets") as ArrayList<Objet>
+        reseau.connexions.clear()
         reseau.objets.forEach { obj ->
             obj.connexions.forEach{
                 if(!reseau.existeConnexion(it.getObjet1(), it.getObjet2()!!))

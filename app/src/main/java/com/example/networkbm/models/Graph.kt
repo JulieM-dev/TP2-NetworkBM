@@ -22,7 +22,7 @@ class Graph() {
     fun getConnexion(x : Float, y: Float) : Connexion?
     {
         connexions.forEach {
-            val cords = it.getCenter()
+            val cords = it.getRealCenter()
             if(x < cords.get(0) + 25  && x > cords.get(0) - 25 &&
                 y < cords.get(1) + 25  && y > cords.get(1) - 25){
                 return it
@@ -43,6 +43,7 @@ class Graph() {
         }
         return ci > 1
     }
+
 
     /**
      * Vérifie si l'objet existe (pour un test de connexion)

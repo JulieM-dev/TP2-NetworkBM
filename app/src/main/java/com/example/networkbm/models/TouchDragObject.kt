@@ -109,8 +109,8 @@ class TouchDragObject(private var rootLayout: WScrollView, var reseau: Graph,
 
                     val distance = sqrt((x - this.connexion!!.getCenter()[0].toDouble()).pow(2.0) + Math.pow(y - this.connexion!!.getCenter()[1].toDouble(), 2.0))
                     this.connexion!!.courbure = distance.toInt()
-                    val quadCords = this.connexion!!.getQuadCords()
-                    if(!(quadCords[0] > x-60 && quadCords[0] < x+60) || !(quadCords[1] > y-60 && quadCords[1] < y+60))
+                    val center = this.connexion!!.getRealCenter()
+                    if(!(center[0] > x-60 && center[0] < x+60) || !(center[1] > y-60 && center[1] < y+60))
                     {
                         this.connexion!!.courbure = (-(distance)).toInt()
                     }
@@ -127,8 +127,8 @@ class TouchDragObject(private var rootLayout: WScrollView, var reseau: Graph,
                 MotionEvent.ACTION_MOVE -> {
                     val distance = sqrt((x - this.connexion!!.getCenter()[0].toDouble()).pow(2.0) + Math.pow(y - this.connexion!!.getCenter()[1].toDouble(), 2.0))
                     this.connexion!!.courbure = distance.toInt()
-                    val quadCords = this.connexion!!.getQuadCords()
-                    if(!(quadCords[0] > x-60 && quadCords[0] < x+60) || !(quadCords[1] > y-60 && quadCords[1] < y+60))
+                    val center = this.connexion!!.getRealCenter()
+                    if(!(center[0] > x-60 && center[0] < x+60) || !(center[1] > y-60 && center[1] < y+60))
                     {
                         this.connexion!!.courbure = (-(distance)).toInt()
                     }

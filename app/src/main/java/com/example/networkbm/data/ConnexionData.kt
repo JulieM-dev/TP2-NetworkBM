@@ -12,4 +12,5 @@ class ConnexionData (conx: Connexion) {
     var nom = conx.getNom()
     var couleur = conx.couleur
     var epaisseur = conx.epaisseur
+    var courbure = conx.courbure
 }

@@ -11,30 +11,28 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.children
 import com.example.networkbm.DeptListener
 import com.example.networkbm.R
 import com.example.networkbm.models.Connexion
 import com.example.networkbm.models.Graph
 import com.example.networkbm.models.Objet
-import java.io.File
 import java.lang.ClassCastException
 
 class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
-    lateinit var listener: DeptListener
-    lateinit var dialogBuilder : AlertDialog.Builder
-    lateinit var alertDialog : AlertDialog
-    lateinit var editTextNom : EditText
-    lateinit var buttonValider : Button
-    lateinit var buttonAnnuler : Button
-    lateinit var buttonSupprimer : Button
+    private lateinit var listener: DeptListener
+    private lateinit var dialogBuilder : AlertDialog.Builder
+    private lateinit var alertDialog : AlertDialog
+    private lateinit var editTextNom : EditText
+    private lateinit var buttonValider : Button
+    private lateinit var buttonAnnuler : Button
+    private lateinit var buttonSupprimer : Button
     var objet : Objet? = null
     var reseau : Graph? = null
-    var listCouleurs = arrayOf("#2d3436","#e74c3c","#2ecc71","#3498db","#e67e22","#00cec9","#9b59b6")
-    var listIcones = arrayOf(null, "printer", "blender", "camera", "computer", "lamp", "television")
-    var selectedColor : String? = null
-    var selectedIcon: String? = null
+    private var listCouleurs = arrayOf("#2d3436","#e74c3c","#2ecc71","#3498db","#e67e22","#00cec9","#9b59b6")
+    private var listIcones = arrayOf(null, "printer", "blender", "camera", "computer", "lamp", "television")
+    private var selectedColor : String? = null
+    private var selectedIcon: String? = null
 
     constructor(objet: Objet, reseau: Graph) : this() {
         this.objet = objet
@@ -43,7 +41,7 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogBuilder =  AlertDialog.Builder(activity)
-        this.selectedColor = this.listCouleurs.get(0)
+        this.selectedColor = this.listCouleurs[0]
 
         val formulaire = activity?.layoutInflater?.inflate(R.layout.ajout_objet_form, null)
         dialogBuilder.setView(formulaire)
@@ -65,7 +63,7 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
                 newBut.layoutParams = butNoir.layoutParams
                 newBut.setBackgroundColor(Color.parseColor(it))
                 newBut.setTextColor(resources.getColor(R.color.white))
-                val str = it.toString()
+                val str = it
                 newBut.setOnClickListener()
                 {
                     this.clickCouleur(str, formulaire)
@@ -90,7 +88,7 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
                 }
 
                 var icon2 = BitmapFactory.decodeResource(this.resources, path)
-                icon2 = Bitmap.createScaledBitmap(icon2, 100, 100, false);
+                icon2 = Bitmap.createScaledBitmap(icon2, 100, 100, false)
                 newBut.setImageBitmap(icon2)
                 newBut.tag = it.toString()
                 newBut.setOnClickListener()
@@ -112,7 +110,7 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
                     this.clickIcon(objet!!.icone!!, formulaire)
                 }
             } else {
-                this.clickCouleur(this.listCouleurs.get(0), formulaire)
+                this.clickCouleur(this.listCouleurs[0], formulaire)
             }
 
             buttonValider.setOnClickListener()
@@ -133,7 +131,7 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
                     val si = reseau!!.connexions.size
                     val con = this.reseau!!.connexions.clone() as ArrayList<Connexion>
                     while(i < si){
-                        val itCon = con.get(i)
+                        val itCon = con[i]
                         if(itCon.getObjet1() == objet || itCon.getObjet2() == objet){
                             reseau!!.connexions.remove(itCon)
                         }
@@ -149,7 +147,7 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
         return alertDialog
     }
 
-    fun clickCouleur(color: String, formulaire: View){
+    private fun clickCouleur(color: String, formulaire: View){
         this.selectedColor = color
         val layout = formulaire.findViewById<LinearLayout>(R.id.listCouleurs)
         layout.children.forEach {
@@ -163,7 +161,7 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
         }
     }
 
-    fun clickIcon(tag: String, formulaire: View){
+    private fun clickIcon(tag: String, formulaire: View){
         this.selectedIcon = tag
         val layout = formulaire.findViewById<LinearLayout>(R.id.listIcones)
         layout.children.forEach {
@@ -176,7 +174,7 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
         }
     }
 
-    fun valider(){
+    private fun valider(){
         val nom = editTextNom.text.toString()
         val depts = ArrayList<String>()
         depts.add(nom)

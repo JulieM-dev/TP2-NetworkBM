@@ -18,26 +18,26 @@ import com.example.networkbm.models.Objet
 import java.lang.ClassCastException
 
 class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnItemSelectedListener {
-    lateinit var listener: DeptListener
-    lateinit var dialogBuilder : AlertDialog.Builder
-    lateinit var alertDialog : AlertDialog
-    lateinit var buttonValider : Button
-    lateinit var buttonAnnuler : Button
-    lateinit var buttonSupprimer : Button
-    lateinit var editObjet1 : Spinner
-    lateinit var editObjet2 : Spinner
-    lateinit var nomConnexion: EditText
+    private lateinit var listener: DeptListener
+    private lateinit var dialogBuilder : AlertDialog.Builder
+    private lateinit var alertDialog : AlertDialog
+    private lateinit var buttonValider : Button
+    private lateinit var buttonAnnuler : Button
+    private lateinit var buttonSupprimer : Button
+    private lateinit var editObjet1 : Spinner
+    private lateinit var editObjet2 : Spinner
+    private lateinit var nomConnexion: EditText
     lateinit var barEpaisseur: SeekBar
     lateinit var nbrEpaisseur: TextView
-    var listCouleurs = arrayOf("#2d3436","#e74c3c","#2ecc71","#3498db","#e67e22","#00cec9","#9b59b6")
+    private var listCouleurs = arrayOf("#2d3436","#e74c3c","#2ecc71","#3498db","#e67e22","#00cec9","#9b59b6")
     var connexion : Connexion? = null
     var reseau : Graph? = null
-    var obj1 : Objet? = null
-    var obj2: Objet? = null
-    var idT1 = 0
-    var idT2 = 0
-    var isEdition = false
-    var selectedColor : String? = null
+    private var obj1 : Objet? = null
+    private var obj2: Objet? = null
+    private var idT1 = 0
+    private var idT2 = 0
+    private var isEdition = false
+    private var selectedColor : String? = null
 
     constructor(connexion: Connexion, reseau: Graph, isEdition: Boolean = false) : this() {
         this.connexion = connexion
@@ -50,7 +50,7 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogBuilder =  AlertDialog.Builder(activity)
-        this.selectedColor = this.listCouleurs.get(0)
+        this.selectedColor = this.listCouleurs[0]
 
         val formulaire = activity?.layoutInflater?.inflate(R.layout.edit_connexion_form, null)
         dialogBuilder.setView(formulaire)
@@ -76,7 +76,7 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
                 newBut.layoutParams = butNoir.layoutParams
                 newBut.setBackgroundColor(Color.parseColor(it))
                 newBut.setTextColor(resources.getColor(R.color.white))
-                val str = it.toString()
+                val str = it
                 newBut.setOnClickListener()
                 {
                     this.clickCouleur(str, formulaire)
@@ -87,7 +87,7 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
 
             if(this.isEdition){
                 buttonSupprimer.visibility = View.INVISIBLE
-                this.clickCouleur(this.listCouleurs.get(0), formulaire)
+                this.clickCouleur(this.listCouleurs[0], formulaire)
             } else {
                 this.selectedColor = connexion!!.couleur
                 this.clickCouleur(connexion!!.couleur!!, formulaire)
@@ -133,7 +133,7 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
         return alertDialog
     }
 
-    fun sendSupprimer(){
+    private fun sendSupprimer(){
         val depts = ArrayList<String>()
         connexion!!.remove()
         //reseau!!.connexions.remove(connexion)
@@ -142,7 +142,7 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
         alertDialog.dismiss()
     }
 
-    fun setList(){
+    private fun setList(){
         val ar1 = reseau!!.objets.clone() as ArrayList<Objet>
         ar1.remove(this.obj2)
         val aa1 = ArrayAdapter(this.context!!, android.R.layout.simple_spinner_item, ar1)
@@ -190,7 +190,7 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
 
     }
 
-    fun valider(){
+    private fun valider(){
         val depts = ArrayList<String>()
         Toast.makeText(this.context, getString(R.string.connectionModified), Toast.LENGTH_SHORT).show()
 
@@ -206,7 +206,7 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
         alertDialog.dismiss()
     }
 
-    fun clickCouleur(color: String, formulaire: View){
+    private fun clickCouleur(color: String, formulaire: View){
         this.selectedColor = color
         val layout = formulaire.findViewById<LinearLayout>(R.id.listCouleurs)
         layout.children.forEach {

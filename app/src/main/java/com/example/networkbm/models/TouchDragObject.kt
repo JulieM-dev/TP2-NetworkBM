@@ -47,7 +47,7 @@ class TouchDragObject(private var rootLayout: WScrollView, reseau: Graph, plan: 
         return ret
     }
 
-    fun dragLine(newConnexion: Connexion?, event: MotionEvent, x : Float, y : Float): Boolean {
+    fun dragLine(newConnexion: Connexion?, event: MotionEvent, x: Float, y: Float, courbure: Int?): Boolean {
         var ret = false
         if (this.connexion == null) this.connexion = newConnexion
         if(connexion != null)
@@ -55,6 +55,9 @@ class TouchDragObject(private var rootLayout: WScrollView, reseau: Graph, plan: 
             when(event.action){
                 MotionEvent.ACTION_DOWN -> {
                     connexion!!.setPositions(x,y)
+                    if(courbure != null) {
+                        connexion!!.courbure = courbure
+                    }
                     ret = true
                 }
                 MotionEvent.ACTION_UP -> {

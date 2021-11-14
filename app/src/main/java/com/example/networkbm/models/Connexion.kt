@@ -1,32 +1,29 @@
 package com.example.networkbm.models
 
-import android.content.Context
 import android.graphics.*
-import com.google.gson.annotations.Expose
+import kotlin.math.pow
+import kotlin.math.sqrt
 
-class Connexion (objet1 : Objet, reseau: Graph?) : Path() {
+class Connexion (private var objet1: Objet, var reseau: Graph?) : Path() {
     var id = this.hashCode()
-    var reseau = reseau
-    private var objet1 = objet1
     private var objet2 : Objet? = null
     private var nom : String? = null
     var pointerX = 50F
     var pointerY = 0F
     var couleur : String? = null
     var epaisseur = 10F
-    var paint = Paint()
-    var paintText = Paint()
-    var courbure = 1000
+    private var paint = Paint()
+    private var paintText = Paint()
+    var courbure = 0
 
     init {
         paint.style = Paint.Style.STROKE
-        paint.setColor(Color.BLACK);
+        paint.color = Color.BLACK
 
         paintText.style = Paint.Style.FILL
-        paintText.setColor(Color.BLACK);
+        paintText.color = Color.BLACK
         paintText.strokeWidth = 7F
         updatePaint()
-
     }
 
 
@@ -46,9 +43,9 @@ class Connexion (objet1 : Objet, reseau: Graph?) : Path() {
     fun draw(canvas : Canvas)
     {
         rewind()
-        var radius = 1000
+        val radius = this.courbure
 
-        var cords = getCords()
+        val cords = getCords()
         // cords[0] = objet1.x
         // cords[1] = objet1.y
         // si objet2 != null:
@@ -59,34 +56,33 @@ class Connexion (objet1 : Objet, reseau: Graph?) : Path() {
         //      cords[3] = position Y du doigt
 
         moveTo(cords[0], cords[1])
-        var centerCords = listOf((cords[0] + cords[2])/2, (cords[1] + cords[3])/2)
+        val centerCords = listOf((cords[0] + cords[2])/2, (cords[1] + cords[3])/2)
 
-        var m1 = (cords[3] - cords[1]) / (cords[2] - cords[0])
-        var m2 = -(1/m1)
-        var h = -(m2 * centerCords[0] - centerCords[1])
-        var mediatriceY = m2 * 3 + h
+        val m1 = (cords[3] - cords[1]) / (cords[2] - cords[0])
+        val m2 = -(1/m1)
+        // var h = -(m2 * centerCords[0] - centerCords[1])
+        // var mediatriceY = m2 * 3 + h
         var quadX = centerCords[0]
         var quadY = centerCords[1]
-        if(cords[1] > cords[3])
-        {
-            quadX = (centerCords[0] + (radius / Math.sqrt(Math.pow( m2.toDouble(), 2.0)+1))).toFloat()
-            quadY = (centerCords.get(1) + (m2 * radius / Math.sqrt(Math.pow( m2.toDouble(), 2.0)+1))).toFloat()
-        }
-        else if (cords[1] < cords[3])
-        {
-            quadX = (centerCords[0] - (radius / Math.sqrt(Math.pow(m2.toDouble(), 2.0)+1))).toFloat()
-            quadY = (centerCords[1] - (m2 * radius / Math.sqrt(Math.pow( m2.toDouble(), 2.0)+1))).toFloat()
-        }
-        else if(cords[1] == cords[3])
-        {
-            quadX = (centerCords[0])
-            quadY = (centerCords[1] + radius)
+        when {
+            cords[1] > cords[3] -> {
+                quadX = (centerCords[0] + (radius / sqrt(m2.toDouble().pow(2.0) +1))).toFloat()
+                quadY = (centerCords[1] + (m2 * radius / sqrt(m2.toDouble().pow(2.0) +1))).toFloat()
+            }
+            cords[1] < cords[3] -> {
+                quadX = (centerCords[0] - (radius / sqrt(m2.toDouble().pow(2.0) +1))).toFloat()
+                quadY = (centerCords[1] - (m2 * radius / sqrt(m2.toDouble().pow(2.0) +1))).toFloat()
+            }
+            cords[1] == cords[3] -> {
+                quadX = (centerCords[0])
+                quadY = (centerCords[1] + radius)
+            }
         }
 
         quadTo(quadX, quadY , cords[2], cords[3])
         canvas.drawPath(this, paint)
 
-        cords = getCenter()
+        // cords = getCenter()
         if (nom != null)
         {
             canvas.drawText(nom!!, getCenter()[0], getCenter()[1] + 50, paint)
@@ -94,7 +90,7 @@ class Connexion (objet1 : Objet, reseau: Graph?) : Path() {
 
     }
 
-    fun actualisePath()
+    private fun actualisePath()
     {
         this.rewind()
         this.setLastPoint(objet1.centerX(), objet1.centerY())
@@ -118,9 +114,9 @@ class Connexion (objet1 : Objet, reseau: Graph?) : Path() {
     }
 
     fun getCenter(): List<Float> {
-        var cords = getCords()
-        var centerX = (cords.get(0) + cords.get(2)) / 2
-        var centerY = (cords.get(1) + cords.get(3)) / 2
+        val cords = getCords()
+        val centerX = (cords[0] + cords[2]) / 2
+        val centerY = (cords[1] + cords[3]) / 2
         return listOf(centerX, centerY)
     }
 
@@ -175,10 +171,10 @@ class Connexion (objet1 : Objet, reseau: Graph?) : Path() {
         this.couleur = color
     }
 
-    fun updatePaint()
+    private fun updatePaint()
     {
         if(couleur != null){
-            paint.setColor(Color.parseColor(couleur))
+            paint.color = Color.parseColor(couleur)
         }
         paint.strokeWidth = epaisseur
 

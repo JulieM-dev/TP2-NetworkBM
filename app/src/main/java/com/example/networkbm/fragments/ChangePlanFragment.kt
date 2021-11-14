@@ -3,11 +3,9 @@ package com.example.networkbm.fragments
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
-import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -18,10 +16,10 @@ import com.example.networkbm.R
 import java.lang.ClassCastException
 
 class ChangePlanFragment : AppCompatDialogFragment() {
-    lateinit var dialogBuilder : AlertDialog.Builder
-    lateinit var alertDialog : AlertDialog
-    var listPlans = arrayOf("planmin", "planmin2", "planmin3", "planmin4")
-    lateinit var listener: DeptListener
+    private lateinit var dialogBuilder : AlertDialog.Builder
+    private lateinit var alertDialog : AlertDialog
+    private var listPlans = arrayOf("planmin", "planmin2", "planmin3", "planmin4")
+    private lateinit var listener: DeptListener
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogBuilder =  AlertDialog.Builder(activity)
@@ -40,13 +38,12 @@ class ChangePlanFragment : AppCompatDialogFragment() {
                 val newBut = ImageButton(butPlan.context)
                 newBut.layoutParams = butPlan.layoutParams
 
-                var path = this.resources.getIdentifier("cross", "drawable", this.context!!.packageName)
-                path = this.resources.getIdentifier(it.toString(), "drawable", this.context!!.packageName)
+                val path = this.resources.getIdentifier(it, "drawable", this.context!!.packageName)
                 newBut.setBackgroundColor(Color.parseColor("#f2f2f2"))
 
                 val img = BitmapFactory.decodeResource(this.resources, path)
                 newBut.setImageBitmap(img)
-                newBut.tag = it.toString()
+                newBut.tag = it
                 newBut.scaleType = ImageView.ScaleType.CENTER_INSIDE
                 newBut.setOnClickListener()
                 {
@@ -60,7 +57,7 @@ class ChangePlanFragment : AppCompatDialogFragment() {
         return alertDialog
     }
 
-    fun clickImg(tag: String){
+    private fun clickImg(tag: String){
         val depts = ArrayList<String>()
         depts.add("changePlan")
         depts.add(tag)

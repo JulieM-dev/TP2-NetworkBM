@@ -2,7 +2,6 @@ package com.example.networkbm
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +11,6 @@ import android.os.Looper
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.MotionEvent
-import android.view.View.LAYER_TYPE_SOFTWARE
 import android.view.animation.AnimationUtils
 import android.widget.*
 import android.widget.Toast.LENGTH_SHORT
@@ -26,37 +24,38 @@ import com.example.networkbm.models.*
 import com.example.networkbm.views.WScrollView
 import com.google.android.material.navigation.NavigationView
 import java.util.*
-import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
+import kotlin.math.pow
+import kotlin.math.sqrt
 import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity(), DeptListener {
 
-    lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var toggle: ActionBarDrawerToggle
     private var modeSelected : Mode = Mode.AUCUN
     private var isPressed = false
     private lateinit var objetAModifier : Objet
-    var drawGraph = DrawableGraph(this)
+    private var drawGraph = DrawableGraph(this)
     var reseau = drawGraph.reseau
-    var connexionAModifier : Connexion? = null
-    lateinit var tableButsMenu : Array<ImageButton>
+    private var connexionAModifier : Connexion? = null
+    private lateinit var tableButsMenu : Array<ImageButton>
     private var savePosX = 0F
     private var savePosY = 0F
     private var saveScrollX : Int? = null
     private var saveScrollY : Int? = null
-    lateinit var ecran : ImageView
-    lateinit var dragOnTouch : TouchDragObject
-    var dragging = false
-    var saveReseau = SaveReseau()
+    private lateinit var ecran : ImageView
+    private lateinit var dragOnTouch : TouchDragObject
+    private var dragging = false
+    private var saveReseau = SaveReseau()
 
-    lateinit var locale: Locale
+    private lateinit var locale: Locale
     private var currentLanguage = "fr"
     private var currentLang: String? = null
 
-    var handler : Handler? = null
+    private var handler : Handler? = null
 
     private lateinit var affPrinc : TextView
-    lateinit var hsv : WScrollView
+    private lateinit var hsv : WScrollView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,9 +75,9 @@ class MainActivity : AppCompatActivity(), DeptListener {
         navView.getHeaderView(0).setBackgroundColor(resources.getColor(R.color.purple_princ))
 
         tableButsMenu = arrayOf (
-            findViewById<ImageButton>(R.id.butAjoutObjet),
-            findViewById<ImageButton>(R.id.butAjoutConnexion),
-            findViewById<ImageButton>(R.id.butModif)
+            findViewById(R.id.butAjoutObjet),
+            findViewById(R.id.butAjoutConnexion),
+            findViewById(R.id.butModif)
         )
 
         navView.setNavigationItemSelectedListener {
@@ -98,24 +97,24 @@ class MainActivity : AppCompatActivity(), DeptListener {
         }
 
         for(i in 0..tableButsMenu.size-1){
-            tableButsMenu.get(i).setOnClickListener{
+            tableButsMenu[i].setOnClickListener{
                 clickMenu(i+1)
                 it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fadein))
             }
         }
         val plan = findViewById<ImageView>(R.id.planAppartement)
-        ecran = findViewById<ImageView>(R.id.contRect)
+        ecran = findViewById(R.id.contRect)
 
         ecran.setImageDrawable(drawGraph)
 
         // Bidirectionnal scrollview
         val sv = findViewById<ScrollView>(R.id.scrollView)
-        hsv = findViewById<WScrollView>(R.id.scrollViewH)
+        hsv = findViewById(R.id.scrollViewH)
         hsv.sv = sv
         hsv.ecran = ecran
         dragOnTouch = TouchDragObject(hsv, reseau, plan)
         plan.doOnPreDraw {
-            val param: FrameLayout.LayoutParams = FrameLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,100);
+            val param: FrameLayout.LayoutParams = FrameLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,100)
             param.height = plan.height
             param.width = plan.width
             ecran.layoutParams = param
@@ -128,7 +127,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
     }
 
 
-    fun reinitialisation()
+    private fun reinitialisation()
     {
         reseau.connexions.clear()
         reseau.objets.clear()
@@ -138,7 +137,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
     @SuppressLint("ClickableViewAccessibility")
     fun initListeners()
     {
-        hsv.setOnTouchListener { view, event ->
+        hsv.setOnTouchListener { _, event ->
             ecran.dispatchTouchEvent(event)
 
             true
@@ -148,14 +147,19 @@ class MainActivity : AppCompatActivity(), DeptListener {
             true
         }
 
-        ecran.setOnTouchListener { v, event ->
-            this.savePosX = event.getX() + hsv.scrollX
-            this.savePosY = event.getY() + hsv.sv.scrollY
+        ecran.setOnTouchListener { _, event ->
+            this.savePosX = event.x + hsv.scrollX
+            this.savePosY = event.y + hsv.sv.scrollY
             val draggingObj = dragOnTouch.onTouch(null, event, savePosX, savePosY)
-            val draggingLine = dragOnTouch.dragLine(null, event, savePosX, savePosY)
+            val draggingLine = dragOnTouch.dragLine(
+                null,
+                event,
+                savePosX,
+                savePosY,
+                null
+            )
             dragging = draggingLine || draggingObj
-            val action = event.action
-            when(action)
+            when(event.action)
             {
                 MotionEvent.ACTION_DOWN ->
                 {
@@ -171,8 +175,8 @@ class MainActivity : AppCompatActivity(), DeptListener {
                             dialog.show(supportFragmentManager, resources.getString(R.string.editConnection))
                         } else if (connexion != null && modeSelected != Mode.MODIFICATION) {
                             System.out.println("HEY")
-                            val distance = Math.sqrt(Math.pow(event.getX() - connexion.getCenter()[0].toDouble(),2.0) + Math.pow(event.getY() - connexion.getCenter()[1].toDouble(), 2.0))
-                            connexion.courbure = distance.toInt()
+                            val distance = sqrt((event.x - connexion.getCenter()[0].toDouble()).pow(2.0) + Math.pow(event.y - connexion.getCenter()[1].toDouble(), 2.0))
+                            dragging = dragOnTouch.dragLine(connexion, event, savePosX, savePosY, distance.toInt())
                         } else if(objet != null) {
                             //On a recupere un objet
                             when(modeSelected)
@@ -187,11 +191,23 @@ class MainActivity : AppCompatActivity(), DeptListener {
                                     {
                                         connexionAModifier = Connexion(objet, reseau)
                                         reseau.connexions.add(connexionAModifier!!)
-                                        dragging = dragOnTouch.dragLine(connexionAModifier!!, event, savePosX, savePosY)
+                                        dragging = dragOnTouch.dragLine(
+                                            connexionAModifier!!,
+                                            event,
+                                            savePosX,
+                                            savePosY,
+                                            null
+                                        )
                                     }
                                     else if(connexionAModifier != null)
                                     {
-                                        dragging = dragOnTouch.dragLine(connexionAModifier!!, event, savePosX, savePosY)
+                                        dragging = dragOnTouch.dragLine(
+                                            connexionAModifier!!,
+                                            event,
+                                            savePosX,
+                                            savePosY,
+                                            null
+                                        )
                                     }
                                 }
                                 Mode.MODIFICATION -> {
@@ -200,12 +216,20 @@ class MainActivity : AppCompatActivity(), DeptListener {
                                     val dialog = AjoutObjetDialogFragment(objet, reseau)
                                     dialog.show(supportFragmentManager, resources.getString(R.string.editObject))
                                 }
-                                else -> null
+                                else -> {
+
+                                }
                             }
                         }
                         else if (modeSelected == Mode.AJOUT_CONNEXION && connexionAModifier != null)
                         {
-                            dragging = dragOnTouch.dragLine(connexionAModifier!!, event, savePosX, savePosY)
+                            dragging = dragOnTouch.dragLine(
+                                connexionAModifier!!,
+                                event,
+                                savePosX,
+                                savePosY,
+                                null
+                            )
                         }
                         else
                         {
@@ -294,14 +318,14 @@ class MainActivity : AppCompatActivity(), DeptListener {
         return super.onOptionsItemSelected(item)
     }
 
-    fun clickMenu(i: Int)
+    private fun clickMenu(i: Int)
     {
         val navView = findViewById<NavigationView>(R.id.navView)
         for(it in 0..tableButsMenu.size-1){
-            tableButsMenu.get(it).setBackgroundColor(resources.getColor(R.color.white))
-            navView.menu.getItem(it + 1).setChecked(false)
+            tableButsMenu[it].setBackgroundColor(resources.getColor(R.color.white))
+            navView.menu.getItem(it + 1).isChecked = false
         }
-        navView.menu.getItem(i).setChecked(true)
+        navView.menu.getItem(i).isChecked = true
        when(i){
            1 -> {
                if(this.modeSelected != Mode.AJOUT_OBJET)
@@ -340,11 +364,11 @@ class MainActivity : AppCompatActivity(), DeptListener {
            }
        }
         if(this.modeSelected != Mode.AUCUN)
-            tableButsMenu.get(i - 1).setBackgroundColor(resources.getColor(R.color.purple_sec))
+            tableButsMenu[i - 1].setBackgroundColor(resources.getColor(R.color.purple_sec))
         else
         {
-            tableButsMenu.get(i - 1).setBackgroundColor(resources.getColor(R.color.white))
-            navView.menu.getItem(i).setChecked(false)
+            tableButsMenu[i - 1].setBackgroundColor(resources.getColor(R.color.white))
+            navView.menu.getItem(i).isChecked = false
         }
 
         ecran.invalidate()
@@ -353,19 +377,19 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
     override fun onDeptSelected(depts: ArrayList<String>) {
         //Click sur une page de dialogue
-        if(depts.size >= 1 && depts.get(0) == "changePlan"){
+        if(depts.size >= 1 && depts[0] == "changePlan"){
             //Changement de plan
-            val img = depts.get(1)
+            val img = depts[1]
 
             this.reseau.imgAppart = img
             this.loadImgAppart()
         } else {
             when (modeSelected) {
                 Mode.AJOUT_OBJET -> {
-                    objetAModifier.nom = depts.get(0)
-                    objetAModifier.couleur = depts.get(1)
+                    objetAModifier.nom = depts[0]
+                    objetAModifier.couleur = depts[1]
                     if (depts.size > 2) {
-                        objetAModifier.icone = depts.get(2)
+                        objetAModifier.icone = depts[2]
                     }
                     reseau.objets.add(objetAModifier)
                     Toast.makeText(this, getString(R.string.objectCreated), LENGTH_SHORT).show()
@@ -373,10 +397,10 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 Mode.MODIFICATION -> {
                     val obj = reseau.getObjet(this.savePosX, this.savePosY)
                     if (obj != null) {
-                        obj.nom = depts.get(0)
-                        obj.couleur = depts.get(1)
+                        obj.nom = depts[0]
+                        obj.couleur = depts[1]
                         if (depts.size > 2) {
-                            obj.icone = depts.get(2)
+                            obj.icone = depts[2]
                         } else {
                             obj.icone = null
                         }
@@ -404,8 +428,8 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
         reseau.imgAppart = savedInstanceState.getString("imgAppart") as String
         reseau.objets = savedInstanceState.getParcelableArrayList<Objet>("objets") as ArrayList<Objet>
-        reseau.objets.forEach {
-            it.connexions.forEach{
+        reseau.objets.forEach { obj ->
+            obj.connexions.forEach{
                 if(!reseau.existeConnexion(it.getObjet1(), it.getObjet2()!!))
                 {
                     reseau.connexions.add(it)
@@ -416,7 +440,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
         ecran.invalidate()
     }
 
-    fun setLocale(localeName: String) {
+    private fun setLocale(localeName: String) {
         if (localeName != currentLanguage) {
             locale = Locale(localeName)
             val res = resources
@@ -432,7 +456,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
             startActivity(refresh)
         } else {
             Toast.makeText(
-                this@MainActivity, "Language, , already, , selected)!", Toast.LENGTH_SHORT).show();
+                this@MainActivity, "Language, , already, , selected)!", LENGTH_SHORT).show()
         }
     }
 
@@ -445,7 +469,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
         exitProcess(0)
     }
 
-    fun changeLanguage(){
+    private fun changeLanguage(){
         if(this.currentLanguage == "fr"){
             this.setLocale("en")
         } else {
@@ -453,12 +477,12 @@ class MainActivity : AppCompatActivity(), DeptListener {
         }
     }
 
-    fun saveReseau(){
+    private fun saveReseau(){
         this.saveReseau.create(this, this.reseau)
         Toast.makeText(this, getString(R.string.networkSaved), LENGTH_SHORT).show()
     }
 
-    fun lireReseau() {
+    private fun lireReseau() {
         this.reseau.objets.clear()
         this.reseau.connexions.clear()
         val isLoad = this.saveReseau.read(this, this.reseau)
@@ -469,16 +493,15 @@ class MainActivity : AppCompatActivity(), DeptListener {
         }
     }
 
-    fun affChangePlan() {
+    private fun affChangePlan() {
         val dialog = ChangePlanFragment()
         dialog.show(supportFragmentManager, resources.getString(R.string.changePlan))
     }
 
-    fun loadImgAppart() {
+    private fun loadImgAppart() {
         val plan = findViewById<ImageView>(R.id.planAppartement)
 
-        var path = this.resources.getIdentifier("cross", "drawable", this.packageName)
-        path = this.resources.getIdentifier(this.reseau.imgAppart, "drawable", this.packageName)
+        val path = this.resources.getIdentifier(this.reseau.imgAppart, "drawable", this.packageName)
         val nouvImg = BitmapFactory.decodeResource(this.resources, path)
         if(nouvImg != null) {
             plan.setImageBitmap(nouvImg)
@@ -493,7 +516,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
             }
 
             plan.doOnPreDraw {
-                val param: FrameLayout.LayoutParams = FrameLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,100);
+                val param: FrameLayout.LayoutParams = FrameLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,100)
                 param.height = plan.height
                 param.width = plan.width
                 ecran.layoutParams = param

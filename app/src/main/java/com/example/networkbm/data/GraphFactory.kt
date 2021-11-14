@@ -9,20 +9,20 @@ class GraphFactory {
     {
         fun getGraph(graphData: GraphData) : Graph
         {
-            var graph = Graph()
+            val graph = Graph()
             graphData.objets.forEach {
-                var obj = Objet(it.nom, it.x, it.y)
+                val obj = Objet(it.nom, it.x, it.y)
                 obj.id = it.id
                 obj.couleur = it.couleur
                 obj.icone = it.icone
                 graph.objets.add(obj)
             }
             graphData.connexions.forEach {
-                if(it.objet1 != null && it.objet2 != null)
+                if(it.objet2 != null)
                 {
-                    var obj1 = getObjet(it.objet1, graph)
-                    var obj2 = getObjet(it.objet2!!, graph)
-                    var conx = Connexion(obj1!!, obj2, it.couleur, it.epaisseur)
+                    val obj1 = getObjet(it.objet1, graph)
+                    val obj2 = getObjet(it.objet2!!, graph)
+                    val conx = Connexion(obj1!!, obj2, it.couleur, it.epaisseur)
                     conx.id = it.id
                     conx.setObjet1(obj1)
                     conx.setObjet2(obj2!!)
@@ -36,7 +36,7 @@ class GraphFactory {
 
         fun getGraphData(graph: Graph) : GraphData
         {
-            var graphData = GraphData()
+            val graphData = GraphData()
             graph.connexions.forEach {
                 graphData.connexions.add(ConnexionData(it))
             }
@@ -50,14 +50,6 @@ class GraphFactory {
         private fun getObjet(id :Int, graph: Graph) : Objet?
         {
             graph.objets.forEach {
-                if (it.id == id) return it
-            }
-            return null
-        }
-
-        private fun getConnexion(id: Int, graph: Graph) : Connexion?
-        {
-            graph.connexions.forEach {
                 if (it.id == id) return it
             }
             return null

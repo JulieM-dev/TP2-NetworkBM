@@ -17,4 +17,14 @@
     <string name="connectionDeleted">Connection deleted</string>
     <string name="connectionModified">Connection modified</string>
     <string name="lang">Lang : English</string>
+    <string name="save">Save</string>
+    <string name="networkSaved">Network saved</string>
+    <string name="thickness">Thickness</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="accept">Accept</string>
+    <string name="changePlan">Change plan</string>
+    <string name="planChanged">Plan changed</string>
+    <string name="restore">Restore</string>
+    <string name="sendMail">Send mail</string>
 </resources>

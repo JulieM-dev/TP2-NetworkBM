@@ -1,45 +1,56 @@
 package com.example.networkbm.models
 
+import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import androidx.core.graphics.drawable.updateBounds
+import com.example.networkbm.R
+import kotlin.math.sqrt
 
-class DrawableGraph : Drawable() {
+class DrawableGraph(var context: Context) : Drawable() {
 
     var reseau : Graph = Graph()
     lateinit var canvas: Canvas
     var paint = Paint()
+    var paintStroke = Paint()
     var greyAlpha = 255
 
-
-    override fun draw(canvas: Canvas) {
-        this.canvas = canvas
-
+    init {
+        paint.style = Paint.Style.FILL
         paint.setColor(Color.BLACK);
         paint.strokeWidth = 7F
 
-        reseau.connexions.forEach {
-            var cords = it.getCords()
-            canvas.drawLine(cords.get(0), cords.get(1), cords.get(2), cords.get(3), paint)
-            cords = it.getCenter()
-            canvas.drawCircle(cords.get(0), cords.get(1), 20F, paint)
-        }
+        paintStroke.style = Paint.Style.STROKE
+        paintStroke.setColor(Color.BLACK);
 
-
-        reseau.objets.forEach {
-            paint.setColor(Color.parseColor(it.couleur))
-            canvas.drawRoundRect(it,20F,20F, paint)
-            paint.setColor(Color.parseColor("#000000"))
-            paint.textSize = 30F
-            paint.textAlign = Paint.Align.CENTER
-            canvas.drawText(it.nom, it.centerX(), it.centerY()+65, paint)
-        }
-
+        paintStroke.strokeWidth = 7F
     }
 
+    /**
+     * Ecris les connexions et objets
+     */
+    override fun draw(canvas: Canvas) {
+        this.canvas = canvas
+
+        reseau.connexions.forEach {
+            it.draw(canvas)
+        }
+
+        reseau.objets.forEach {
+            it.draw(canvas, this.context)
+        }
+    }
+
+    /**
+     * Set l'alpha
+     */
     override fun setAlpha(newAlpha: Int) {
          greyAlpha = newAlpha
     }
 
+    /**
+     * Récupère l'alpha
+     */
     override fun getAlpha(): Int {
         return greyAlpha
     }
@@ -48,6 +59,9 @@ class DrawableGraph : Drawable() {
 
     }
 
+    /**
+     * Récupère l'opacité
+     */
     override fun getOpacity(): Int {
         return PixelFormat.TRANSPARENT
     }

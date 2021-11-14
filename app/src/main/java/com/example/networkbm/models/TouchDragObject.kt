@@ -3,15 +3,20 @@ package com.example.networkbm.models
 import android.view.MotionEvent
 import android.widget.ImageView
 import com.example.networkbm.views.WScrollView
+import kotlin.math.pow
+import kotlin.math.sqrt
 
-class TouchDragObject(private var rootLayout: WScrollView, reseau: Graph, plan: ImageView) {
-    var reseau : Graph = reseau
+class TouchDragObject(private var rootLayout: WScrollView, var reseau: Graph,
+                      private var plan: ImageView
+) {
 
     var objet : Objet? = null
     var connexion : Connexion? = null
-    var plan : ImageView = plan
 
 
+    /**
+     * On modifie la position d'un objet
+     */
     fun onTouch(newObjet: Objet?, event: MotionEvent, x : Float, y : Float): Boolean {
         var ret = false
         if (this.objet == null) this.objet = newObjet
@@ -31,12 +36,16 @@ class TouchDragObject(private var rootLayout: WScrollView, reseau: Graph, plan: 
                 MotionEvent.ACTION_POINTER_UP -> {
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    if(event.getY() < 42){
-                        objet!!.setPositions(x, 42f)
-                    } else if(y > plan.height - 70) {
-                        objet!!.setPositions(x, plan.height.toFloat() - 70)
-                    } else {
-                        objet!!.setPositions(x, y)
+                    when {
+                        event.y < 42 -> {
+                            objet!!.setPositions(x, 42f)
+                        }
+                        y > plan.height - 70 -> {
+                            objet!!.setPositions(x, plan.height.toFloat() - 70)
+                        }
+                        else -> {
+                            objet!!.setPositions(x, y)
+                        }
                     }
                     ret = true
                 }
@@ -47,10 +56,13 @@ class TouchDragObject(private var rootLayout: WScrollView, reseau: Graph, plan: 
         return ret
     }
 
-    fun dragLine(newConnexion: Connexion?, event: MotionEvent, x : Float, y : Float): Boolean {
+    /**
+     * On modifie la position d'une connexion
+     */
+    fun dragLine(newConnexion: Connexion?, event: MotionEvent, x: Float, y: Float): Boolean {
         var ret = false
         if (this.connexion == null) this.connexion = newConnexion
-        if(connexion != null)
+        if(connexion != null && connexion!!.getObjet2() == null)
         {
             when(event.action){
                 MotionEvent.ACTION_DOWN -> {
@@ -58,7 +70,10 @@ class TouchDragObject(private var rootLayout: WScrollView, reseau: Graph, plan: 
                     ret = true
                 }
                 MotionEvent.ACTION_UP -> {
-                    var obj = reseau.getObjet(connexion!!.getCords().get(2), connexion!!.getCords().get(3))
+                    val obj = reseau.getObjet(
+                        connexion!!.getCords()[2],
+                        connexion!!.getCords()[3]
+                    )
                     if (obj != null && obj != connexion!!.getObjet1() )
                     {
                         connexion!!.setObjet2(obj)
@@ -72,6 +87,51 @@ class TouchDragObject(private var rootLayout: WScrollView, reseau: Graph, plan: 
                 }
                 MotionEvent.ACTION_MOVE -> {
                     connexion!!.setPositions(x,y)
+                    ret = true
+                }
+            }
+            rootLayout.invalidate()
+        }
+        return ret
+    }
+
+    /**
+     * On modifie la position d'une courbure
+     */
+    fun dragCourbure(connexion: Connexion?, event: MotionEvent, x: Float, y: Float): Boolean
+    {
+        var ret = false
+        if (this.connexion == null) this.connexion = connexion
+        if(this.connexion != null)
+        {
+            when(event.action){
+                MotionEvent.ACTION_DOWN -> {
+
+                    val distance = sqrt((x - this.connexion!!.getCenter()[0].toDouble()).pow(2.0) + Math.pow(y - this.connexion!!.getCenter()[1].toDouble(), 2.0))
+                    this.connexion!!.courbure = distance.toInt()
+                    val center = this.connexion!!.getRealCenter()
+                    if(!(center[0] > x-60 && center[0] < x+60) || !(center[1] > y-60 && center[1] < y+60))
+                    {
+                        this.connexion!!.courbure = (-(distance)).toInt()
+                    }
+                    ret = true
+                }
+                MotionEvent.ACTION_UP -> {
+                    this.connexion = null
+                    ret = false
+                }
+                MotionEvent.ACTION_POINTER_DOWN -> {
+                }
+                MotionEvent.ACTION_POINTER_UP -> {
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    val distance = sqrt((x - this.connexion!!.getCenter()[0].toDouble()).pow(2.0) + Math.pow(y - this.connexion!!.getCenter()[1].toDouble(), 2.0))
+                    this.connexion!!.courbure = distance.toInt()
+                    val center = this.connexion!!.getRealCenter()
+                    if(!(center[0] > x-60 && center[0] < x+60) || !(center[1] > y-60 && center[1] < y+60))
+                    {
+                        this.connexion!!.courbure = (-(distance)).toInt()
+                    }
                     ret = true
                 }
             }

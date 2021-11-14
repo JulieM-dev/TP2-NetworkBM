@@ -47,7 +47,9 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
         this.isEdition = isEdition
     }
 
-
+    /**
+     * Initialise la page de dialogue pour modifier / créer une connexion
+     */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogBuilder =  AlertDialog.Builder(activity)
         this.selectedColor = this.listCouleurs[0]
@@ -133,6 +135,9 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
         return alertDialog
     }
 
+    /**
+     * On envoie l'information qu'on supprime la connexion
+     */
     private fun sendSupprimer(){
         val depts = ArrayList<String>()
         connexion!!.remove()
@@ -142,6 +147,9 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
         alertDialog.dismiss()
     }
 
+    /**
+     * On initialise les listes d'objets
+     */
     private fun setList(){
         val ar1 = reseau!!.objets.clone() as ArrayList<Objet>
         ar1.remove(this.obj2)
@@ -159,6 +167,9 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
         editObjet2.setSelection(ar2.indexOf(this.obj2))
     }
 
+    /**
+     * On relie le dialogue au contexte principal
+     */
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
@@ -170,6 +181,10 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
         }
     }
 
+    /**
+     * On a choisit un objet relié à la connexion
+     * On met à jour les listes
+     */
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         if (this.idT1 == p0?.id) {
             val o1 = this.editObjet1.adapter.getItem(p2) as Objet
@@ -190,6 +205,9 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
 
     }
 
+    /**
+     * On valide la modification de la connexion
+     */
     private fun valider(){
         val depts = ArrayList<String>()
         Toast.makeText(this.context, getString(R.string.connectionModified), Toast.LENGTH_SHORT).show()
@@ -206,6 +224,9 @@ class EditConnexionDialogFragment() : AppCompatDialogFragment(), AdapterView.OnI
         alertDialog.dismiss()
     }
 
+    /**
+     * On modifie la couleur de la connexion
+     */
     private fun clickCouleur(color: String, formulaire: View){
         this.selectedColor = color
         val layout = formulaire.findViewById<LinearLayout>(R.id.listCouleurs)

@@ -21,6 +21,9 @@ class ChangePlanFragment : AppCompatDialogFragment() {
     private var listPlans = arrayOf("planmin", "planmin2", "planmin3", "planmin4")
     private lateinit var listener: DeptListener
 
+    /**
+     * On initialise la fenêtre de dialogue pour changer le plan
+     */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogBuilder =  AlertDialog.Builder(activity)
         val formulaire = activity?.layoutInflater?.inflate(R.layout.liste_plans, null)
@@ -57,6 +60,9 @@ class ChangePlanFragment : AppCompatDialogFragment() {
         return alertDialog
     }
 
+    /**
+     * On choisit un plan
+     */
     private fun clickImg(tag: String){
         val depts = ArrayList<String>()
         depts.add("changePlan")
@@ -66,6 +72,9 @@ class ChangePlanFragment : AppCompatDialogFragment() {
         alertDialog.dismiss()
     }
 
+    /**
+     * On relie la fenêtre de dialogue au contexte principal
+     */
     override fun onAttach(context: Context) {
         super.onAttach(context)
 

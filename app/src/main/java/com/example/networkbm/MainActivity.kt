@@ -139,7 +139,10 @@ class MainActivity : AppCompatActivity(), DeptListener {
         initListeners()
     }
 
-
+    /**
+     * Réinitialise l'application
+     * Supprime les objets et connexions
+     */
     private fun reinitialisation()
     {
         reseau.connexions.clear()
@@ -147,6 +150,9 @@ class MainActivity : AppCompatActivity(), DeptListener {
         ecran.invalidate()
     }
 
+    /**
+     * On initialise les différents écouteurs de l'application
+     */
     @SuppressLint("ClickableViewAccessibility")
     fun initListeners()
     {
@@ -336,6 +342,9 @@ class MainActivity : AppCompatActivity(), DeptListener {
         return super.onOptionsItemSelected(item)
     }
 
+    /**
+     * On clique sur un des boutons du menu
+     */
     private fun clickMenu(i: Int)
     {
         val navView = findViewById<NavigationView>(R.id.navView)
@@ -392,9 +401,10 @@ class MainActivity : AppCompatActivity(), DeptListener {
         ecran.invalidate()
     }
 
-
+    /**
+     * On a validé une fenêtre de dialogue
+     */
     override fun onDeptSelected(depts: ArrayList<String>) {
-        //Click sur une page de dialogue
         if(depts.size >= 1 && depts[0] == "changePlan"){
             //Changement de plan
             val img = depts[1]
@@ -434,6 +444,9 @@ class MainActivity : AppCompatActivity(), DeptListener {
         ecran.invalidate()
     }
 
+    /**
+     * Sauvegarde temporarement l'instance pour un changement d'orientation
+     */
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putParcelableArrayList("objets", reseau.objets)
         outState.putString("imgAppart", this.reseau.imgAppart)
@@ -441,6 +454,9 @@ class MainActivity : AppCompatActivity(), DeptListener {
         super.onSaveInstanceState(outState)
     }
 
+    /**
+     * Restaure l'instance après un changement d'orientation de l'application
+     */
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
 
@@ -458,6 +474,9 @@ class MainActivity : AppCompatActivity(), DeptListener {
         ecran.invalidate()
     }
 
+    /**
+     * Change la langue et recharge l'applciation
+     */
     private fun setLocale(localeName: String) {
         if (localeName != currentLanguage) {
             locale = Locale(localeName)
@@ -472,12 +491,12 @@ class MainActivity : AppCompatActivity(), DeptListener {
             )
             refresh.putExtra(currentLang, localeName)
             startActivity(refresh)
-        } else {
-            Toast.makeText(
-                this@MainActivity, "Language, , already, , selected)!", LENGTH_SHORT).show()
         }
     }
 
+    /**
+     *
+     */
     override fun onBackPressed() {
         val intent = Intent(Intent.ACTION_MAIN)
         intent.addCategory(Intent.CATEGORY_HOME)
@@ -487,19 +506,30 @@ class MainActivity : AppCompatActivity(), DeptListener {
         exitProcess(0)
     }
 
+    /**
+     * Change la langue du logiciel
+     */
     private fun changeLanguage(){
         if(this.currentLanguage == "fr"){
+            this.currentLanguage = "en"
             this.setLocale("en")
         } else {
+            this.currentLanguage = "fr"
             this.setLocale("fr")
         }
     }
 
+    /**
+     * Sauvegarde le réseau en mémoire
+     */
     private fun saveReseau(){
         this.saveReseau.create(this, this.reseau)
         Toast.makeText(this, getString(R.string.networkSaved), LENGTH_SHORT).show()
     }
 
+    /**
+     * Efface le réseau et lis celui qui a été sauvegardé
+     */
     private fun lireReseau() {
         this.reseau.objets.clear()
         this.reseau.connexions.clear()
@@ -511,11 +541,17 @@ class MainActivity : AppCompatActivity(), DeptListener {
         }
     }
 
+    /**
+     * Ouvre la fenêtre de dialogue pour changer le plan
+     */
     private fun affChangePlan() {
         val dialog = ChangePlanFragment()
         dialog.show(supportFragmentManager, resources.getString(R.string.changePlan))
     }
 
+    /**
+     * Charge l'image du plan à mettre en arrière plan
+     */
     private fun loadImgAppart() {
         val plan = findViewById<ImageView>(R.id.planAppartement)
 
@@ -543,6 +579,9 @@ class MainActivity : AppCompatActivity(), DeptListener {
         }
     }
 
+    /**
+     * Envoie l'image du réseau par mail
+     */
     private fun sendMail() {
         val subject = "Image réseau"
         val message = "Ceci est un message"
@@ -564,6 +603,10 @@ class MainActivity : AppCompatActivity(), DeptListener {
         startActivity(Intent.createChooser(email, "Choose an Email client :"))
     }
 
+    /**
+     * Permet de fusionner deux Bitmap
+     * Utile pour créer l'image à envoyer par mail
+     */
     private fun createSingleImageFromMultipleImages(firstImage : Bitmap, secondImage : Bitmap) : Bitmap{
         val result = Bitmap.createBitmap(firstImage.getWidth(), firstImage.getHeight(), firstImage.getConfig());
         val canvas = Canvas(result);
@@ -572,6 +615,10 @@ class MainActivity : AppCompatActivity(), DeptListener {
         return result;
     }
 
+    /**
+     * Sauvegarde le bitmap dans un fichier temporaire
+     * Utile pour l'envoi par mail
+     */
     private fun savebitmap(bmp : Bitmap) : File? {
         val builder = StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -589,6 +636,10 @@ class MainActivity : AppCompatActivity(), DeptListener {
         return file;
     }
 
+    /**
+     * Vérifie son on a les vérifications de stockage
+     * Utile pour l'envoi par mail
+     */
     private fun verifyStoragePermissions() {
         val permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 

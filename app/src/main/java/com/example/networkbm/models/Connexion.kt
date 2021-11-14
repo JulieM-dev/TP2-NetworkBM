@@ -35,12 +35,18 @@ class Connexion (private var objet1: Objet, var reseau: Graph?) : Path() {
         this.objet2 = objet2
     }
 
+    /**
+     * Initialise les positions
+     */
     fun setPositions(x : Float, y : Float)
     {
         pointerX = x
         pointerY = y
     }
 
+    /**
+     * Ecris la connexion
+     */
     fun draw(canvas : Canvas)
     {
         updatePaint()
@@ -79,6 +85,10 @@ class Connexion (private var objet1: Objet, var reseau: Graph?) : Path() {
         }
 
     }
+
+    /**
+     * Met à jour les distances de connexion
+     */
     private fun actualisePath()
     {
         this.rewind()
@@ -93,6 +103,9 @@ class Connexion (private var objet1: Objet, var reseau: Graph?) : Path() {
         }
     }
 
+    /**
+     * Récupère les coordonnées
+     */
     fun getCords() : List<Float>
     {
         if(objet2 == null)
@@ -102,6 +115,9 @@ class Connexion (private var objet1: Objet, var reseau: Graph?) : Path() {
         return listOf(objet1.centerX(), objet1.centerY(), objet2!!.centerX(), objet2!!.centerY())
     }
 
+    /**
+     * Récupère le centre de la connexion
+     */
     fun getCenter(): List<Float> {
         val cords = getCords()
         val centerX = (cords[0] + cords[2]) / 2
@@ -109,6 +125,9 @@ class Connexion (private var objet1: Objet, var reseau: Graph?) : Path() {
         return listOf(centerX, centerY)
     }
 
+    /**
+     * Récupère les coordonnées pour la courbure
+     */
     fun getQuadCords() : List<Float>
     {
         val radius = this.courbure
@@ -141,16 +160,25 @@ class Connexion (private var objet1: Objet, var reseau: Graph?) : Path() {
         return listOf(quadX, quadY)
     }
 
+    /**
+     * Récupère l'objet 1
+     */
     fun getObjet1() : Objet
     {
         return objet1
     }
 
+    /**
+     * Récupère l'objet 2
+     */
     fun getObjet2() : Objet?
     {
         return objet2
     }
 
+    /**
+     * Initialise l'objet 1
+     */
     fun setObjet1(newObjet1: Objet)
     {
         if(this.objet1.connexions.contains(this))
@@ -162,6 +190,9 @@ class Connexion (private var objet1: Objet, var reseau: Graph?) : Path() {
         actualisePath()
     }
 
+    /**
+     * Initilise l'objet 2
+     */
     fun setObjet2(newObjet2 : Objet)
     {
         if(this.objet2 != null && this.objet2!!.connexions.contains(this))
@@ -173,6 +204,9 @@ class Connexion (private var objet1: Objet, var reseau: Graph?) : Path() {
         actualisePath()
     }
 
+    /**
+     * Supprime la connexion
+     */
     fun remove()
     {
         objet1.connexions.remove(this)
@@ -180,18 +214,30 @@ class Connexion (private var objet1: Objet, var reseau: Graph?) : Path() {
         reseau!!.connexions.remove(this)
     }
 
+    /**
+     * Initialise le nom
+     */
     fun setNom(nom: String){
         this.nom = nom
     }
 
+    /**
+     * Récupère le nom
+     */
     fun getNom() : String? {
         return this.nom
     }
 
+    /**
+     * Initialise la couleur
+     */
     fun setColor(color: String){
         this.couleur = color
     }
 
+    /**
+     * Met à jour les couleurs
+     */
     private fun updatePaint()
     {
         if(couleur != null){

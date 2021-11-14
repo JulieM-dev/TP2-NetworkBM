@@ -2,6 +2,9 @@ package com.example.networkbm.data
 
 import com.example.networkbm.models.Objet
 
+/**
+ * Classe de donnée pour les Objets
+ */
 class ObjetData (obj: Objet){
     var id = obj.id
     var nom = obj.nom

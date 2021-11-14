@@ -14,6 +14,9 @@ class TouchDragObject(private var rootLayout: WScrollView, var reseau: Graph,
     var connexion : Connexion? = null
 
 
+    /**
+     * On modifie la position d'un objet
+     */
     fun onTouch(newObjet: Objet?, event: MotionEvent, x : Float, y : Float): Boolean {
         var ret = false
         if (this.objet == null) this.objet = newObjet
@@ -53,6 +56,9 @@ class TouchDragObject(private var rootLayout: WScrollView, var reseau: Graph,
         return ret
     }
 
+    /**
+     * On modifie la position d'une connexion
+     */
     fun dragLine(newConnexion: Connexion?, event: MotionEvent, x: Float, y: Float): Boolean {
         var ret = false
         if (this.connexion == null) this.connexion = newConnexion
@@ -89,6 +95,9 @@ class TouchDragObject(private var rootLayout: WScrollView, var reseau: Graph,
         return ret
     }
 
+    /**
+     * On modifie la position d'une courbure
+     */
     fun dragCourbure(connexion: Connexion?, event: MotionEvent, x: Float, y: Float): Boolean
     {
         var ret = false

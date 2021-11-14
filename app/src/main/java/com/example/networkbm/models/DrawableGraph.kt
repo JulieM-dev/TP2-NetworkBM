@@ -26,43 +26,31 @@ class DrawableGraph(var context: Context) : Drawable() {
         paintStroke.strokeWidth = 7F
     }
 
+    /**
+     * Ecris les connexions et objets
+     */
     override fun draw(canvas: Canvas) {
-
         this.canvas = canvas
-
-        paint.style = Paint.Style.FILL
-        paint.setColor(Color.BLACK);
-        paint.strokeWidth = 7F
-
 
         reseau.connexions.forEach {
             it.draw(canvas)
         }
 
         reseau.objets.forEach {
-            paint.setColor(Color.parseColor(it.couleur))
-            canvas.drawRoundRect(it,20F,20F, paint)
-            if(it.couleur != null)
-                paint.setColor(Color.parseColor(it.couleur))
-            paint.textSize = 30F
-            paint.textAlign = Paint.Align.CENTER
-            canvas.drawText(it.nom, it.centerX(), it.centerY()+65, paint)
-            if(it.icone != null){
-                val path = this.context.resources.getIdentifier(it.icone, "drawable", this.context.packageName)
-                var icon2 = BitmapFactory.decodeResource(this.context.resources, path)
-                if(icon2 != null) {
-                    icon2 = Bitmap.createScaledBitmap(icon2, 80, 80, false)
-                    canvas.drawBitmap(icon2, it.centerX() - 40, it.centerY() - 40, null)
-                }
-            }
+            it.draw(canvas, this.context)
         }
-
     }
 
+    /**
+     * Set l'alpha
+     */
     override fun setAlpha(newAlpha: Int) {
          greyAlpha = newAlpha
     }
 
+    /**
+     * Récupère l'alpha
+     */
     override fun getAlpha(): Int {
         return greyAlpha
     }
@@ -71,6 +59,9 @@ class DrawableGraph(var context: Context) : Drawable() {
 
     }
 
+    /**
+     * Récupère l'opacité
+     */
     override fun getOpacity(): Int {
         return PixelFormat.TRANSPARENT
     }

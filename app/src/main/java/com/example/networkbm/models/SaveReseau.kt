@@ -11,6 +11,9 @@ class SaveReseau {
     // private lateinit var listObjets : ArrayList<Objet>
     // private lateinit var listConnexion: ArrayList<Connexion>
 
+    /**
+     * Lecture du réseau et on l'initialise
+     */
     fun read(context : Context, reseau: Graph): Boolean {
         try {
             val fis = context.openFileInput("graph")
@@ -39,6 +42,9 @@ class SaveReseau {
         }
     }
 
+    /**
+     * Lecture du réseau et sauvegarde
+     */
     fun create(context: Context, reseau: Graph) : Boolean{
         try {
             // Conversion d'objet concret vers data pour éviter la récursivité

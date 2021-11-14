@@ -4,9 +4,15 @@ import com.example.networkbm.models.Connexion
 import com.example.networkbm.models.Graph
 import com.example.networkbm.models.Objet
 
+/**
+ * Initalise le graphe à partir des données de Graph
+ */
 class GraphFactory {
     companion object Factory
     {
+        /**
+         * Récupère le Graph
+         */
         fun getGraph(graphData: GraphData) : Graph
         {
             val graph = Graph()
@@ -34,6 +40,9 @@ class GraphFactory {
             return graph
         }
 
+        /**
+         * Récupère les données de graph
+         */
         fun getGraphData(graph: Graph) : GraphData
         {
             val graphData = GraphData()
@@ -47,6 +56,9 @@ class GraphFactory {
             return graphData
         }
 
+        /**
+         * Récupère un objet
+         */
         private fun getObjet(id :Int, graph: Graph) : Objet?
         {
             graph.objets.forEach {

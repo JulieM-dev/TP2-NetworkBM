@@ -39,6 +39,9 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
         this.reseau = reseau
     }
 
+    /**
+     * On initialise la fenêtre de dialogue pour modifier / créer un objet
+     */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogBuilder =  AlertDialog.Builder(activity)
         this.selectedColor = this.listCouleurs[0]
@@ -147,6 +150,9 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
         return alertDialog
     }
 
+    /**
+     * On modifie la couleur
+     */
     private fun clickCouleur(color: String, formulaire: View){
         this.selectedColor = color
         val layout = formulaire.findViewById<LinearLayout>(R.id.listCouleurs)
@@ -161,6 +167,9 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
         }
     }
 
+    /**
+     * On modifie l'icône
+     */
     private fun clickIcon(tag: String, formulaire: View){
         this.selectedIcon = tag
         val layout = formulaire.findViewById<LinearLayout>(R.id.listIcones)
@@ -174,6 +183,9 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
         }
     }
 
+    /**
+     * On valide la modification
+     */
     private fun valider(){
         val nom = editTextNom.text.toString()
         val depts = ArrayList<String>()
@@ -186,7 +198,9 @@ class AjoutObjetDialogFragment() : AppCompatDialogFragment() {
         alertDialog.dismiss()
     }
 
-
+    /**
+     * On relie la fenêtre de dialogue au contexte principal
+     */
     override fun onAttach(context: Context) {
         super.onAttach(context)
 

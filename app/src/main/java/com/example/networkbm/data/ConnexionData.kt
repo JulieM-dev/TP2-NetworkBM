@@ -2,6 +2,9 @@ package com.example.networkbm.data
 
 import com.example.networkbm.models.Connexion
 
+/**
+ * Classe de donnée pour les connexions
+ */
 class ConnexionData (conx: Connexion) {
     var id = conx.id
     var objet1 = conx.getObjet1().id

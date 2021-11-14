@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import com.example.networkbm.R
+import kotlin.math.sqrt
 
 class DrawableGraph(var context: Context) : Drawable() {
 
@@ -33,17 +34,32 @@ class DrawableGraph(var context: Context) : Drawable() {
 
 
         reseau.connexions.forEach {
+            it.rewind()
             var cords = it.getCords()
-
+            var radius = 50
             if(it.couleur != null){
                 paintStroke.setColor(Color.parseColor(it.couleur))
                 paintStroke.strokeWidth = it.epaisseur
                 paint.setColor(Color.parseColor(it.couleur))
             }
 
-            it.rewind()
             it.moveTo(cords.get(0), cords.get(1))
-            it.lineTo(cords.get(2), cords.get(3))
+            var centerCords = listOf((cords.get(0)+cords.get(2)+radius)/2, (cords.get(1)+cords.get(3)+radius)/2)
+
+            var m1 = (cords.get(3) - cords.get(1)) / (cords.get(2) - cords.get(0))
+            var m2 = -(1/m1)
+            var h = -(m2 * centerCords.get(0) - centerCords.get(1))
+            var mediatriceY = m2 * 3 + h
+            var quadX = cords.get(0) + (radius / Math.sqrt(Math.pow(m2.toDouble(), 2.0)+1))
+            var quadY = cords.get(1) + (m2 * radius / Math.sqrt(Math.pow(m2.toDouble(), 2.0)+1))
+
+            System.out.println(cords.get(0))
+            System.out.println(cords.get(1))
+            System.out.println(quadX)
+            System.out.println(quadY)
+            System.out.println(cords.get(2))
+            System.out.println(cords.get(3))
+            it.quadTo(quadX.toFloat(), quadY.toFloat() ,cords.get(2), cords.get(3))
             canvas.drawPath(it, paintStroke)
 
             cords = it.getCenter()

@@ -91,6 +91,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 R.id.switch_lang -> changeLanguage()
                 R.id.saveReseau -> saveReseau()
                 R.id.button_changePlan -> affChangePlan()
+                R.id.button_restore -> lireReseau()
             }
             drawerLayout.closeDrawer(Gravity.LEFT)
             true
@@ -279,10 +280,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
             true
         }
-        val isLoad = this.saveReseau.read(this, this.reseau)
-        if(!isLoad){
-            //TODO Afficher la liste des plans d'appart
-        }
+        this.lireReseau()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -353,30 +351,11 @@ class MainActivity : AppCompatActivity(), DeptListener {
     override fun onDeptSelected(depts: ArrayList<String>) {
         //Click sur une page de dialogue
         if(depts.size >= 1 && depts.get(0) == "changePlan"){
+            //Changement de plan
             val img = depts.get(1)
-            val plan = findViewById<ImageView>(R.id.planAppartement)
 
-            var path = this.resources.getIdentifier("cross", "drawable", this.packageName)
-            path = this.resources.getIdentifier(img, "drawable", this.packageName)
-            val nouvImg = BitmapFactory.decodeResource(this.resources, path)
-            plan.setImageBitmap(nouvImg)
-
-            this.reseau.objets.forEach{
-                if(nouvImg.width < it.centerX() - 50){
-                    it.setPositions(nouvImg.width.toFloat() - 50, it.centerY())
-                }
-                if(nouvImg.height - 50 < it.centerY()){
-                    it.setPositions(it.centerX(), nouvImg.height.toFloat() - 50)
-                }
-            }
-
-            plan.doOnPreDraw {
-                val param: FrameLayout.LayoutParams = FrameLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,100);
-                param.height = plan.height
-                param.width = plan.width
-                ecran.layoutParams = param
-                ecran.invalidate()
-            }
+            this.reseau.imgAppart = img
+            this.loadImgAppart()
         } else {
             when (modeSelected) {
                 Mode.AJOUT_OBJET -> {
@@ -412,6 +391,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putParcelableArrayList("objets", reseau.objets)
+        outState.putString("imgAppart", this.reseau.imgAppart)
 
         super.onSaveInstanceState(outState)
     }
@@ -419,6 +399,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
 
+        reseau.imgAppart = savedInstanceState.getString("imgAppart") as String
         reseau.objets = savedInstanceState.getParcelableArrayList<Objet>("objets") as ArrayList<Objet>
         reseau.objets.forEach {
             it.connexions.forEach{
@@ -428,6 +409,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 }
             }
         }
+        this.loadImgAppart()
         ecran.invalidate()
     }
 
@@ -473,9 +455,48 @@ class MainActivity : AppCompatActivity(), DeptListener {
         Toast.makeText(this, getString(R.string.networkSaved), LENGTH_SHORT).show()
     }
 
+    fun lireReseau() {
+        this.reseau.objets.clear()
+        this.reseau.connexions.clear()
+        val isLoad = this.saveReseau.read(this, this.reseau)
+        this.loadImgAppart()
+        ecran.invalidate()
+        if(!isLoad){
+            this.affChangePlan()
+        }
+    }
+
     fun affChangePlan() {
         val dialog = ChangePlanFragment()
         dialog.show(supportFragmentManager, resources.getString(R.string.changePlan))
+    }
+
+    fun loadImgAppart() {
+        val plan = findViewById<ImageView>(R.id.planAppartement)
+
+        var path = this.resources.getIdentifier("cross", "drawable", this.packageName)
+        path = this.resources.getIdentifier(this.reseau.imgAppart, "drawable", this.packageName)
+        val nouvImg = BitmapFactory.decodeResource(this.resources, path)
+        if(nouvImg != null) {
+            plan.setImageBitmap(nouvImg)
+
+            this.reseau.objets.forEach{
+                if(nouvImg.width < it.centerX() - 50){
+                    it.setPositions(nouvImg.width.toFloat() - 50, it.centerY())
+                }
+                if(nouvImg.height - 50 < it.centerY()){
+                    it.setPositions(it.centerX(), nouvImg.height.toFloat() - 50)
+                }
+            }
+
+            plan.doOnPreDraw {
+                val param: FrameLayout.LayoutParams = FrameLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,100);
+                param.height = plan.height
+                param.width = plan.width
+                ecran.layoutParams = param
+                ecran.invalidate()
+            }
+        }
     }
 
 }

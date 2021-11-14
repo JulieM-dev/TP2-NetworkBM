@@ -7,6 +7,7 @@ import com.google.gson.Gson
 class Graph() {
     var objets = ArrayList<Objet>()
     var connexions = ArrayList<Connexion>()
+    var imgAppart = String()
 
     fun getObjet(x : Float, y : Float) : Objet?
     {

@@ -43,6 +43,7 @@ class GraphFactory {
             graph.objets.forEach {
                 graphData.objets.add(ObjetData(it))
             }
+            graphData.imgAppart = graph.imgAppart
             return graphData
         }
 

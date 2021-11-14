@@ -26,13 +26,13 @@ class SaveReseau {
             }
             val gson = Gson()
             val graphData : GraphData = gson.fromJson(sb.toString(), GraphData::class.java)
-            System.out.println(sb.toString())
 
             // Conversion de data vers objet concret
             val graph = GraphFactory.getGraph(graphData)
 
             reseau.objets = graph.objets
             reseau.connexions = graph.connexions
+            reseau.imgAppart = graphData.imgAppart
             return true;
         } catch (fileNotFound : FileNotFoundException) {
             return false;
@@ -53,7 +53,6 @@ class SaveReseau {
             if (str != null) {
                 fos.write(str.toByteArray());
             }
-            System.out.println(str)
             fos.close();
 
             return true;

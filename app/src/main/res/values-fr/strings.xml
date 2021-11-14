@@ -24,4 +24,5 @@
     <string name="accept">Accepter</string>
     <string name="changePlan">Changer le plan</string>
     <string name="planChanged">Plan changé</string>
+    <string name="restore">Restaurer</string>
 </resources>

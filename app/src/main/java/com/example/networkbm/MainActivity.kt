@@ -1,21 +1,29 @@
 package com.example.networkbm
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Rect
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
+import android.os.*
 
 import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.MotionEvent
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.*
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.app.ActivityCompat
 import androidx.core.view.doOnPreDraw
+import androidx.core.view.drawToBitmap
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.networkbm.fragments.AjoutObjetDialogFragment
 import com.example.networkbm.fragments.ChangePlanFragment
@@ -23,6 +31,9 @@ import com.example.networkbm.fragments.EditConnexionDialogFragment
 import com.example.networkbm.models.*
 import com.example.networkbm.views.WScrollView
 import com.google.android.material.navigation.NavigationView
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.pow
@@ -91,6 +102,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 R.id.saveReseau -> saveReseau()
                 R.id.button_changePlan -> affChangePlan()
                 R.id.button_restore -> lireReseau()
+                R.id.button_sendMail -> sendMail()
             }
             drawerLayout.closeDrawer(Gravity.LEFT)
             true
@@ -123,6 +135,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
 
         handler = Handler(Looper.getMainLooper())
 
+        this.verifyStoragePermissions()
         initListeners()
     }
 
@@ -527,6 +540,69 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 ecran.layoutParams = param
                 ecran.invalidate()
             }
+        }
+    }
+
+    private fun sendMail() {
+        val subject = "Image réseau"
+        val message = "Ceci est un message"
+
+        val email = Intent(Intent.ACTION_SEND)
+        email.putExtra(Intent.EXTRA_SUBJECT, subject)
+        email.putExtra(Intent.EXTRA_TEXT, message)
+
+        val bm = this.ecran.drawToBitmap()
+        val bgbm = findViewById<ImageView>(R.id.planAppartement).drawToBitmap()
+        val mergedImages = createSingleImageFromMultipleImages(bgbm, bm);
+
+        val mFile = savebitmap(mergedImages);
+        val u = Uri.fromFile(mFile)
+        email.putExtra(Intent.EXTRA_STREAM, u);
+
+        email.setType("message/rfc822")
+
+        startActivity(Intent.createChooser(email, "Choose an Email client :"))
+    }
+
+    private fun createSingleImageFromMultipleImages(firstImage : Bitmap, secondImage : Bitmap) : Bitmap{
+        val result = Bitmap.createBitmap(firstImage.getWidth(), firstImage.getHeight(), firstImage.getConfig());
+        val canvas = Canvas(result);
+        canvas.drawBitmap(firstImage, 0f, 0f, null);
+        canvas.drawBitmap(secondImage, 0f, 0f, null);
+        return result;
+    }
+
+    private fun savebitmap(bmp : Bitmap) : File? {
+        val builder = StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+
+        val extStorageDirectory = Environment.getExternalStorageDirectory().toString();
+        val temp = "screen"
+        var file = File(extStorageDirectory, temp + ".png");
+        System.out.println(file)
+
+        val outStream = FileOutputStream(file);
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+        outStream.flush();
+        outStream.close();
+
+        return file;
+    }
+
+    private fun verifyStoragePermissions() {
+        val permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            val REQUEST_EXTERNAL_STORAGE = 1;
+            val PERMISSIONS_STORAGE = arrayOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            ActivityCompat.requestPermissions(
+                this,
+                PERMISSIONS_STORAGE,
+                REQUEST_EXTERNAL_STORAGE
+            );
         }
     }
 

@@ -25,4 +25,5 @@
     <string name="changePlan">Changer le plan</string>
     <string name="planChanged">Plan changé</string>
     <string name="restore">Restaurer</string>
+    <string name="sendMail">Envoyer par mail</string>
 </resources>

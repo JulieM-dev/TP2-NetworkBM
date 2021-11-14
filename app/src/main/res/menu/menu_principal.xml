@@ -36,6 +36,9 @@
         android:id="@+id/button_restore"
         android:title="@string/restore" />
     <item
+        android:id="@+id/button_sendMail"
+        android:title="@string/sendMail" />
+    <item
         android:id="@+id/switch_lang"
         android:title="@string/lang"
         app:actionLayout="@layout/switch_item"

@@ -16,6 +16,7 @@ class Connexion (private var objet1: Objet, var reseau: Graph?) : Path() {
     private var paintText = Paint()
     var courbure = 0
 
+
     init {
         paint.style = Paint.Style.STROKE
         paint.color = Color.BLACK
@@ -44,7 +45,7 @@ class Connexion (private var objet1: Objet, var reseau: Graph?) : Path() {
     {
         updatePaint()
         rewind()
-        val radius = this.courbure
+
 
         val cords = getCords()
         // cords[0] = objet1.x
@@ -57,30 +58,18 @@ class Connexion (private var objet1: Objet, var reseau: Graph?) : Path() {
         //      cords[3] = position Y du doigt
 
         moveTo(cords[0], cords[1])
-        val centerCords = listOf((cords[0] + cords[2])/2, (cords[1] + cords[3])/2)
+        if(objet2 == null)
+        {
+            lineTo(cords[2], cords[3])
+            courbure = 0
+        }
+        else
+        {
+            val quadCords =  getQuadCords()
 
-        val m1 = (cords[3] - cords[1]) / (cords[2] - cords[0])
-        val m2 = -(1/m1)
-        // var h = -(m2 * centerCords[0] - centerCords[1])
-        // var mediatriceY = m2 * 3 + h
-        var quadX = centerCords[0]
-        var quadY = centerCords[1]
-        when {
-            cords[1] > cords[3] -> {
-                quadX = (centerCords[0] + (radius / sqrt(m2.toDouble().pow(2.0) +1))).toFloat()
-                quadY = (centerCords[1] + (m2 * radius / sqrt(m2.toDouble().pow(2.0) +1))).toFloat()
-            }
-            cords[1] < cords[3] -> {
-                quadX = (centerCords[0] - (radius / sqrt(m2.toDouble().pow(2.0) +1))).toFloat()
-                quadY = (centerCords[1] - (m2 * radius / sqrt(m2.toDouble().pow(2.0) +1))).toFloat()
-            }
-            cords[1] == cords[3] -> {
-                quadX = (centerCords[0])
-                quadY = (centerCords[1] + radius)
-            }
+            quadTo(quadCords[0], quadCords[1] , cords[2], cords[3])
         }
 
-        quadTo(quadX, quadY , cords[2], cords[3])
         canvas.drawPath(this, paint)
 
         // cords = getCenter()
@@ -90,7 +79,6 @@ class Connexion (private var objet1: Objet, var reseau: Graph?) : Path() {
         }
 
     }
-
     private fun actualisePath()
     {
         this.rewind()
@@ -119,6 +107,38 @@ class Connexion (private var objet1: Objet, var reseau: Graph?) : Path() {
         val centerX = (cords[0] + cords[2]) / 2
         val centerY = (cords[1] + cords[3]) / 2
         return listOf(centerX, centerY)
+    }
+
+    fun getQuadCords() : List<Float>
+    {
+        val radius = this.courbure
+        val cords = getCords()
+        val centerCords = listOf((cords[0] + cords[2])/2, (cords[1] + cords[3])/2)
+
+        val m1 = (cords[3] - cords[1]) / (cords[2] - cords[0])
+        val m2 = -(1/m1)
+        // var h = -(m2 * centerCords[0] - centerCords[1])
+        // var mediatriceY = m2 * 3 + h
+        var quadX = centerCords[0]
+        var quadY = centerCords[1]
+        when {
+            cords[1] > cords[3] -> {
+                quadX = (centerCords[0] + (radius / sqrt(m2.toDouble().pow(2.0) + 1))).toFloat()
+                quadY =
+                    (centerCords[1] + (m2 * radius / sqrt(m2.toDouble().pow(2.0) + 1))).toFloat()
+            }
+            cords[1] < cords[3] -> {
+                quadX = (centerCords[0] - (radius / sqrt(m2.toDouble().pow(2.0) + 1))).toFloat()
+                quadY =
+                    (centerCords[1] - (m2 * radius / sqrt(m2.toDouble().pow(2.0) + 1))).toFloat()
+            }
+            cords[1] == cords[3] -> {
+                quadX = (centerCords[0])
+                quadY = (centerCords[1] + radius)
+            }
+        }
+
+        return listOf(quadX, quadY)
     }
 
     fun getObjet1() : Objet

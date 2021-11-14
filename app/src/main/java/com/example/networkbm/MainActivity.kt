@@ -157,7 +157,17 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 savePosX,
                 savePosY,
             )
-            dragging = draggingLine || draggingObj
+            var draggingCourbure = false
+            if(!draggingLine)
+            {
+                draggingCourbure = dragOnTouch.dragCourbure(
+                    null,
+                    event,
+                    savePosX,
+                    savePosY
+                )
+            }
+            dragging = draggingLine || draggingObj || draggingCourbure
             when(event.action)
             {
                 MotionEvent.ACTION_DOWN ->
@@ -174,8 +184,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                             dialog.show(supportFragmentManager, resources.getString(R.string.editConnection))
                         } else if (connexion != null && modeSelected != Mode.MODIFICATION) {
                             System.out.println("HEY")
-                            val distance = sqrt((event.x - connexion.getCenter()[0].toDouble()).pow(2.0) + Math.pow(event.y - connexion.getCenter()[1].toDouble(), 2.0))
-                            dragging = dragOnTouch.dragLine(connexion, event, savePosX, savePosY)
+                            dragging = dragOnTouch.dragCourbure(connexion, event, savePosX, savePosY)
                         } else if(objet != null) {
                             //On a recupere un objet
                             when(modeSelected)

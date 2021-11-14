@@ -14,11 +14,22 @@ class Connexion (objet1 : Objet, reseau: Graph?) : Path() {
     var pointerY = 0F
     var couleur : String? = null
     var epaisseur = 10F
-    var courbure = 0
+    var paint = Paint()
+    var paintText = Paint()
+    var courbure = 1000
 
     init {
-        actualisePath()
+        paint.style = Paint.Style.STROKE
+        paint.setColor(Color.BLACK);
+
+        paintText.style = Paint.Style.FILL
+        paintText.setColor(Color.BLACK);
+        paintText.strokeWidth = 7F
+        updatePaint()
+
     }
+
+
 
     constructor(objet1 : Objet, objet2 : Objet?, col: String?, epaisseur: Float) : this(objet1, null) {
         this.couleur = col
@@ -30,6 +41,57 @@ class Connexion (objet1 : Objet, reseau: Graph?) : Path() {
     {
         pointerX = x
         pointerY = y
+    }
+
+    fun draw(canvas : Canvas)
+    {
+        rewind()
+        var radius = 1000
+
+        var cords = getCords()
+        // cords[0] = objet1.x
+        // cords[1] = objet1.y
+        // si objet2 != null:
+        //      cords[2] = objet2.x
+        //      cords[3] = objet2.y
+        // sinon :
+        //      cords[2] = position X du doigt
+        //      cords[3] = position Y du doigt
+
+        moveTo(cords[0], cords[1])
+        var centerCords = listOf((cords[0] + cords[2])/2, (cords[1] + cords[3])/2)
+
+        var m1 = (cords[3] - cords[1]) / (cords[2] - cords[0])
+        var m2 = -(1/m1)
+        var h = -(m2 * centerCords[0] - centerCords[1])
+        var mediatriceY = m2 * 3 + h
+        var quadX = centerCords[0]
+        var quadY = centerCords[1]
+        if(cords[1] > cords[3])
+        {
+            quadX = (centerCords[0] + (radius / Math.sqrt(Math.pow( m2.toDouble(), 2.0)+1))).toFloat()
+            quadY = (centerCords.get(1) + (m2 * radius / Math.sqrt(Math.pow( m2.toDouble(), 2.0)+1))).toFloat()
+        }
+        else if (cords[1] < cords[3])
+        {
+            quadX = (centerCords[0] - (radius / Math.sqrt(Math.pow(m2.toDouble(), 2.0)+1))).toFloat()
+            quadY = (centerCords[1] - (m2 * radius / Math.sqrt(Math.pow( m2.toDouble(), 2.0)+1))).toFloat()
+        }
+        else if(cords[1] == cords[3])
+        {
+            quadX = (centerCords[0])
+            quadY = (centerCords[1] + radius)
+        }
+
+        quadTo(quadX, quadY , cords[2], cords[3])
+        canvas.drawPath(this, paint)
+
+        cords = getCenter()
+        if (nom != null)
+        {
+            canvas.drawText(nom!!, getCenter()[0], getCenter()[1] + 50, paint)
+        }
+
     }
 
     fun actualisePath()
@@ -111,6 +173,19 @@ class Connexion (objet1 : Objet, reseau: Graph?) : Path() {
 
     fun setColor(color: String){
         this.couleur = color
+    }
+
+    fun updatePaint()
+    {
+        if(couleur != null){
+            paint.setColor(Color.parseColor(couleur))
+        }
+        paint.strokeWidth = epaisseur
+
+        if(nom != null){
+            paintText.textSize = 30F
+            paintText.textAlign = Paint.Align.CENTER
+        }
     }
 
 

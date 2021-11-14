@@ -14,6 +14,7 @@ class Connexion (objet1 : Objet, reseau: Graph?) : Path() {
     var pointerY = 0F
     var couleur : String? = null
     var epaisseur = 10F
+    var courbure = 0
 
     init {
         actualisePath()

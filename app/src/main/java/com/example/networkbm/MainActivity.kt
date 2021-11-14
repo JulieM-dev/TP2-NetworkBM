@@ -166,11 +166,14 @@ class MainActivity : AppCompatActivity(), DeptListener {
                         val connexion = reseau.getConnexion(savePosX, savePosY)
                         if(connexion != null && modeSelected == Mode.MODIFICATION)
                         {
-                            //On a recupere une connexion
+                            //On a recupere une connexion en mode MODIFICATION
                             val dialog = EditConnexionDialogFragment(connexion, reseau)
                             dialog.show(supportFragmentManager, resources.getString(R.string.editConnection))
-                        } else if(objet != null)
-                        {
+                        } else if (connexion != null && modeSelected != Mode.MODIFICATION) {
+                            System.out.println("HEY")
+                            val distance = Math.sqrt(Math.pow(event.getX() - connexion.getCenter()[0].toDouble(),2.0) + Math.pow(event.getY() - connexion.getCenter()[1].toDouble(), 2.0))
+                            connexion.courbure = distance.toInt()
+                        } else if(objet != null) {
                             //On a recupere un objet
                             when(modeSelected)
                             {

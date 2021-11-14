@@ -36,7 +36,7 @@ class DrawableGraph(var context: Context) : Drawable() {
         reseau.connexions.forEach {
             it.rewind()
             var cords = it.getCords()
-            var radius = 1000
+            var radius = it.courbure
             if(it.couleur != null){
                 paintStroke.setColor(Color.parseColor(it.couleur))
                 paintStroke.strokeWidth = it.epaisseur
@@ -68,15 +68,6 @@ class DrawableGraph(var context: Context) : Drawable() {
                 quadY = (centerCords.get(1) + radius)
             }
 
-
-            System.out.println("x1 " + cords.get(0))
-            System.out.println("y1 " + cords.get(1))
-            System.out.println("CenterX " + centerCords.get(0))
-            System.out.println("CenterY " + centerCords.get(1))
-            System.out.println("quadX " + quadX)
-            System.out.println("quadY " + quadY)
-            System.out.println("x2 " + cords.get(2))
-            System.out.println("y2 " + cords.get(3))
             it.quadTo(quadX.toFloat(), quadY.toFloat() ,cords.get(2), cords.get(3))
             canvas.drawPath(it, paintStroke)
 
@@ -97,7 +88,8 @@ class DrawableGraph(var context: Context) : Drawable() {
             paint.textSize = 30F
             paint.textAlign = Paint.Align.CENTER
             canvas.drawText(it.nom, it.centerX(), it.centerY()+65, paint)
-            if(it.icone != null){
+            if(it.icone != null && it.icone != "null"){
+                System.out.println(it.icone)
                 val path = this.context.resources.getIdentifier(it.icone, "drawable", this.context.packageName)
                 var icon2 = BitmapFactory.decodeResource(this.context.resources, path)
                 if(icon2 != null) {

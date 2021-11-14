@@ -156,7 +156,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
                 event,
                 savePosX,
                 savePosY,
-                null
             )
             dragging = draggingLine || draggingObj
             when(event.action)
@@ -176,7 +175,7 @@ class MainActivity : AppCompatActivity(), DeptListener {
                         } else if (connexion != null && modeSelected != Mode.MODIFICATION) {
                             System.out.println("HEY")
                             val distance = sqrt((event.x - connexion.getCenter()[0].toDouble()).pow(2.0) + Math.pow(event.y - connexion.getCenter()[1].toDouble(), 2.0))
-                            dragging = dragOnTouch.dragLine(connexion, event, savePosX, savePosY, distance.toInt())
+                            dragging = dragOnTouch.dragLine(connexion, event, savePosX, savePosY)
                         } else if(objet != null) {
                             //On a recupere un objet
                             when(modeSelected)
@@ -196,7 +195,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
                                             event,
                                             savePosX,
                                             savePosY,
-                                            null
                                         )
                                     }
                                     else if(connexionAModifier != null)
@@ -206,7 +204,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
                                             event,
                                             savePosX,
                                             savePosY,
-                                            null
                                         )
                                     }
                                 }
@@ -228,7 +225,6 @@ class MainActivity : AppCompatActivity(), DeptListener {
                                 event,
                                 savePosX,
                                 savePosY,
-                                null
                             )
                         }
                         else

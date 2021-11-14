@@ -1,9 +1,5 @@
 package com.example.networkbm.models
 
-import android.os.Parcel
-import android.os.Parcelable
-import com.google.gson.Gson
-
 class Graph() {
     var objets = ArrayList<Objet>()
     var connexions = ArrayList<Connexion>()

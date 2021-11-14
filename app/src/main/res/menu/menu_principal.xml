@@ -1,29 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
 
     <item
         android:id="@+id/button_reinitialiser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="Réinitialiser" />
+        android:title="@string/reset" />
 
     <item
         android:id="@+id/button_ajout_objet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="Ajouter un objet" />
+        android:title="@string/addObject" />
 
     <item
         android:id="@+id/button_ajout_connexion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="Ajouter une connexion" />
+        android:title="@string/addConnection" />
 
     <item
         android:id="@+id/button_modification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="Modifier" />
+        android:title="@string/modify" />
+    <item
+        android:id="@+id/saveReseau"
+        android:title="@string/save" />
+    <item
+        android:id="@+id/button_changePlan"
+        android:title="@string/changePlan" />
+    <item
+        android:id="@+id/button_restore"
+        android:title="@string/restore" />
+    <item
+        android:id="@+id/button_sendMail"
+        android:title="@string/sendMail" />
+    <item
+        android:id="@+id/switch_lang"
+        android:title="@string/lang"
+        app:actionLayout="@layout/switch_item"
+        app:showAsAction="always" />
 
 </menu>

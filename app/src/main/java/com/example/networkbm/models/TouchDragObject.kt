@@ -1,44 +1,144 @@
 package com.example.networkbm.models
 
 import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
-import android.widget.RelativeLayout
+import android.widget.ImageView
+import com.example.networkbm.views.WScrollView
+import kotlin.math.pow
+import kotlin.math.sqrt
 
-class TouchDragObject(private var rootLayout: ViewGroup, private var posX: Int?,
-                      private var posY: Int?
-) : View.OnTouchListener {
+class TouchDragObject(private var rootLayout: WScrollView, var reseau: Graph,
+                      private var plan: ImageView
+) {
 
-    override fun onTouch(view: View, event: MotionEvent): Boolean {
-        val X = event.rawX
-        val Y = event.rawY
-        if(posX == null && posY == null){
-            posX = 625
-            posY = 1080
+    var objet : Objet? = null
+    var connexion : Connexion? = null
+
+
+    /**
+     * On modifie la position d'un objet
+     */
+    fun onTouch(newObjet: Objet?, event: MotionEvent, x : Float, y : Float): Boolean {
+        var ret = false
+        if (this.objet == null) this.objet = newObjet
+        if(objet != null)
+        {
+            when(event.action){
+                MotionEvent.ACTION_DOWN -> {
+                    objet!!.setPositions(x, y)
+                    ret = true
+                }
+                MotionEvent.ACTION_UP -> {
+                    objet = null
+                    ret = false
+                }
+                MotionEvent.ACTION_POINTER_DOWN -> {
+                }
+                MotionEvent.ACTION_POINTER_UP -> {
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    when {
+                        event.y < 42 -> {
+                            objet!!.setPositions(x, 42f)
+                        }
+                        y > plan.height - 70 -> {
+                            objet!!.setPositions(x, plan.height.toFloat() - 70)
+                        }
+                        else -> {
+                            objet!!.setPositions(x, y)
+                        }
+                    }
+                    ret = true
+                }
+            }
+            rootLayout.invalidate()
         }
-        when(event.action){
-            MotionEvent.ACTION_DOWN -> {
-                val lParams : RelativeLayout.LayoutParams = view.layoutParams as RelativeLayout.LayoutParams
-                posX = (X - lParams.leftMargin).toInt()
-                posY = (Y - lParams.topMargin).toInt()
-                view.layoutParams = lParams
-            }
-            MotionEvent.ACTION_UP -> {
-            }
-            MotionEvent.ACTION_POINTER_DOWN -> {
-            }
-            MotionEvent.ACTION_POINTER_UP -> {
-            }
-            MotionEvent.ACTION_MOVE -> {
-                val lParams : RelativeLayout.LayoutParams = view.layoutParams as RelativeLayout.LayoutParams
-                lParams.leftMargin = (X - posX!!).toInt()
-                lParams.topMargin = (Y - posY!!).toInt()
-                lParams.rightMargin = 0
-                lParams.bottomMargin = 0
-                view.layoutParams = lParams
-            }
-        }
-        rootLayout.invalidate()
-        return true
+
+        return ret
     }
+
+    /**
+     * On modifie la position d'une connexion
+     */
+    fun dragLine(newConnexion: Connexion?, event: MotionEvent, x: Float, y: Float): Boolean {
+        var ret = false
+        if (this.connexion == null) this.connexion = newConnexion
+        if(connexion != null && connexion!!.getObjet2() == null)
+        {
+            when(event.action){
+                MotionEvent.ACTION_DOWN -> {
+                    connexion!!.setPositions(x,y)
+                    ret = true
+                }
+                MotionEvent.ACTION_UP -> {
+                    val obj = reseau.getObjet(
+                        connexion!!.getCords()[2],
+                        connexion!!.getCords()[3]
+                    )
+                    if (obj != null && obj != connexion!!.getObjet1() )
+                    {
+                        connexion!!.setObjet2(obj)
+                    }
+                    connexion = null
+                    ret = false
+                }
+                MotionEvent.ACTION_POINTER_DOWN -> {
+                }
+                MotionEvent.ACTION_POINTER_UP -> {
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    connexion!!.setPositions(x,y)
+                    ret = true
+                }
+            }
+            rootLayout.invalidate()
+        }
+        return ret
+    }
+
+    /**
+     * On modifie la position d'une courbure
+     */
+    fun dragCourbure(connexion: Connexion?, event: MotionEvent, x: Float, y: Float): Boolean
+    {
+        var ret = false
+        if (this.connexion == null) this.connexion = connexion
+        if(this.connexion != null)
+        {
+            when(event.action){
+                MotionEvent.ACTION_DOWN -> {
+
+                    val distance = sqrt((x - this.connexion!!.getCenter()[0].toDouble()).pow(2.0) + Math.pow(y - this.connexion!!.getCenter()[1].toDouble(), 2.0))
+                    this.connexion!!.courbure = distance.toInt()
+                    val center = this.connexion!!.getRealCenter()
+                    if(!(center[0] > x-60 && center[0] < x+60) || !(center[1] > y-60 && center[1] < y+60))
+                    {
+                        this.connexion!!.courbure = (-(distance)).toInt()
+                    }
+                    ret = true
+                }
+                MotionEvent.ACTION_UP -> {
+                    this.connexion = null
+                    ret = false
+                }
+                MotionEvent.ACTION_POINTER_DOWN -> {
+                }
+                MotionEvent.ACTION_POINTER_UP -> {
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    val distance = sqrt((x - this.connexion!!.getCenter()[0].toDouble()).pow(2.0) + Math.pow(y - this.connexion!!.getCenter()[1].toDouble(), 2.0))
+                    this.connexion!!.courbure = distance.toInt()
+                    val center = this.connexion!!.getRealCenter()
+                    if(!(center[0] > x-60 && center[0] < x+60) || !(center[1] > y-60 && center[1] < y+60))
+                    {
+                        this.connexion!!.courbure = (-(distance)).toInt()
+                    }
+                    ret = true
+                }
+            }
+            rootLayout.invalidate()
+        }
+
+        return ret
+    }
+
 }

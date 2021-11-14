@@ -2,98 +2,76 @@ package com.example.networkbm.models
 
 import android.content.Context
 import android.graphics.*
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.RectShape
-import android.view.View
-import android.widget.RelativeLayout
 
-class Objet(context: Context, nom: String, couleur: String, savePosX: Int?, savePosY: Int?) : View(context) {
+class Objet(var nom: String, x: Float, y: Float) : RectF(x-45, y-42, x+45, y+42) {
 
-    private var bitmap = Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888)
-    private lateinit var canvas :Canvas
-    private var shapeDrawable = ShapeDrawable(RectShape())
-    var nom : String = nom
-    var couleur : String = couleur
-    lateinit var touchDragObject : TouchDragObject
+    var id = this.hashCode()
+    var couleur : String? = null
+    var icone : String? = null
     var connexions = ArrayList<Connexion>()
-    private var posX = savePosX
-    private var posY = savePosY
+    val paint = Paint()
 
-
-    override fun onDraw(canvas: Canvas){
-        super.onDraw(canvas)
+    constructor(nom: String, x: Float, y:Float, col: String?, ico: String?) : this(nom, x, y) {
+        this.couleur = col
+        this.icone = ico
     }
 
-    fun editRect(contPrinc: RelativeLayout){
-        // rectangle positions
-        val left = 200
-        val top = 0
-        val right = 800
-        val bottom = 650
-        // draw rectangle shape to canvas
-        shapeDrawable.setBounds( left, top, right, bottom)
-        shapeDrawable.paint.color = Color.parseColor("#009944")
-        shapeDrawable.draw(canvas)
-        var paint = Paint()
-        paint.textSize = 183F
-
-        paint.color = Color.BLACK;
+    init {
+        paint.style = Paint.Style.FILL
+        paint.setColor(Color.BLACK);
+        paint.strokeWidth = 7F
+        paint.textSize = 30F
         paint.textAlign = Paint.Align.CENTER
-        canvas.drawText(nom, 500F, 850F, paint);
-
-        var paint1 = Paint()
-        paint1.textSize = 183F
-
-        paint1.color = Color.BLACK;
-        paint1.textAlign = Paint.Align.CENTER
-        canvas.drawText(nom, 500F, 1000F, paint1);
-
-        // set bitmap as background to ImageView
-        this.background = BitmapDrawable(getResources(), bitmap)
-
     }
 
-    fun createRect(contPrinc: RelativeLayout) {
-        canvas = Canvas(bitmap)
-        editRect(contPrinc)
-        System.out.println("-----" + posX)
-        if(posX == null && posY == null){
-            this.translationX = (contPrinc.width / 2).toFloat()
-            this.translationY = (contPrinc.height / 2).toFloat()
-        } else {
-            this.translationX = posX!!.toFloat()
-            this.translationY = posY!!.toFloat()
+    /**
+     * Set les positions
+     */
+    fun setPositions(x : Float, y : Float)
+    {
+        this.left = x-45
+        this.top = y-42
+        this.right = x+45
+        this.bottom = y+42
+    }
+
+    /**
+     * Récupère les ID de connexions
+     */
+    fun getConnexionsId() : ArrayList<Int>
+    {
+        val listId = ArrayList<Int>()
+        connexions.forEach {
+            listId.add(it.id)
+        }
+        return listId
+    }
+
+    /**
+     * Ecris l'objet sur le graphe
+     */
+    fun draw(canvas : Canvas, context: Context){
+
+
+        if(this.couleur != null)
+            paint.setColor(Color.parseColor(this.couleur))
+        canvas.drawRoundRect(this,20F,20F, paint)
+        canvas.drawText(this.nom, this.centerX(), this.centerY()+65, paint)
+        if(this.icone != null){
+            val path = context.resources.getIdentifier(this.icone, "drawable", context.packageName)
+            var icon2 = BitmapFactory.decodeResource(context.resources, path)
+            if(icon2 != null) {
+                icon2 = Bitmap.createScaledBitmap(icon2, 80, 80, false)
+                canvas.drawBitmap(icon2, this.centerX() - 40, this.centerY() - 40, null)
+            }
         }
     }
 
-
-    fun clear()
-    {
-        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
+    override fun toString(): String {
+        return if(nom.isNotEmpty())
+            nom
+        else
+            "Objet " + (this.left.toInt().toString() + "." + this.top.toInt())
     }
-
-    fun changeColor(color: String){
-        this.shapeDrawable.paint.color = Color.parseColor(color)
-        shapeDrawable.draw(canvas)
-    }
-
-    fun addTouchDragObject(touchDragObject: TouchDragObject)
-    {
-        this.touchDragObject = touchDragObject
-        setDragable(true)
-    }
-
-    fun setDragable(dragable: Boolean)
-    {
-        if(dragable)
-        {
-            this.setOnTouchListener(touchDragObject)
-        }
-        else{
-            this.setOnTouchListener(null)
-        }
-    }
-
 
 }

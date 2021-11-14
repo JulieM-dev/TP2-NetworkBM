@@ -3,6 +3,7 @@ package com.example.networkbm.models
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import androidx.core.graphics.drawable.updateBounds
 import com.example.networkbm.R
 import kotlin.math.sqrt
 
@@ -26,6 +27,7 @@ class DrawableGraph(var context: Context) : Drawable() {
     }
 
     override fun draw(canvas: Canvas) {
+
         this.canvas = canvas
 
         paint.style = Paint.Style.FILL

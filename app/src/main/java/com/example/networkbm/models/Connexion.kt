@@ -42,6 +42,7 @@ class Connexion (private var objet1: Objet, var reseau: Graph?) : Path() {
 
     fun draw(canvas : Canvas)
     {
+        updatePaint()
         rewind()
         val radius = this.courbure
 
@@ -85,7 +86,7 @@ class Connexion (private var objet1: Objet, var reseau: Graph?) : Path() {
         // cords = getCenter()
         if (nom != null)
         {
-            canvas.drawText(nom!!, getCenter()[0], getCenter()[1] + 50, paint)
+            canvas.drawText(nom!!, getCenter()[0], getCenter()[1] + 50, paintText)
         }
 
     }
